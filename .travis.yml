@@ -1,0 +1,31 @@
+dist: trusty
+sudo: false  
+
+language: python
+python:
+  - "3.6"
+
+env:
+  global:
+    - HELM_URL=https://storage.googleapis.com/kubernetes-helm
+    - HELM_TGZ=helm-v2.11.0-linux-amd64.tar.gz
+    - REPO=s3://datacube-charts-stable
+
+install:
+  # Installing Helm
+  - wget -q ${HELM_URL}/${HELM_TGZ}
+  - tar xzfv ${HELM_TGZ}
+  - PATH=`pwd`/linux-amd64/:$PATH
+  - helm init --client-only
+  # Installing Helm s3 plugin
+  - helm plugin install https://github.com/hypnoglow/helm-s3.git
+  - helm repo add datacube-charts $REPO
+
+before_script:
+  # Lint the charts
+  - helm lint stable/*
+
+script:
+  # Deploy charts in the stable folder to the datacube-charts repo
+  - deploy-charts.sh datacube-charts stable
+ 

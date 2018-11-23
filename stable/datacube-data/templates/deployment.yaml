@@ -1,0 +1,69 @@
+{{- $externalDb := .Values.global.externalDatabase }}
+{{- $dc := .Values.global.datacube }}
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ include "datacube-data.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "datacube-data.name" . }}
+    helm.sh/chart: {{ include "datacube-data.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "datacube-data.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "datacube-data.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+      annotations:
+      {{- range $key, $value := .Values.annotations }}
+        {{ $key }}: {{ $value | quote }}
+      {{- end }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: [ {{- range .Values.dockerArgs }} {{ . | quote }}, {{ end -}} ]
+          env:
+          - name: AWS_DEFAULT_REGION
+            value: {{ .Values.aws_region }}
+          - name: WMS_CONFIG_URL
+            value: {{ $dc.wmsConfigURL | quote }}
+          - name: DB_HOSTNAME
+            value: {{ $externalDb.host | quote }}
+          - name: DB_PORT
+            value: {{ $externalDb.port | quote }}
+          - name: DB_DATABASE
+            value: {{ $externalDb.database | quote }}
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: {{ $externalDb.database }}
+                key: postgres-username
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ $externalDb.database }}
+                key: postgres-password
+          - name: DATACUBE_CONFIG_PATH
+            value: {{ $dc.configPath }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

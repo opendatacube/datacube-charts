@@ -1,0 +1,35 @@
+# Default values for datacube-wms.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+replicaCount: 1
+image:
+  registry: docker.io
+  repository: opendatacube/wps
+  tag: 'latest'
+  pullPolicy: Always
+
+clusterSecret: datakube.gadevs.ga
+
+global:
+  datacube:
+    wpsConfigURL: https://raw.githubusercontent.com/GeoscienceAustralia/dea-config/master/dev/services/wps/combined/pywps.cfg
+
+##
+## Datacube WMS configuration
+##
+wps:
+  enabled: true
+  externalPort: 80
+  internalPort: 8000
+  resources:
+    limits:
+      cpu: "2"
+      memory: 2048Mi
+  annotations:
+    iam.amazonaws.com/role: kubernetes-wms
+    
+ingress:
+  enabled: false
+
+service:
+  type: NodePort

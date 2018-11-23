@@ -1,0 +1,56 @@
+apiVersion: batch/v1
+kind: Job
+{{ $externalDb := .Values.global.externalDatabase }}
+{{ $image := .Values.global.image }}
+metadata:
+  name: "{{.Release.Name}}"
+  labels:
+    heritage: {{.Release.Service | quote }}
+    release: {{.Release.Name | quote }}
+    chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+  annotations:
+    "helm.sh/hook": "post-delete"
+    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
+spec:
+  template:
+    metadata:
+      name: "{{.Release.Name}}"
+      labels:
+        heritage: {{.Release.Service | quote }}
+        release: {{.Release.Name | quote }}
+        chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+    spec:
+      containers:
+      - name: cleanup-job
+        image: "{{ $image.repository }}:{{ $image.tag }}"
+        env:
+        - name: DB_HOSTNAME
+          value: {{ $externalDb.host | quote }}
+        - name: DB_PORT
+          value: {{ $externalDb.port | quote }}
+        - name: DB_DATABASE
+          value: {{ $externalDb.database | quote }}
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ $externalDb.database }}
+              key: postgres-username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ $externalDb.database }}
+              key: postgres-password
+        - name: ADMIN_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.global.clusterSecret }}
+              key: postgres-username
+        - name: ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.global.clusterSecret }}
+              key: postgres-password
+        args: [ {{- range .Values.cleanup.dockerArgs }} {{ . | quote }}, {{ end -}} ]
+      restartPolicy: OnFailure
+  backoffLimit: 10

@@ -1,0 +1,90 @@
+{{- $externalDb := .Values.global.externalDatabase }}
+{{- $dc := .Values.global.datacube }}
+{{- $archive := .Values.archive }}
+{{- $image := .Values.global.image }}
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: "{{ $externalDb.database }}-archive"
+  labels:
+    heritage: {{.Release.Service | quote }}
+    release: {{.Release.Name | quote }}
+    chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+    component: archive
+spec:
+  schedule: {{ $archive.cron | quote }}
+  successfulJobsHistoryLimit: {{ $archive.historyLimit}}
+  failedJobsHistoryLimit: {{ $archive.historyLimit }}
+  suspend: {{ $archive.suspend }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          name: "{{ $externalDb.database }}-archive"
+          labels:
+            heritage: {{.Release.Service | quote }}
+            release: {{.Release.Name | quote }}
+            chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+          annotations:
+          {{- range $key, $value := $archive.annotations }}
+            {{ $key }}: {{ $value | quote }}
+          {{- end }}
+        spec:
+          initContainers:
+          - name: postgres-listener
+            image: alpine
+            command: ["sh", "-c", "for i in $(seq 1 200); do nc -z -w3 {{ $externalDb.host }} {{ $externalDb.port }} && exit 0 || sleep 3; done; exit 1"]
+          containers:
+          - name: datacube-archive
+            image: "{{ $image.repository }}:{{ $image.tag }}"
+            imagePullPolicy: {{ $image.pullPolicy }}
+            args: [ {{- range $archive.dockerArgs }} {{ . | quote }}, {{ end -}} ]
+            env:
+            - name: WMS_CONFIG_URL
+              value: {{ $dc.wmsConfigURL | quote }}
+            - name: PRODUCT_URLS
+              value: {{ $dc.products | quote }}
+            - name: DC_S3_ARCHIVE_BUCKET
+              value: {{ $archive.bucket | quote }}
+            - name: DC_S3_ARCHIVE_PREFIX
+              value: {{ template "helm-toolkit.utils.joinListWithSpace" $archive.prefix }}
+            - name: DC_S3_ARCHIVE_SUFFIX
+              value: {{ $archive.suffix | quote }}
+            - name: DC_ARCHIVE_DAYS
+              value: {{ $archive.days | quote }}
+            - name: DB_HOSTNAME
+              value: {{ $externalDb.host | quote }}
+            - name: DB_PORT
+              value: {{ $externalDb.port | quote }}
+            - name: DB_DATABASE
+              value: {{ $externalDb.database | quote }}
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $externalDb.database }}
+                  key: postgres-username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $externalDb.database }}
+                  key: postgres-password
+            {{- if $archive.additionalEnvironmentVars }}
+            {{- range $arg, $value := $archive.additionalEnvironmentVars }}
+            - name: {{ $arg | quote }}
+              value: {{ $value | quote }}
+            {{- end }}
+            {{- end }}
+          restartPolicy: Never
+          {{- with $archive.resources }}
+          resources:
+            {{- with .limits }}
+            limits:
+              {{ if .cpu }}cpu: {{ .cpu | quote }} {{ end }}
+              {{ if .memory }}memory: {{ .memory | quote }} {{ end }}
+            {{- end }}
+            {{- with .requests }}
+              requests:
+              {{ if .cpu }}cpu: {{ .cpu | quote }} {{ end }}
+              {{ if .memory }}memory: {{ .memory | quote }} {{ end }}
+            {{- end }}
+          {{- end }}

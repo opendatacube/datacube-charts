@@ -1,0 +1,55 @@
+# Values required for NRT upkeep and operation
+image:
+  repository: opendatacube/wms
+  tag: latest
+##
+## Datacube Index configuration
+##
+## whether we should create an index or not
+index:
+  dockerArgs: [ "/bin/bash", "-c", "cd index; ./create-index.sh" ]
+  bucket: dea-public-data
+  suffix: .yaml
+  prefix: []
+  historyLimit: 5
+  cron: "0 0 31 2 *"
+  suspend: true
+  annotations:
+    iam.amazonaws.com/role: kubernetes-wms
+  resources:
+    requests:
+      cpu: 300m
+      memory: 768Mi
+    limits:
+      cpu: 500m
+      memory: 1024Mi
+  additionalEnvironmentVars: { }
+  wmsConfigURL:
+  products:
+
+archive:
+  dockerArgs: [ "/bin/bash", "-c", "cd archive; ./archive-wrapper.sh" ]
+  imageTag: archive-k
+  historyLimit: 5
+  cron: "0 0 31 2 *"
+  suspend: true
+  bucket: dea-public-data
+  suffix: .yaml
+  prefix: []
+  days:
+  annotations:
+    iam.amazonaws.com/role: kubernetes-wms
+  resources:
+    requests:
+      cpu: 300m
+      memory: 768Mi
+    limits:
+      cpu: 500m
+      memory: 1024Mi
+  additionalEnvironmentVars: { }
+
+global:
+  datacube:
+    configPath: /opt/odc/datacube.conf
+    wmsConfigURL: 
+    products: 

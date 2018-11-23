@@ -1,0 +1,100 @@
+# Default values for datacube-wms.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+minReplicas: 1
+maxReplicas: 2
+
+global:
+  datacube:
+    configPath: /opt/odc/datacube.conf
+    products: raw.githubusercontent.com/GeoscienceAustralia/dea-config/master/prod/products/nrt/sentinel/products.yaml
+  clusterSecret: datakube.gadevs.ga
+
+
+##
+## Datacube WMS configuration
+##
+wms:
+  enabled: true
+  externalPort: 80
+  internalPort: 8000
+  resources:
+    limits:
+      cpu: "1"
+      memory: 2048Mi
+  dockerArgs: [ "gunicorn", "-b", "0.0.0.0:8000", "-w", "4", "--keep-alive", "50", "--timeout", "120", "datacube_wms.wsgi" ]
+  targetCpu: 10
+  autoscaling: True
+  annotations:
+    iam.amazonaws.com/role: kubernetes-wms
+  additionalEnvironmentVars: { }
+
+##
+## Prometheus Monitoring
+##
+prometheus:
+  enabled: false
+  path: "/opt/prometheus/"
+
+##
+## cProfiling, only enable for debugging and profiling purposes
+##
+profiling:
+  enabled: true
+  path: "/opt/profiling/"
+
+##
+## DB setup config
+##
+setup:
+  dockerArgs: [ "/bin/bash", "-c", "cd setup; ./create-db.sh" ]
+
+##
+## DB cleanup config
+##
+cleanup:
+  dockerArgs: [ "/bin/bash", "-c", "cd setup; ./drop-db.sh" ]
+
+##
+## Datacube Index configuration
+##
+## whether we should create an index or not
+index:
+  enabled: false
+# Host prefixes will prepend this to the value of global.domain
+# hostPrefix:
+# - custom
+# hosts:
+# - custom.hostname.com
+
+wps:
+  enabled: false
+
+cubedash:
+  enabled: false
+
+data_orchestration:
+  enabled: true
+
+datacube-index:
+  index:
+    bucket: dea-public-data
+    prefix: default
+    suffix: .yaml
+    resources:
+      requests:
+        cpu: 300m
+        memory: 2048Mi
+
+# Enable NRT subchart if automated indexing and archiving jobs are required
+schedules:
+  enabled: false
+
+service:
+  type: NodePort
+
+ingress:
+  ## Enable Ingress.
+  ##
+  enabled: false
+  host:

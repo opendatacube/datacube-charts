@@ -1,0 +1,15 @@
+dependencies:
+- name: datacube-index
+  repository: s3://datacube-charts-stable
+  version: 0.2.12
+- name: datacube-wps
+  repository: s3://datacube-charts-stable
+  version: 0.1.2
+- name: datacube-dashboard
+  repository: s3://datacube-charts-stable
+  version: 0.2.7
+- name: datacube-data
+  repository: s3://datacube-charts-stable
+  version: 0.1.5
+digest: sha256:20bc14b3a87e09397c5dbc3da44ea4fdb3d4cee49237c024cb62a10fa2a61b57
+generated: 2018-11-23T12:09:34.786862+11:00

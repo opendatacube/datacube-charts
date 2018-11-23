@@ -1,0 +1,82 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+{{ $externalDb := .Values.global.externalDatabase }}
+{{ $dc := .Values.global.datacube }}
+metadata:
+  name: "{{ .Release.Name }}-wps"
+  labels:
+    app: {{ template "datacube-wps.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+  {{- range $key, $value := .Values.wps.annotations }}
+    {{ $key }}: {{ $value | quote }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "datacube-wps.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: wps
+        env:
+        - name: WPS_CONFIG_URL
+          value: {{ $dc.wpsConfigURL | quote }}
+        - name: DB_HOSTNAME
+          value: {{ $externalDb.host | quote }}
+        - name: DB_PORT
+          value: {{ $externalDb.port | quote }}
+        - name: DB_DATABASE
+          value: {{ $externalDb.database | quote }}
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ $externalDb.database }}
+              key: postgres-username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ $externalDb.database }}
+              key: postgres-password
+        - name: VIRTUAL_HOST
+          value: localhost,127.0.0.
+        - name: DATACUBE_CONFIG_PATH
+          value: {{ $dc.configPath }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+        resources: {}
+        livenessProbe:
+          httpGet:
+            path: /?service=WPS&request=GetCapabilities&version=1.0.0
+            port: 8000
+          timeoutSeconds: 60
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        args: ["gunicorn", "-b", "0.0.0.0:8000", "-w", "2", "--timeout", "300", "wps:app"]
+        volumeMounts:
+        - mountPath: /opt/outputs/
+          name: output-volume 
+      restartPolicy: Always
+      volumes:
+      - name: output-volume
+        emptyDir: {}
+      {{- with .Values.wps.resources }}
+      resources:
+        {{- with .limits }}
+        limits:
+            {{ if .cpu }} cpu: {{ .cpu | quote }} {{ end }}
+            {{ if .memory }} memory: {{ .memory | quote }} {{ end }}
+        {{- end }}
+        {{- with .requests }}
+          requests:
+            {{ if .cpu }} cpu: {{ .cpu | quote }} {{ end }}
+            {{ if .memory }} memory: {{ .memory | quote }} {{ end }}
+        {{- end }}
+      {{- end }}
+status: {}

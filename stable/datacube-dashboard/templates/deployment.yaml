@@ -1,0 +1,74 @@
+{{- $externalDb := .Values.global.externalDatabase }}
+{{- $dc := .Values.global.datacube }}
+{{- $cubedash := .Values.cubedash }}
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "{{ .Release.Name }}-cubedash"
+  labels:
+    app: {{ template "datacube-dashboard.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ template "datacube-dashboard.name" . }}
+        release: {{ .Release.Name }}
+      annotations:
+      {{- range $key, $value := $cubedash.annotations }}
+        {{ $key }}: {{ $value | quote }}
+      {{- end }}
+    spec:
+      containers:
+      - name: cubedash
+        env:
+        - name: WMS_CONFIG_URL
+          value: {{ $dc.wmsConfigURL | quote }}
+        - name: DB_HOSTNAME
+          value: {{ $externalDb.host | quote }}
+        - name: DB_PORT
+          value: {{ $externalDb.port | quote }}
+        - name: DB_DATABASE
+          value: {{ $externalDb.database | quote }}
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ $externalDb.database }}
+              key: postgres-username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ $externalDb.database }}
+              key: postgres-password
+        - name: VIRTUAL_HOST
+          value: localhost,127.0.0.
+        - name: DATACUBE_CONFIG_PATH
+          value: {{ $dc.configPath }}
+        {{- if $cubedash.additionalEnvironmentVars }}
+        {{- range $arg, $value := $cubedash.additionalEnvironmentVars }}
+        - name: {{ $arg | quote }}
+          value: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+        {{- with $cubedash.resources }}
+        resources:
+          {{- with .limits }}
+          limits:
+            {{ if .cpu }} cpu: {{ .cpu | quote }} {{ end }}
+            {{ if .memory }} memory: {{ .memory | quote }} {{ end }}
+          {{- end }}
+          {{- with .requests }}
+          requests:
+            {{ if .cpu }} cpu: {{ .cpu | quote }} {{ end }}
+            {{ if .memory }} memory: {{ .memory | quote }} {{ end }}
+          {{- end }}
+        {{- end }}
+        args: [ {{- range $cubedash.dockerArgs }} {{ . | quote }}, {{ end -}} ]
+        terminationGracePeriodSeconds: 60
+status: {}

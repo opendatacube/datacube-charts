@@ -1,0 +1,18 @@
+dependencies:
+  - name: datacube-index
+    version: 0.2.12
+    # Use special file:// path, not suitable for official helm repo
+    repository: "s3://datacube-charts-stable"
+    condition: index.enabled
+  - name: datacube-wps
+    version: 0.1.2
+    repository: "s3://datacube-charts-stable"
+    condition: wps.enabled
+  - name: datacube-dashboard
+    version: 0.2.7
+    repository: "s3://datacube-charts-stable"
+    condition: cubedash.enabled
+  - name: datacube-data
+    version: 0.1.5
+    repository: "s3://datacube-charts-stable"
+    condition: data_orchestration.enabled

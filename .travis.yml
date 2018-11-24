@@ -27,5 +27,5 @@ before_script:
 
 script:
   # Deploy charts in the stable folder to the datacube-charts repo
-  - deploy-charts.sh datacube-charts stable
+  - bash deploy-charts.sh datacube-charts stable
  

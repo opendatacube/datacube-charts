@@ -1,7 +1,7 @@
 dependencies:
 - name: datacube-index
   repository: s3://datacube-charts-stable
-  version: 0.2.12
+  version: 0.2.13
 - name: datacube-wps
   repository: s3://datacube-charts-stable
   version: 0.1.2
@@ -11,5 +11,5 @@ dependencies:
 - name: datacube-data
   repository: s3://datacube-charts-stable
   version: 0.1.5
-digest: sha256:20bc14b3a87e09397c5dbc3da44ea4fdb3d4cee49237c024cb62a10fa2a61b57
-generated: 2018-11-23T12:09:34.786862+11:00
+digest: sha256:ad31bc9c3803e75d19246baa28d18743764cc520d19a38aad51a4c756e321964
+generated: 2018-11-24T12:50:25.63843+11:00

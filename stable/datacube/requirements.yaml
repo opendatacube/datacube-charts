@@ -1,6 +1,6 @@
 dependencies:
   - name: datacube-index
-    version: 0.2.12
+    version: 0.2.13
     # Use special file:// path, not suitable for official helm repo
     repository: "s3://datacube-charts-stable"
     condition: index.enabled

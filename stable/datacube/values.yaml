@@ -7,8 +7,14 @@ maxReplicas: 2
 global:
   datacube:
     configPath: /opt/odc/datacube.conf
-    products: raw.githubusercontent.com/GeoscienceAustralia/dea-config/master/prod/products/nrt/sentinel/products.yaml
+    products: 
+      - https://raw.githubusercontent.com/GeoscienceAustralia/dea-config/master/dev/products/ls8-bare-earth/landsat8_barest_earth_albers.yaml
   clusterSecret: datakube.gadevs.ga
+  clusterInfo:
+    envName:
+  externalDatabase:
+    database: ows
+
 
 
 ##
@@ -85,6 +91,11 @@ datacube-index:
       requests:
         cpu: 300m
         memory: 2048Mi
+    products:
+    prefix:
+      - bare-earth/summary/v2.1.1/
+
+      
 
 # Enable NRT subchart if automated indexing and archiving jobs are required
 schedules:

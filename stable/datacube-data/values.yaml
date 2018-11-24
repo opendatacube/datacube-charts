@@ -35,3 +35,6 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+global:
+  externalDatabase: {}

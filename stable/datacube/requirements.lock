@@ -1,15 +1,15 @@
 dependencies:
 - name: datacube-index
-  repository: s3://datacube-charts-stable
+  repository: https://opendatacube.github.io/datacube-charts/charts/
   version: 0.2.13
 - name: datacube-wps
-  repository: s3://datacube-charts-stable
+  repository: https://opendatacube.github.io/datacube-charts/charts/
   version: 0.1.2
 - name: datacube-dashboard
-  repository: s3://datacube-charts-stable
+  repository: https://opendatacube.github.io/datacube-charts/charts/
   version: 0.2.7
 - name: datacube-data
-  repository: s3://datacube-charts-stable
+  repository: https://opendatacube.github.io/datacube-charts/charts/
   version: 0.1.5
-digest: sha256:ad31bc9c3803e75d19246baa28d18743764cc520d19a38aad51a4c756e321964
-generated: 2018-11-24T12:50:25.63843+11:00
+digest: sha256:33d0fb08f719ebd4e877e2d63fb6b927e6632fb24b1ea544ffbf296cd9f8f9d0
+generated: 2018-12-03T15:21:27.923729+11:00

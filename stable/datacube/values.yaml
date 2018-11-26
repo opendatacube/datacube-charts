@@ -7,8 +7,7 @@ maxReplicas: 2
 global:
   datacube:
     configPath: /opt/odc/datacube.conf
-    products: 
-      - https://raw.githubusercontent.com/GeoscienceAustralia/dea-config/master/dev/products/ls8-bare-earth/landsat8_barest_earth_albers.yaml
+    products: raw.githubusercontent.com/GeoscienceAustralia/dea-config/master/prod/products/nrt/sentinel/products.yaml
   clusterSecret: datakube.gadevs.ga
   clusterInfo:
     envName:
@@ -16,12 +15,13 @@ global:
     database: ows
 
 
-
 ##
 ## Datacube WMS configuration
 ##
 wms:
   enabled: true
+  maxSurge: 25%
+  maxUnavailable: 25%
   externalPort: 80
   internalPort: 8000
   resources:
@@ -34,6 +34,7 @@ wms:
   annotations:
     iam.amazonaws.com/role: kubernetes-wms
   additionalEnvironmentVars: { }
+
 
 ##
 ## Prometheus Monitoring
@@ -91,11 +92,6 @@ datacube-index:
       requests:
         cpu: 300m
         memory: 2048Mi
-    products:
-    prefix:
-      - bare-earth/summary/v2.1.1/
-
-      
 
 # Enable NRT subchart if automated indexing and archiving jobs are required
 schedules:

@@ -11,8 +11,16 @@ set -e
 # Tries to upload each chart to the repo
 
 repo="$1"
-pushd $2
-ls | xargs -n 1 echo helm package -u | bash
-ls | grep ".tgz" | xargs -I{} -n 1 sh -c "helm s3 push --acl=\"bucket-owner-full-control\" {} $repo --ignore-if-exists || :"
-ls | grep ".tgz" | xargs rm
-popd
+folder="$2"
+
+# build helm charts and dependencies
+helm package -u $folder/* 
+
+# copy charts that don't already exist (ignore fail messages if they do)
+cp -nv *.tgz charts/ 2>/dev/null || :
+
+# clean up duplicate charts so they don't polute the website
+rm *.tgz
+
+# rebuild index
+helm repo index charts --url $repo

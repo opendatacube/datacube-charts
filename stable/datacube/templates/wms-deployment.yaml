@@ -14,9 +14,9 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-  {{- if not .Values.wms.autoscaling }}
+{{- if not .Values.wms.autoscaling }}
   replicas: {{ .Values.minReplicas }}
-  {{- end }}
+{{- end }}
   strategy:
     rollingUpdate:
       maxSurge: {{ .Values.wms.maxSurge | quote }}
@@ -28,21 +28,26 @@ spec:
         app: {{ template "datacube.name" . }}
         release: {{ .Release.Name }}
       annotations:
-      {{- range $key, $value := .Values.wms.annotations }}
-        {{ $key }}: {{ $value | quote }}
-      {{- end }}
+{{ toYaml .Values.wms.annotations | indent 8 }}
     spec:
+      initContainers:
+{{- if .Values.wms.config.docker }}
+      - name: wms-config
+        image: "{{ $.Values.wms.config.docker.repository }}:{{ $.Values.wms.config.docker.tag }}"
+        imagePullPolicy: {{ $.Values.wms.config.docker.pullPolicy }}
+        args: [ "/bin/sh", "cp", "-f", "{{ .Values.wms.config.docker.src }}", "{{ .Values.wms.config.path }}/{{ .Values.wms.config.filename }}" ]
+{{- end }}
       containers:
       - name: wms
         env:
-        {{- if $dc.wmsConfigURL }}
+{{- if .Values.wms.config.url }}
         - name: WMS_CONFIG_URL
-          value: {{ $dc.wmsConfigURL | quote }}
-        {{- end }}
-        {{- if $dc.wms_config }}
-        - value: "{{ $dc.wms_config.mountPath }}/{{ $dc.wms_config.configMap }}.py"
+          value: {{ .Values.wms.config.url | quote }}
+{{- end }}
+{{- if .Values.wms.config.configMap }}
+        - value: "{{ .Values.wms.config.path }}/{{ .Values.wms.config.filename }}"
           name: WMS_CONFIG_PATH
-        {{- end }}
+{{- end }}
         - name: DB_HOSTNAME
           value: {{ $externalDb.host | quote }}
         - name: DB_PORT
@@ -63,39 +68,28 @@ spec:
           value: localhost,127.0.0.
         - name: DATACUBE_CONFIG_PATH
           value: {{ $dc.configPath }}
-        {{- if $prometheus.enabled }}
+{{- if $prometheus.enabled }}
         - name: prometheus_multiproc_dir
           value: {{ $prometheus.path | quote }}
-        {{- end }}
-        {{- if $profiling.enabled }}
+{{- end }}
+{{- if $profiling.enabled }}
         - name: PROFILER_FILE_PATH
           value: {{ $profiling.path }}
         - name: PROFILER
           value: {{ 1 | quote }}
-        {{- end }}
-        {{- if .Values.wms.additionalEnvironmentVars }}
-        {{- range $arg, $value := .Values.wms.additionalEnvironmentVars }}
+{{- end }}
+{{- if .Values.wms.additionalEnvironmentVars }}
+{{- range $arg, $value := .Values.wms.additionalEnvironmentVars }}
         - name: {{ $arg | quote }}
           value: {{ $value | quote }}
-        {{- end }}
-        {{- end }}
+{{- end }}
+{{- end }}
         image: "{{ $image.repository }}:{{ $image.tag }}"
         imagePullPolicy: {{ $image.pullPolicy }}
         ports:
         - containerPort: 8000
-        {{- with .Values.wms.resources }}
         resources:
-          {{- with .limits }}
-          limits:
-            {{ if .cpu }} cpu: {{ .cpu | quote }} {{ end }}
-            {{ if .memory }} memory: {{ .memory | quote }} {{ end }}
-          {{- end }}
-          {{- with .requests }}
-          requests:
-            {{ if .cpu }} cpu: {{ .cpu | quote }} {{ end }}
-            {{ if .memory }} memory: {{ .memory | quote }} {{ end }}
-          {{- end }}
-        {{- end }}
+{{ toYaml .Values.wms.resources | indent 10 }}
         livenessProbe:
           exec:
             command:
@@ -107,31 +101,35 @@ spec:
         args: [ {{- range .Values.wms.dockerArgs }} {{ . | quote }}, {{ end -}} ]
         terminationGracePeriodSeconds: 60
         volumeMounts:
-        {{- if $prometheus.enabled }}
+{{- if $prometheus.enabled }}
         - mountPath: {{ $prometheus.path }}
           name: prometheus-volume
-        {{- end }}
-        {{- if $profiling.enabled }}
+{{- end }}
+{{- if $profiling.enabled }}
         - mountPath: {{ $profiling.path }}
           name: profiling-volume
-        {{- end }}
-        {{- if $dc.wms_config }}
-        - mountPath: {{ $dc.wms_config.mountPath }}
+{{- end }}
+{{- if or .Values.wms.config.configMap .Values.wms.config.docker }}
+        - mountPath: {{ .Values.wms.config.path }}
           name: wms-config-volume
-        {{- end }}
+{{- end }}
       restartPolicy: Always
       volumes:
-      {{- if $prometheus.enabled }}
+{{- if $prometheus.enabled }}
       - name: prometheus-volume
         emptyDir: {}
-      {{- end }}
-      {{- if $profiling.enabled }}
+{{- end }}
+{{- if $profiling.enabled }}
       - name: profiling-volume
         emptyDir: {}
-      {{- end }}
-      {{- if $dc.wms_config }}
+{{- end }}
+{{- if or .Values.wms.config.configMap .Values.wms.config.docker }}
       - name: wms-config-volume
+{{- if .Values.wms.config.configMap }}
         configMap:
-          name: {{ $dc.wms_config.configMap }}
-      {{- end }}
+          name: {{ .Values.wms.config.configMap }}
+{{- else if .Values.wms.config.docker }}
+        emptyDir: {}
+{{- end }}
+{{- end }}
 status: {}

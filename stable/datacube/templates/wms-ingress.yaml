@@ -12,29 +12,27 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
   annotations:
-    {{- range $key, $value := .Values.ingress.annotations }}
-      {{ $key }}: {{ $value | quote }}
-    {{- end }}
+{{ toYaml .Values.ingress.annotations | indent 6 }}
 spec:
   rules:
-    {{- range $hostPrefix := .Values.ingress.hostPrefix }}
+{{- range $hostPrefix := .Values.ingress.hostPrefix }}
     - host: "{{ $hostPrefix }}.{{ $domain }}"
       http:
         paths:
           - backend:
               serviceName: {{ $serviceName }}
               servicePort: {{ $servicePort }}
-    {{- end -}}
-    {{- range $host := .Values.ingress.hosts }}
+{{- end -}}
+{{- range $host := .Values.ingress.hosts }}
     - host: {{ $host }}
       http:
         paths:
           - backend:
               serviceName: {{ $serviceName }}
               servicePort: {{ $servicePort }}
-    {{- end -}}
-  {{- if .Values.ingress.tls }}
+{{- end -}}
+{{- if .Values.ingress.tls }}
   tls:
 {{ toYaml .Values.ingress.tls | indent 4 }}
-  {{- end -}}
+{{- end -}}
 {{- end -}}

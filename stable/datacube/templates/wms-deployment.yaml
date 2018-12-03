@@ -17,6 +17,11 @@ spec:
   {{- if not .Values.wms.autoscaling }}
   replicas: {{ .Values.minReplicas }}
   {{- end }}
+  strategy:
+    rollingUpdate:
+      maxSurge: {{ .Values.wms.maxSurge | quote }}
+      maxUnavailable: {{ .Values.wms.maxUnavailable | quote }}
+    type: RollingUpdate
   template:
     metadata:
       labels:

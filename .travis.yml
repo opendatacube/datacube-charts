@@ -4,6 +4,8 @@ sudo: false
 language: python
 python:
   - "3.6"
+git:
+  depth: 2
 
 env:
   global:
@@ -26,7 +28,7 @@ before_script:
   - git remote add origin https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
   - git remote set-branches --add origin gh-pages
   - git fetch
-  - git checkout gh-pages -- charts/
+  - git checkout origin/gh-pages -- charts/
 
 script:
   # Generate chart tarballs and index file

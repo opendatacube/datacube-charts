@@ -14,6 +14,8 @@ repo="$1"
 folder="$2"
 
 # build helm charts and dependencies
+helm repo add datacube-charts $repo
+helm repo update
 helm package -u $folder/* 
 
 # copy charts that don't already exist (ignore fail messages if they do)

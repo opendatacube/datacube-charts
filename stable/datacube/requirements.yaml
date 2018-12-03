@@ -1,6 +1,6 @@
 dependencies:
   - name: datacube-index
-    version: 0.2.13
+    version: 0.2.12
     # Use special file:// path, not suitable for official helm repo
     repository: "https://opendatacube.github.io/datacube-charts/charts/"
     condition: index.enabled
@@ -14,5 +14,10 @@ dependencies:
     condition: cubedash.enabled
   - name: datacube-data
     version: 0.1.5
+<<<<<<< HEAD
     repository: "https://opendatacube.github.io/datacube-charts/charts/"
     condition: data_orchestration.enabled
+=======
+    repository: "s3://datacube-charts-stable"
+    condition: data_orchestration.enabled
+>>>>>>> 0631293... Update RollingUpdate strategy to 25% max surge

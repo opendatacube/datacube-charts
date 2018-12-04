@@ -28,6 +28,7 @@ wms:
     limits:
       cpu: "1"
       memory: 2048Mi
+  targetCpu: 10
   dockerArgs: [ "gunicorn", "-b", "0.0.0.0:8000", "-w", "4", "--keep-alive", "50", "--timeout", "120", "datacube_wms.wsgi" ]
   autoscaling: True
   annotations:

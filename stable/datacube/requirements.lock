@@ -7,9 +7,9 @@ dependencies:
   version: 0.1.2
 - name: datacube-dashboard
   repository: https://opendatacube.github.io/datacube-charts/charts/
-  version: 0.2.7
+  version: 0.2.9
 - name: datacube-data
   repository: https://opendatacube.github.io/datacube-charts/charts/
   version: 0.1.5
-digest: sha256:7ac584d131a1fe3cc0464582db6df02a7b3fd36353ca3192c88158f14891d732
-generated: 2018-12-04T03:16:48.29550503Z
+digest: sha256:1e0e31f8ae0766a6e29961178f8f3c024a16128755ba65f91e0b9efedf174654
+generated: 2018-12-04T14:02:36.815039+11:00

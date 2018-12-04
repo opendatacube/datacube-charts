@@ -36,6 +36,9 @@ spec:
         image: "{{ $.Values.wms.config.docker.repository }}:{{ $.Values.wms.config.docker.tag }}"
         imagePullPolicy: {{ $.Values.wms.config.docker.pullPolicy }}
         args: [ "cp", "-f", "{{ .Values.wms.config.docker.src }}", "{{ .Values.wms.config.path }}/{{ .Values.wms.config.filename }}" ]
+        volumeMounts:
+        - mountPath: {{ .Values.wms.config.path }}
+          name: wms-config-volume
 {{- end }}
       containers:
       - name: wms

@@ -47,7 +47,7 @@ spec:
         - name: WMS_CONFIG_URL
           value: {{ .Values.wms.config.url | quote }}
 {{- end }}
-{{- if .Values.wms.config.configMap }}
+{{- if or .Values.wms.config.configMap .Values.wms.config.docker }}
         - value: "{{ .Values.wms.config.path }}/{{ .Values.wms.config.filename }}"
           name: WMS_CONFIG_PATH
 {{- end }}

@@ -62,19 +62,6 @@ setup:
 ##
 cleanup:
   dockerArgs: [ "/bin/bash", "-c", "cd setup; ./drop-db.sh" ]
-
-##
-## Datacube Index configuration
-##
-## whether we should create an index or not
-index:
-  enabled: false
-# Host prefixes will prepend this to the value of global.domain
-# hostPrefix:
-# - custom
-# hosts:
-# - custom.hostname.com
-
 wps:
   enabled: false
 

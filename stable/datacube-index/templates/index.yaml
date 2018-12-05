@@ -2,23 +2,23 @@
 {{- $dc := .Values.global.datacube }}
 {{- $index := .Values.index }}
 {{- $image := .Values.global.image }}
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: Job
 metadata:
-  name: "{{ $externalDb.database }}-index"
+  name: "{{ $index.jobname }}"
   labels:
-    heritage: {{.Release.Service | quote }}
-    release: {{.Release.Name | quote }}
+    heritage: {{ $index.jobname }}
+    release: {{ $index.jobname }}
     chart: "{{.Chart.Name}}-{{.Chart.Version}}"
     component: index
 spec:
   backoffLimit: 1
   template:
     metadata:
-      name: "{{ $externalDb.database }}-index"
+      name: "{{ $index.jobname }}"
       labels:
-        heritage: {{.Release.Service | quote }}
-        release: {{.Release.Name | quote }}
+        heritage: {{ $index.jobname }}
+        release: {{ $index.jobname }}
         chart: "{{.Chart.Name}}-{{.Chart.Version}}"
       annotations:
 {{ toYaml $index.annotations | indent 8 }}
@@ -32,6 +32,8 @@ spec:
         image: "{{ $image.repository }}:{{ $image.tag }}"
         imagePullPolicy: {{ $image.pullPolicy }}
         args: [ {{- range $index.dockerArgs }} {{ . | quote }}, {{ end -}} ]
+        resources:
+{{ toYaml $index.resources | indent 10 }}
         env:
         - name: WMS_CONFIG_URL
 {{- if $index.wmsConfigURL }}

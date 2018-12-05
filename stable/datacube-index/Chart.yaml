@@ -1,7 +1,7 @@
 apiVersion: v1
 description: Datacube OGC Web Services Indexing
 name: datacube-index
-version: 0.3.0
+version: 0.3.1
 keywords:
 - datacube
 - http

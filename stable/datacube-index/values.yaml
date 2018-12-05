@@ -1,7 +1,3 @@
-# Values required for NRT upkeep and operation
-image:
-  repository: opendatacube/wms
-  tag: latest
 ##
 ## Datacube Index configuration
 ##

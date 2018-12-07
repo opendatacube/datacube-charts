@@ -4,6 +4,8 @@
 
 ## Example Config
 
+This example works on docker for mac, with a pre-indexed postgres database hosted on the host machine
+
 ```yaml
 global:
   image:

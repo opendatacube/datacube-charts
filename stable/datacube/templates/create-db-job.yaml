@@ -53,10 +53,5 @@ spec:
             secretKeyRef:
               name: {{ .Values.global.clusterSecret }}
               key: postgres-password
-        - name: STATE_BUCKET
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Values.global.clusterSecret }}
-              key: state-bucket
       restartPolicy: Never
   backoffLimit: 2

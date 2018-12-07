@@ -28,6 +28,7 @@ wms:
     limits:
       cpu: "1"
       memory: 2048Mi
+  targetCpu: 10
   dockerArgs: [ "gunicorn", "-b", "0.0.0.0:8000", "-w", "4", "--keep-alive", "50", "--timeout", "120", "datacube_wms.wsgi" ]
   autoscaling: True
   annotations:
@@ -61,19 +62,6 @@ setup:
 ##
 cleanup:
   dockerArgs: [ "/bin/bash", "-c", "cd setup; ./drop-db.sh" ]
-
-##
-## Datacube Index configuration
-##
-## whether we should create an index or not
-index:
-  enabled: false
-# Host prefixes will prepend this to the value of global.domain
-# hostPrefix:
-# - custom
-# hosts:
-# - custom.hostname.com
-
 wps:
   enabled: false
 

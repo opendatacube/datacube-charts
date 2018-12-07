@@ -1,7 +1,3 @@
-# Values required for NRT upkeep and operation
-image:
-  repository: opendatacube/wms
-  tag: latest
 ##
 ## Datacube Index configuration
 ##
@@ -11,9 +7,6 @@ index:
   bucket: dea-public-data
   suffix: .yaml
   prefix: []
-  historyLimit: 5
-  cron: "0 0 31 2 *"
-  suspend: true
   annotations:
     iam.amazonaws.com/role: kubernetes-wms
   resources:

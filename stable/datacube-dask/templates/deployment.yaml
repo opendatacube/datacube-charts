@@ -24,6 +24,10 @@ spec:
         - name: {{ template "datacube-dask.name" . }}-scheduler
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+          - name: config-volume
+            mountPath: /etc/config/datacube/dask/
+          command: [ {{- range .Values.scheduler.command }} {{ . | quote }}, {{ end -}}  ]
           args: [ {{- range .Values.scheduler.args }} {{ . | quote }}, {{ end -}} ]
           env:
 {{- if .Values.scheduler.env }}
@@ -48,6 +52,10 @@ spec:
             periodSeconds: 60
           resources:
 {{ toYaml .Values.resources | indent 12 }}
+      volumes:
+      - name: config-volume
+        configMap:
+          name: {{ include "datacube-dask.fullname" . }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}

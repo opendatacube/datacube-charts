@@ -1,0 +1,62 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ include "datacube-dask.fullname" . }}-scheduler
+  labels:
+    app.kubernetes.io/name: {{ include "datacube-dask.name" . }}
+    helm.sh/chart: {{ include "datacube-dask.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "datacube-dask.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "datacube-dask.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      serviceAccountName: {{ include "datacube-dask.fullname" . }}
+      containers:
+        - name: {{ template "datacube-dask.name" . }}-scheduler
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: [ {{- range .Values.scheduler.args }} {{ . | quote }}, {{ end -}} ]
+          env:
+{{- if .Values.scheduler.env }}
+{{- range $arg, $value := .Values.scheduler.env }}
+          - name: {{ $arg | quote }}
+            value: {{ $value | quote }}
+{{- end }}
+{{- end }}
+          ports:
+            - name: scheduler
+              containerPort: {{ .Values.scheduler.port }}
+              protocol: TCP
+            - name: bokeh
+              containerPort: {{ .Values.scheduler.bokehPort }}
+          livenessProbe:
+            exec:
+              command:
+              - dask-scheduler-health.py
+              - --port
+              - {{ .Values.scheduler.port | quote }}
+            initialDelaySeconds: 30
+            periodSeconds: 60
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

@@ -2,7 +2,7 @@ apiVersion: v1
 entries:
   datacube:
   - apiVersion: v1
-    created: 2018-12-17T21:25:08.194456435Z
+    created: 2018-12-17T23:58:57.315807688Z
     description: Datacube Web Map Service
     digest: 6e81d18159da24113e39aa0b1ef22ef3649949dfcf1eaf959da85313b474be7d
     home: https://www.opendatacube.org/documentation
@@ -20,7 +20,7 @@ entries:
     - https://opendatacube.github.io/datacube-charts/charts/datacube-0.10.0.tgz
     version: 0.10.0
   - apiVersion: v1
-    created: 2018-12-17T21:25:08.208971439Z
+    created: 2018-12-17T23:58:57.329942042Z
     description: Datacube Web Map Service
     digest: a96f14b640e0c0d24a3a0cf9f6c6ddb56f9afeb39dc70281d22b0ce8916388fd
     home: https://www.opendatacube.org/documentation
@@ -38,7 +38,7 @@ entries:
     - https://opendatacube.github.io/datacube-charts/charts/datacube-0.9.8.tgz
     version: 0.9.8
   - apiVersion: v1
-    created: 2018-12-17T21:25:08.207730661Z
+    created: 2018-12-17T23:58:57.328747674Z
     description: Datacube Web Map Service
     digest: ac470251641d05d91e927d13236f8f1f4b0547842f97bcae1c3a7048677b6fa2
     home: https://www.opendatacube.org/documentation
@@ -56,7 +56,7 @@ entries:
     - https://opendatacube.github.io/datacube-charts/charts/datacube-0.9.7.tgz
     version: 0.9.7
   - apiVersion: v1
-    created: 2018-12-17T21:25:08.206458541Z
+    created: 2018-12-17T23:58:57.327592397Z
     description: Datacube Web Map Service
     digest: 0b6ffe4e4860f6a546aef9bad281a89379ec43a9d6f203bd50784a69d1a2cc17
     home: https://www.opendatacube.org/documentation
@@ -74,7 +74,7 @@ entries:
     - https://opendatacube.github.io/datacube-charts/charts/datacube-0.9.4.tgz
     version: 0.9.4
   - apiVersion: v1
-    created: 2018-12-17T21:25:08.205214758Z
+    created: 2018-12-17T23:58:57.326302008Z
     description: Datacube Web Map Service
     digest: 2cf6b8d259960013cb3f31176da7688cb93bd7883db17f0b75d84fc87fa6ebe5
     home: https://www.opendatacube.org/documentation
@@ -92,7 +92,7 @@ entries:
     - https://opendatacube.github.io/datacube-charts/charts/datacube-0.9.3.tgz
     version: 0.9.3
   - apiVersion: v1
-    created: 2018-12-17T21:25:08.204040522Z
+    created: 2018-12-17T23:58:57.325131528Z
     description: Datacube Web Map Service
     digest: 97258ef8783182f51efbfb83a65cf9de146a501856ae2b73c91c84e3636562a6
     home: https://www.opendatacube.org/documentation
@@ -110,7 +110,7 @@ entries:
     - https://opendatacube.github.io/datacube-charts/charts/datacube-0.9.2.tgz
     version: 0.9.2
   - apiVersion: v1
-    created: 2018-12-17T21:25:08.20275984Z
+    created: 2018-12-17T23:58:57.323808784Z
     description: Datacube Web Map Service
     digest: dc0621600e1cb219a4d8e2ccd153a687ed82b49bcbf025bbbe1c6acc47025fb4
     home: https://www.opendatacube.org/documentation
@@ -128,7 +128,7 @@ entries:
     - https://opendatacube.github.io/datacube-charts/charts/datacube-0.9.1.tgz
     version: 0.9.1
   - apiVersion: v1
-    created: 2018-12-17T21:25:08.201552034Z
+    created: 2018-12-17T23:58:57.322451576Z
     description: Datacube Web Map Service
     digest: cd250eec361c23425cbc8ad5520ce7d0f92133d18d029716a4a16e5c036eba7c
     home: https://www.opendatacube.org/documentation
@@ -146,7 +146,7 @@ entries:
     - https://opendatacube.github.io/datacube-charts/charts/datacube-0.9.0.tgz
     version: 0.9.0
   - apiVersion: v1
-    created: 2018-12-17T21:25:08.200209297Z
+    created: 2018-12-17T23:58:57.320699647Z
     description: Datacube Web Map Service
     digest: c6f0aeeb218a2fb01a1c6ba56f9b589cbae454560f128f44bf3b8b6d187307b6
     home: https://www.opendatacube.org/documentation
@@ -164,7 +164,7 @@ entries:
     - https://opendatacube.github.io/datacube-charts/charts/datacube-0.8.50.tgz
     version: 0.8.50
   - apiVersion: v1
-    created: 2018-12-17T21:25:08.197408492Z
+    created: 2018-12-17T23:58:57.318282284Z
     description: Datacube Web Map Service
     digest: f695edd6309d763d2ee108aa4bd299fc12bcec6e604cfc7badd8859cee1fc712
     home: https://www.opendatacube.org/documentation
@@ -184,7 +184,7 @@ entries:
   datacube-dashboard:
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2018-12-17T21:25:08.210037646Z
+    created: 2018-12-17T23:58:57.33093469Z
     description: A Helm chart for Datacube Dashboard
     digest: 6621bff2065232de3e9e6051949699cc27ae30ab8ee8e54ccfd82620fdb1393f
     name: datacube-dashboard
@@ -193,7 +193,7 @@ entries:
     version: 0.2.9
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2018-12-17T21:25:08.209686249Z
+    created: 2018-12-17T23:58:57.33061946Z
     description: A Helm chart for Datacube Dashboard
     digest: a4c9260370a4f6d2dc11075b0cbb9b073a1e53c2af02a1b088e4f37d1812228d
     name: datacube-dashboard
@@ -202,17 +202,27 @@ entries:
     version: 0.2.8
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2018-12-17T21:25:08.209331443Z
+    created: 2018-12-17T23:58:57.330260871Z
     description: A Helm chart for Kubernetes
     digest: 089b7c7b8d01f1fb2f13333aafce39f9b2126f4c6548d0954d92f8868637a6ea
     name: datacube-dashboard
     urls:
     - https://opendatacube.github.io/datacube-charts/charts/datacube-dashboard-0.2.7.tgz
     version: 0.2.7
+  datacube-dask:
+  - apiVersion: v1
+    appVersion: alpha
+    created: 2018-12-17T23:58:57.331308099Z
+    description: A Helm chart for Kubernetes
+    digest: 476f978c49a215ea665ae45efebf2c41a141dc27f3336d9e3f96d0a84b53790b
+    name: datacube-dask
+    urls:
+    - https://opendatacube.github.io/datacube-charts/charts/datacube-dask-0.1.0.tgz
+    version: 0.1.0
   datacube-data:
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2018-12-17T21:25:08.21026775Z
+    created: 2018-12-17T23:58:57.331542827Z
     description: A Helm chart for running datacube data management
     digest: 3db264529fa969c67613f233ff9a311e40aa7088dcc4058ecba073f9e66242c7
     name: datacube-data
@@ -221,7 +231,7 @@ entries:
     version: 0.1.5
   datacube-index:
   - apiVersion: v1
-    created: 2018-12-17T21:25:08.21156875Z
+    created: 2018-12-17T23:58:57.332690824Z
     description: Datacube OGC Web Services Indexing
     digest: ebaa7d29c0bbbb75680000e2ea280978d3301ac454f81d8f8d19b96d61a489fc
     home: https://www.opendatacube.org/documentation
@@ -241,7 +251,7 @@ entries:
     - https://opendatacube.github.io/datacube-charts/charts/datacube-index-0.3.1.tgz
     version: 0.3.1
   - apiVersion: v1
-    created: 2018-12-17T21:25:08.211251217Z
+    created: 2018-12-17T23:58:57.332409347Z
     description: Datacube OGC Web Services Indexing
     digest: e1d84ddea4ee5f010f5d2364b70604b21de04155c393f31f21a37251a4029d18
     home: https://www.opendatacube.org/documentation
@@ -261,7 +271,7 @@ entries:
     - https://opendatacube.github.io/datacube-charts/charts/datacube-index-0.3.0.tgz
     version: 0.3.0
   - apiVersion: v1
-    created: 2018-12-17T21:25:08.210941494Z
+    created: 2018-12-17T23:58:57.332117071Z
     description: Datacube OGC Web Services Indexing
     digest: 99bfda09d92af5df96dba04ecbfce004ca815049259f50db5a30d0435c6ab55b
     home: https://www.opendatacube.org/documentation
@@ -281,7 +291,7 @@ entries:
     - https://opendatacube.github.io/datacube-charts/charts/datacube-index-0.2.13.tgz
     version: 0.2.13
   - apiVersion: v1
-    created: 2018-12-17T21:25:08.210588257Z
+    created: 2018-12-17T23:58:57.331823064Z
     description: Datacube OGC Web Services Indexing
     digest: 36855c71635ba878c8cd1b4382bcb37d3655448d3a7fb9f9393f0802f9f429cb
     home: https://www.opendatacube.org/documentation
@@ -303,7 +313,7 @@ entries:
   datacube-wps:
   - apiVersion: v1
     appVersion: alpha
-    created: 2018-12-17T21:25:08.212118295Z
+    created: 2018-12-17T23:58:57.333192415Z
     description: A Helm chart for Datacube WPS on Kubernetes
     digest: af43a408a3255ca1f95606c7dd10617f0160cacbac690ba713fc41937aeb7353
     name: datacube-wps
@@ -312,11 +322,11 @@ entries:
     version: 0.3.0
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2018-12-17T21:25:08.211827057Z
+    created: 2018-12-17T23:58:57.332925466Z
     description: Datacube WPS Helm Chart
     digest: 5ce00b82c6e429ad163100bd5cb1f8518cbd6c28bdddc08ffcd075ed85927ccb
     name: datacube-wps
     urls:
     - https://opendatacube.github.io/datacube-charts/charts/datacube-wps-0.1.2.tgz
     version: 0.1.2
-generated: 2018-12-17T21:25:08.193193752Z
+generated: 2018-12-17T23:58:57.314617143Z

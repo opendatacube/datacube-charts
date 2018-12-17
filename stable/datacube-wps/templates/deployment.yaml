@@ -9,10 +9,6 @@ metadata:
     helm.sh/chart: {{ include "datacube-wps.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-  annotations:
-  {{- range $key, $value := .Values.wps.annotations }}
-    {{ $key }}: {{ $value | quote }}
-  {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -24,6 +20,10 @@ spec:
       labels:
         app.kubernetes.io/name: {{ include "datacube-wps.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+      annotations:
+      {{- range $key, $value := .Values.wps.annotations }}
+        {{ $key }}: {{ $value | quote }}
+      {{- end }}
     spec:
       initContainers:
       {{- if .Values.wps.config.docker }}

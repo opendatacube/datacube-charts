@@ -21,11 +21,27 @@ spec:
         app: {{ template "datacube-wps.name" . }}
         release: {{ .Release.Name }}
     spec:
+      initContainers:
+{{- if .Values.wps.config.docker }}
+      - name: wps-config
+        image: "{{ $.Values.wps.config.docker.repository }}:{{ $.Values.wps.config.docker.tag }}"
+        imagePullPolicy: {{ $.Values.wps.config.docker.pullPolicy }}
+        args: [ "cp", "-f", "{{ .Values.wps.config.docker.src }}", "{{ .Values.wps.config.path }}/{{ .Values.wps.config.filename }}" ]
+        volumeMounts:
+        - mountPath: {{ .Values.wps.config.path }}
+          name: wps-config-volume
+{{- end }}
       containers:
       - name: wps
         env:
+{{- if .Values.wps.config.url }}
         - name: WPS_CONFIG_URL
-          value: {{ $dc.wpsConfigURL | quote }}
+          value: {{ .Values.wps.config.url | quote }}
+{{- end }}
+{{- if or .Values.wps.config.configMap .Values.wps.config.docker }}
+        - value: "{{ .Values.wps.config.path }}/{{ .Values.wps.config.filename }}"
+          name: WPS_CONFIG_PATH
+{{- end }}
         - name: DB_HOSTNAME
           value: {{ $externalDb.host | quote }}
         - name: DB_PORT
@@ -66,6 +82,15 @@ spec:
       volumes:
       - name: output-volume
         emptyDir: {}
+      {{- if or .Values.wps.config.configMap .Values.wps.config.docker }}
+      - name: wps-config-volume
+{{- if .Values.wps.config.configMap }}
+        configMap:
+          name: {{ .Values.wps.config.configMap }}
+{{- else if .Values.wps.config.docker }}
+        emptyDir: {}
+{{- end }}
+      {{- end }}
       {{- with .Values.wps.resources }}
       resources:
         {{- with .limits }}

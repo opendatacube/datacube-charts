@@ -18,8 +18,6 @@ global:
 ##
 wps:
   enabled: true
-  externalPort: 80
-  internalPort: 8000
   resources:
     limits:
       cpu: "2"
@@ -34,3 +32,4 @@ ingress:
 
 service:
   type: NodePort
+  port: 8000

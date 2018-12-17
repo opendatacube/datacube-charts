@@ -1,28 +1,32 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1beta2
 kind: Deployment
 {{ $externalDb := .Values.global.externalDatabase }}
 {{ $dc := .Values.global.datacube }}
 metadata:
-  name: "{{ .Release.Name }}-wps"
+  name: {{ include "datacube-wps.fullname" . }}
   labels:
-    app: {{ template "datacube-wps.name" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    app.kubernetes.io/name: {{ include "datacube-wps.name" . }}
+    helm.sh/chart: {{ include "datacube-wps.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
   annotations:
   {{- range $key, $value := .Values.wps.annotations }}
     {{ $key }}: {{ $value | quote }}
   {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "datacube-wps.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: {{ template "datacube-wps.name" . }}
-        release: {{ .Release.Name }}
+        app.kubernetes.io/name: {{ include "datacube-wps.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       initContainers:
-{{- if .Values.wps.config.docker }}
+      {{- if .Values.wps.config.docker }}
       - name: wps-config
         image: "{{ $.Values.wps.config.docker.repository }}:{{ $.Values.wps.config.docker.tag }}"
         imagePullPolicy: {{ $.Values.wps.config.docker.pullPolicy }}
@@ -30,78 +34,82 @@ spec:
         volumeMounts:
         - mountPath: {{ .Values.wps.config.path }}
           name: wps-config-volume
-{{- end }}
+      {{- end }}
       containers:
-      - name: wps
-        env:
-{{- if .Values.wps.config.url }}
-        - name: WPS_CONFIG_URL
-          value: {{ .Values.wps.config.url | quote }}
-{{- end }}
-{{- if or .Values.wps.config.configMap .Values.wps.config.docker }}
-        - value: "{{ .Values.wps.config.path }}/{{ .Values.wps.config.filename }}"
-          name: WPS_CONFIG_PATH
-{{- end }}
-        - name: DB_HOSTNAME
-          value: {{ $externalDb.host | quote }}
-        - name: DB_PORT
-          value: {{ $externalDb.port | quote }}
-        - name: DB_DATABASE
-          value: {{ $externalDb.database | quote }}
-        - name: DB_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: {{ $externalDb.database }}
-              key: postgres-username
-        - name: DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ $externalDb.database }}
-              key: postgres-password
-        - name: VIRTUAL_HOST
-          value: localhost,127.0.0.
-        - name: DATACUBE_CONFIG_PATH
-          value: {{ $dc.configPath }}
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 8000
-        resources: {}
-        livenessProbe:
-          httpGet:
-            path: /?service=WPS&request=GetCapabilities&version=1.0.0
-            port: 8000
-          timeoutSeconds: 60
-          initialDelaySeconds: 30
-          periodSeconds: 30
-        args: ["gunicorn", "-b", "0.0.0.0:8000", "-w", "2", "--timeout", "300", "wps:app"]
-        volumeMounts:
-        - mountPath: /opt/outputs/
-          name: output-volume 
-      restartPolicy: Always
+        - name: wps
+          env:
+          {{- if .Values.wps.config.url }}
+          - name: WPS_CONFIG_URL
+            value: {{ .Values.wps.config.url | quote }}
+          {{- end }}
+          {{- if or .Values.wps.config.configMap .Values.wps.config.docker }}
+          - value: "{{ .Values.wps.config.path }}/{{ .Values.wps.config.filename }}"
+            name: WPS_CONFIG_PATH
+          {{- end }}
+          - name: DB_HOSTNAME
+            value: {{ $externalDb.host | quote }}
+          - name: DB_PORT
+            value: {{ $externalDb.port | quote }}
+          - name: DB_DATABASE
+            value: {{ $externalDb.database | quote }}
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: {{ $externalDb.database }}
+                key: postgres-username
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ $externalDb.database }}
+                key: postgres-password
+          - name: VIRTUAL_HOST
+            value: localhost,127.0.0.
+          - name: DATACUBE_CONFIG_PATH
+            value: {{ $dc.configPath }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /?service=WPS&request=GetCapabilities&version=1.0.0
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /?service=WPS&request=GetCapabilities&version=1.0.0
+              port: http
+          volumeMounts:
+          - mountPath: /opt/outputs/
+            name: output-volume
+          {{- if or .Values.wps.config.configMap .Values.wps.config.docker }}
+          - mountPath: {{ .Values.wps.config.path }}
+            name: wps-config-volume
+          {{- end }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
       volumes:
       - name: output-volume
         emptyDir: {}
       {{- if or .Values.wps.config.configMap .Values.wps.config.docker }}
       - name: wps-config-volume
-{{- if .Values.wps.config.configMap }}
+      {{- if .Values.wps.config.configMap }}
         configMap:
           name: {{ .Values.wps.config.configMap }}
-{{- else if .Values.wps.config.docker }}
+      {{- else if .Values.wps.config.docker }}
         emptyDir: {}
-{{- end }}
       {{- end }}
-      {{- with .Values.wps.resources }}
-      resources:
-        {{- with .limits }}
-        limits:
-            {{ if .cpu }} cpu: {{ .cpu | quote }} {{ end }}
-            {{ if .memory }} memory: {{ .memory | quote }} {{ end }}
-        {{- end }}
-        {{- with .requests }}
-          requests:
-            {{ if .cpu }} cpu: {{ .cpu | quote }} {{ end }}
-            {{ if .memory }} memory: {{ .memory | quote }} {{ end }}
-        {{- end }}
       {{- end }}
-status: {}

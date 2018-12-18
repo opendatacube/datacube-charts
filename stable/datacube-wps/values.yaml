@@ -28,6 +28,7 @@ wps:
     
 ingress:
   enabled: false
+  prefixes: [ ]
 
 service:
   type: NodePort

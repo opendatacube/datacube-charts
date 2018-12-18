@@ -36,8 +36,9 @@ spec:
               servicePort: http
   {{- end }}
   {{- if and .Values.global.domain .Values.ingress.prefixes }}
+  {{- $domain := .Values.global.domain }}
   {{- range .Values.ingress.prefixes }}
-    - host: "{{ . }}.{{ .Values.global.domain }}"
+    - host: "{{ . }}.{{ $domain }}"
       http:
       paths:
         - path: {{ $ingressPath }}
@@ -46,5 +47,4 @@ spec:
             servicePort: http
   {{- end }}
   {{- end }}
-  }
 {{- end }}

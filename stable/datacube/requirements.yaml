@@ -1,6 +1,6 @@
 dependencies:
   - name: datacube-wps
-    version: 0.3.1
+    version: 0.4.0
     repository: "https://opendatacube.github.io/datacube-charts/charts/"
     condition: wps.enabled
   - name: datacube-dashboard

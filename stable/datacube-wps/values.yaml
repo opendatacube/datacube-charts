@@ -22,8 +22,7 @@ wps:
     limits:
       cpu: "2"
       memory: 2048Mi
-  annotations:
-    iam.amazonaws.com/role: kubernetes-wms
+  annotations: { }
   config:
     docker: { }
     

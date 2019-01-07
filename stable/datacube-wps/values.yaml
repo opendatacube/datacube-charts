@@ -17,6 +17,7 @@ global:
 ## Datacube WMS configuration
 ##
 wps:
+  baseurl: ""
   enabled: true
   resources:
     limits:

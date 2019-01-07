@@ -66,6 +66,8 @@ spec:
             value: localhost,127.0.0.
           - name: DATACUBE_CONFIG_PATH
             value: {{ $dc.configPath }}
+          - name: WPS_BASEURL
+            value: {{ tpl .Values.wps.baseurl .  | quote }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:

@@ -1,0 +1,13 @@
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "datacube-dask.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "datacube-dask.fullname" . }}
+  apiGroup: ""
+roleRef:
+  kind: Role
+  name: {{ include "datacube-dask.fullname" . }}
+  apiGroup: ""

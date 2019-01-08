@@ -8,28 +8,29 @@ image:
   tag: 'latest'
   pullPolicy: Always
 
-clusterSecret: datakube.gadevs.ga
-
 global:
-  datacube:
-    wpsConfigURL: https://raw.githubusercontent.com/GeoscienceAustralia/dea-config/master/dev/services/wps/combined/pywps.cfg
+  clusterInfo:
+    envName:
+  externalDatabase: { }
 
 ##
 ## Datacube WMS configuration
 ##
 wps:
+  baseurl: ""
   enabled: true
-  externalPort: 80
-  internalPort: 8000
   resources:
     limits:
       cpu: "2"
       memory: 2048Mi
-  annotations:
-    iam.amazonaws.com/role: kubernetes-wms
+  annotations: { }
+  config:
+    docker: { }
     
 ingress:
   enabled: false
+  prefixes: [ ]
 
 service:
   type: NodePort
+  port: 8000

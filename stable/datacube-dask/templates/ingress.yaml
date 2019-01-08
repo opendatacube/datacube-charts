@@ -1,13 +1,13 @@
 {{- if .Values.ingress.enabled -}}
-{{- $fullName := include "datacube-wps.fullname" . -}}
+{{- $fullName := include "datacube-dask.fullname" . -}}
 {{- $ingressPath := .Values.ingress.path -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ $fullName }}
   labels:
-    app.kubernetes.io/name: {{ include "datacube-wps.name" . }}
-    helm.sh/chart: {{ include "datacube-wps.chart" . }}
+    app.kubernetes.io/name: {{ include "datacube-dask.name" . }}
+    helm.sh/chart: {{ include "datacube-dask.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- with .Values.ingress.annotations }}
@@ -34,17 +34,5 @@ spec:
             backend:
               serviceName: {{ $fullName }}
               servicePort: http
-  {{- end }}
-  {{- if and .Values.global.domain .Values.ingress.prefixes }}
-  {{- $domain := .Values.global.domain }}
-  {{- range .Values.ingress.prefixes }}
-    - host: "{{ . }}.{{ $domain }}"
-      http:
-      paths:
-        - path: {{ $ingressPath }}
-          backend:
-            serviceName: {{ $fullName }}
-            servicePort: http
-  {{- end }}
   {{- end }}
 {{- end }}

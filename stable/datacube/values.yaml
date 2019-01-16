@@ -33,8 +33,8 @@ wms:
   autoscaling: True
   annotations:
     iam.amazonaws.com/role: kubernetes-wms
-  config:
-    docker: { }
+wmsConfig:
+  image: { }
 
 
 ##
@@ -70,20 +70,6 @@ cubedash:
 
 data_orchestration:
   enabled: true
-
-datacube-index:
-  index:
-    bucket: dea-public-data
-    prefix: default
-    suffix: .yaml
-    resources:
-      requests:
-        cpu: 300m
-        memory: 2048Mi
-
-# Enable NRT subchart if automated indexing and archiving jobs are required
-schedules:
-  enabled: false
 
 service:
   type: NodePort

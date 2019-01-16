@@ -30,7 +30,7 @@ spec:
       - name: wps-config
         image: "{{ $.Values.wpsConfig.image.repository }}:{{ $.Values.wpsConfig.image.tag }}"
         imagePullPolicy: {{ $.Values.wpsConfig.image.pullPolicy }}
-        args: [ "cp", "-f", "{{ .Values.wpsConfig.image.src }}", "{{ .Values.wpsConfig.path }}/{{ .Values.wps.config.filename }}" ]
+        args: [ "cp", "-f", "{{ .Values.wpsConfig.image.src }}", "{{ .Values.wpsConfig.path }}/{{ .Values.wpsConfig.filename }}" ]
         volumeMounts:
         - mountPath: {{ .Values.wpsConfig.path }}
           name: wps-config-volume

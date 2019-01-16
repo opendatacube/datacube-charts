@@ -24,8 +24,8 @@ wps:
       cpu: "2"
       memory: 2048Mi
   annotations: { }
-  config:
-    docker: { }
+wpsConfig:
+  image: { }
     
 ingress:
   enabled: false

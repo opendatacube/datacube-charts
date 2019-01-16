@@ -33,7 +33,7 @@ spec:
         args: [ "cp", "-f", "{{ .Values.wpsConfig.image.src }}", "{{ .Values.wpsConfig.path }}/{{ .Values.wps.config.filename }}" ]
         volumeMounts:
         - mountPath: {{ .Values.wpsConfig.path }}
-          name: wpsConfig-volume
+          name: wps-config-volume
       {{- end }}
       containers:
         - name: wps
@@ -87,7 +87,7 @@ spec:
             name: output-volume
           {{- if or .Values.wpsConfig.configMap .Values.wpsConfig.image }}
           - mountPath: {{ .Values.wpsConfig.path }}
-            name: wpsConfig-volume
+            name: wps-config-volume
           {{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
@@ -107,7 +107,7 @@ spec:
       - name: output-volume
         emptyDir: {}
       {{- if or .Values.wpsConfig.configMap .Values.wpsConfig.image }}
-      - name: wpsConfig-volume
+      - name: wps-config-volume
       {{- if .Values.wpsConfig.configMap }}
         configMap:
           name: {{ .Values.wpsConfig.configMap }}

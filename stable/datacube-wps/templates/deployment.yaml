@@ -26,24 +26,24 @@ spec:
       {{- end }}
     spec:
       initContainers:
-      {{- if .Values.wps.config.docker }}
-      - name: wps-config
-        image: "{{ $.Values.wps.config.docker.repository }}:{{ $.Values.wps.config.docker.tag }}"
-        imagePullPolicy: {{ $.Values.wps.config.docker.pullPolicy }}
-        args: [ "cp", "-f", "{{ .Values.wps.config.docker.src }}", "{{ .Values.wps.config.path }}/{{ .Values.wps.config.filename }}" ]
+      {{- if .Values.wpsConfig.image }}
+      - name: wpsConfig
+        image: "{{ $.Values.wpsConfig.image.repository }}:{{ $.Values.wpsConfig.image.tag }}"
+        imagePullPolicy: {{ $.Values.wpsConfig.image.pullPolicy }}
+        args: [ "cp", "-f", "{{ .Values.wpsConfig.image.src }}", "{{ .Values.wpsConfig.path }}/{{ .Values.wps.config.filename }}" ]
         volumeMounts:
-        - mountPath: {{ .Values.wps.config.path }}
-          name: wps-config-volume
+        - mountPath: {{ .Values.wpsConfig.path }}
+          name: wpsConfig-volume
       {{- end }}
       containers:
         - name: wps
           env:
-          {{- if .Values.wps.config.url }}
+          {{- if .Values.wpsConfig.url }}
           - name: WPS_CONFIG_URL
-            value: {{ .Values.wps.config.url | quote }}
+            value: {{ .Values.wpsConfig.url | quote }}
           {{- end }}
-          {{- if or .Values.wps.config.configMap .Values.wps.config.docker }}
-          - value: "{{ .Values.wps.config.path }}/{{ .Values.wps.config.filename }}"
+          {{- if or .Values.wpsConfig.configMap .Values.wpsConfig.image }}
+          - value: "{{ .Values.wpsConfig.path }}/{{ .Values.wpsConfig.filename }}"
             name: WPS_CONFIG_PATH
           {{- end }}
           - name: DB_HOSTNAME
@@ -85,9 +85,9 @@ spec:
           volumeMounts:
           - mountPath: /opt/outputs/
             name: output-volume
-          {{- if or .Values.wps.config.configMap .Values.wps.config.docker }}
-          - mountPath: {{ .Values.wps.config.path }}
-            name: wps-config-volume
+          {{- if or .Values.wpsConfig.configMap .Values.wpsConfig.image }}
+          - mountPath: {{ .Values.wpsConfig.path }}
+            name: wpsConfig-volume
           {{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
@@ -106,12 +106,12 @@ spec:
       volumes:
       - name: output-volume
         emptyDir: {}
-      {{- if or .Values.wps.config.configMap .Values.wps.config.docker }}
-      - name: wps-config-volume
-      {{- if .Values.wps.config.configMap }}
+      {{- if or .Values.wpsConfig.configMap .Values.wpsConfig.image }}
+      - name: wpsConfig-volume
+      {{- if .Values.wpsConfig.configMap }}
         configMap:
-          name: {{ .Values.wps.config.configMap }}
-      {{- else if .Values.wps.config.docker }}
+          name: {{ .Values.wpsConfig.configMap }}
+      {{- else if .Values.wpsConfig.image }}
         emptyDir: {}
       {{- end }}
       {{- end }}

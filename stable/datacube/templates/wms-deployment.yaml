@@ -31,24 +31,24 @@ spec:
 {{ toYaml .Values.wms.annotations | indent 8 }}
     spec:
       initContainers:
-{{- if .Values.wms.config.docker }}
+{{- if .Values.wmsConfig.image }}
       - name: wms-config
-        image: "{{ $.Values.wms.config.docker.repository }}:{{ $.Values.wms.config.docker.tag }}"
-        imagePullPolicy: {{ $.Values.wms.config.docker.pullPolicy }}
-        args: [ "cp", "-f", "{{ .Values.wms.config.docker.src }}", "{{ .Values.wms.config.path }}/{{ .Values.wms.config.filename }}" ]
+        image: "{{ $.Values.wmsConfig.image.repository }}:{{ $.Values.wmsConfig.image.tag }}"
+        imagePullPolicy: {{ $.Values.wmsConfig.image.pullPolicy }}
+        args: [ "cp", "-f", "{{ .Values.wmsConfig.image.src }}", "{{ .Values.wmsConfig.path }}/{{ .Values.wmsConfig.filename }}" ]
         volumeMounts:
-        - mountPath: {{ .Values.wms.config.path }}
+        - mountPath: {{ .Values.wmsConfig.path }}
           name: wms-config-volume
 {{- end }}
       containers:
       - name: wms
         env:
-{{- if .Values.wms.config.url }}
+{{- if .Values.wmsConfig.url }}
         - name: WMS_CONFIG_URL
-          value: {{ .Values.wms.config.url | quote }}
+          value: {{ .Values.wmsConfig.url | quote }}
 {{- end }}
-{{- if or .Values.wms.config.configMap .Values.wms.config.docker }}
-        - value: "{{ .Values.wms.config.path }}/{{ .Values.wms.config.filename }}"
+{{- if or .Values.wmsConfig.configMap .Values.wmsConfig.image }}
+        - value: "{{ .Values.wmsConfig.path }}/{{ .Values.wmsConfig.filename }}"
           name: WMS_CONFIG_PATH
 {{- end }}
         - name: DB_HOSTNAME
@@ -112,8 +112,8 @@ spec:
         - mountPath: {{ $profiling.path }}
           name: profiling-volume
 {{- end }}
-{{- if or .Values.wms.config.configMap .Values.wms.config.docker }}
-        - mountPath: {{ .Values.wms.config.path }}
+{{- if or .Values.wmsConfig.configMap .Values.wmsConfig.image }}
+        - mountPath: {{ .Values.wmsConfig.path }}
           name: wms-config-volume
 {{- end }}
       restartPolicy: Always
@@ -126,12 +126,12 @@ spec:
       - name: profiling-volume
         emptyDir: {}
 {{- end }}
-{{- if or .Values.wms.config.configMap .Values.wms.config.docker }}
+{{- if or .Values.wmsConfig.configMap .Values.wmsConfig.image }}
       - name: wms-config-volume
-{{- if .Values.wms.config.configMap }}
+{{- if .Values.wmsConfig.configMap }}
         configMap:
-          name: {{ .Values.wms.config.configMap }}
-{{- else if .Values.wms.config.docker }}
+          name: {{ .Values.wmsConfig.configMap }}
+{{- else if .Values.wmsConfig.image }}
         emptyDir: {}
 {{- end }}
 {{- end }}

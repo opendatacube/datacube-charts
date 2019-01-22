@@ -2,7 +2,7 @@ apiVersion: batch/v1
 kind: Job
 {{ $externalDb := .Values.global.externalDatabase }}
 metadata:
-  name: "{{ $externalDb.database }}-cubedash-postgis-install"
+  name: "{{ include "datacube-dashboard.fullname" . }}-postgis-install"
   labels:
     heritage: {{.Release.Service | quote }}
     release: {{.Release.Name | quote }}
@@ -14,7 +14,7 @@ metadata:
 spec:
   template:
     metadata:
-      name: "{{ $externalDb.database }}-cubedash-postgis-install"
+      name: "{{ include "datacube-dashboard.name" . }}-postgis-install"
       labels:
         heritage: {{.Release.Service | quote }}
         release: {{.Release.Name | quote }}

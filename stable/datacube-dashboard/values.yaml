@@ -13,28 +13,23 @@ global:
   datacube:
     configPath: /opt/odc/datacube.conf
 
-##
-## Datacube WMS configuration
-##
-cubedash:
-  externalPort: 80
-  internalPort: 8080
-  resources:
-    limits:
-      cpu: "300m"
-      memory: 1024Mi
-  dockerArgs: [ "gunicorn", "-b", "0.0.0.0:8080", "-w", "1", "--timeout", "60", "cubedash:app" ]
-  annotations:
-    iam.amazonaws.com/role: kubernetes-wms
-  additionalEnvironmentVars: { }
-  generate:
-    historyLimit: 5
-    cron: "0 0 31 2 *"
-    suspend: true
-    dockerArgs: [ "python3", "-m", "cubedash.generate", "--all", "||", "true"]
+resources:
+  limits:
+    cpu: "300m"
+    memory: 1024Mi
+dockerArgs: [ "gunicorn", "-b", "0.0.0.0:8080", "-w", "1", "--timeout", "60", "cubedash:app" ]
+annotations:
+  iam.amazonaws.com/role: kubernetes-wms
+additionalEnvironmentVars: { }
+generate:
+  historyLimit: 5
+  cron: "0 0 31 2 *"
+  suspend: true
+  dockerArgs: [ "python3", "-m", "cubedash.generate", "--all", "||", "true"]
 
 service:
   type: NodePort
+  port: 8080
 
 setup:
   dockerArgs: [ "/bin/bash", "-c", "PGPASSWORD=$ADMIN_PASSWORD psql -h $DB_HOSTNAME -p 5432 -U $ADMIN_USERNAME -d $DB_DATABASE -c 'CREATE EXTENSION IF NOT EXISTS postgis'" ]

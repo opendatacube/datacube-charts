@@ -1,0 +1,60 @@
+{{- if .Values.update.enabled }}
+{{- $externalDb := .Values.global.externalDatabase }}
+{{- $dc := .Values.global.datacube }}
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ include "datacube-dashboard.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "datacube-dashboard.name" . }}
+    helm.sh/chart: {{ include "datacube-dashboard.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  schedule: {{ .Values.update.cron | quote }}
+  successfulJobsHistoryLimit: {{ .Values.update.historyLimit}}
+  failedJobsHistoryLimit: {{ .Values.update.historyLimit }}
+  suspend: {{ .Values.update.suspend }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          name: {{ include "datacube-dashboard.name" . }}
+          labels:
+            app.kubernetes.io/name: {{ include "datacube-dashboard.name" . }}
+            app.kubernetes.io/instance: {{ .Release.Name }}
+          annotations:
+          {{- range $key, $value := .Values.annotations }}
+            {{ $key }}: {{ $value | quote }}
+          {{- end }}
+        spec:
+          containers:
+          - name: cubedash-updater
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            imagePullPolicy: {{ .Values.image.pullPolicy }}
+            args: [ {{- range .Values.update.dockerArgs }} {{ . | quote }}, {{ end -}} ]
+            env:
+            - name: DB_HOSTNAME
+              value: {{ $externalDb.host | quote }}
+            - name: DB_PORT
+              value: {{ $externalDb.port | quote }}
+            - name: DB_DATABASE
+              value: {{ $externalDb.database | quote }}
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $externalDb.database }}
+                  key: postgres-username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $externalDb.database }}
+                  key: postgres-password
+            {{- if .Values.additionalEnvironmentVars }}
+            {{- range $arg, $value := .Values.update.additionalEnvironmentVars }}
+            - name: {{ $arg | quote }}
+              value: {{ $value | quote }}
+            {{- end }}
+            {{- end }}
+          restartPolicy: Never
+{{- end }}

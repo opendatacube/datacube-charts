@@ -2,22 +2,69 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 1
-
 image:
   repository: opendatacube/dask
   tag: latest
   pullPolicy: Always
 
+adaptive:
+  enabled: false
+
 scheduler:
+  replicaCount: 1
   command:
-  - dask-scheduler-adaptive.py
-  # args:
-  # - dask-scheduler-adaptive.py
+  - dask-scheduler
   port: 8786
   bokehPort: 8787
   env:
     DASK_CONFIG: /etc/config/datacube/dask/kubernetes.yaml
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #  cpu: 100m
+    #  memory: 128Mi
+    # requests:
+    #  cpu: 100m
+    #  memory: 128Mi
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
+worker:
+  minReplicas: 1
+  maxReplicas: 10
+  command:
+  - dask-worker
+  args:
+  - --nthreads
+  - '2'
+  - --no-bokeh
+  - --memory-limit
+  - 6GB
+  - --death-timeout
+  - '60'
+  port: 8789
+  targetCpu: 75
+  targetMemory: 75
+  resources:
+    limits:
+      cpu: "2"
+      memory: 6G
+    requests:
+      cpu: "2"
+      memory: 6G
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
 
 nameOverride: ""
 fullnameOverride: ""
@@ -63,7 +110,7 @@ dask:
               cpu: "2"
               memory: 6G
 service:
-  type: LoadBalancer
+  type: NodePort
   port: 8786
   bokehPort: 8787
 
@@ -79,21 +126,3 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
-
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #  cpu: 100m
-  #  memory: 128Mi
-  # requests:
-  #  cpu: 100m
-  #  memory: 128Mi
-
-nodeSelector: {}
-
-tolerations: []
-
-affinity: {}

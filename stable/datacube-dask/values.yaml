@@ -2,6 +2,17 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+global:
+  datacube:
+    configPath: /opt/odc/datacube.conf
+    products: raw.githubusercontent.com/GeoscienceAustralia/dea-config/master/prod/products/nrt/sentinel/products.yaml
+  clusterSecret: datakube.gadevs.ga
+  clusterInfo:
+    envName:
+  externalDatabase:
+    database: ows
+
+
 image:
   repository: opendatacube/dask
   tag: latest

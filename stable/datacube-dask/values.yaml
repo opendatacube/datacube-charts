@@ -76,6 +76,8 @@ worker:
   tolerations: []
 
   affinity: {}
+  annotations:
+    iam.amazonaws.com/role: kubernetes-wms
 
 nameOverride: ""
 fullnameOverride: ""

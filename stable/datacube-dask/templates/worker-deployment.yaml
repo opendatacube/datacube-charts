@@ -21,8 +21,8 @@ spec:
       labels:
         app.kubernetes.io/name: {{ include "datacube-dask.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
-    annotations:
-{{ toYaml .Values.worker.annotations | indent 6 }}
+      annotations:
+{{ toYaml .Values.worker.annotations | indent 8 }}
     spec:
       containers:
         - name: {{ template "datacube-dask.name" . }}-worker

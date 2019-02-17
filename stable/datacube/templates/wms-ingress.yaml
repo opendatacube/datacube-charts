@@ -1,7 +1,8 @@
-{{- if .Values.ingress.enabled -}}
-{{- $serviceName := printf "%s%s" .Release.Name "-wms" -}}
-{{- $servicePort := .Values.wms.externalPort -}}
-{{- $domain := .Values.global.domain}}
+{{- if .Values.wms.enabled }}
+{{- if .Values.ingress.enabled }}
+{{- $serviceName := printf "%s%s" .Release.Name "-wms" }}
+{{- $servicePort := .Values.wms.externalPort }}
+{{- $domain := .Values.global.domain }}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -34,5 +35,6 @@ spec:
 {{- if .Values.ingress.tls }}
   tls:
 {{ toYaml .Values.ingress.tls | indent 4 }}
-{{- end -}}
-{{- end -}}
+{{- end }}
+{{- end }}
+{{- end }}

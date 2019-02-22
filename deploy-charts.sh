@@ -13,6 +13,7 @@ repo="$1"
 folder="$2"
 
 # build helm charts and dependencies
+helm init --client-only
 helm repo add datacube-charts $repo
 helm repo update
 

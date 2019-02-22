@@ -1,13 +1,5 @@
 dependencies:
-  - name: datacube-wps
-    version: 0.6.2
-    repository: "https://opendatacube.github.io/datacube-charts/charts/"
-    condition: wps.enabled
-  - name: datacube-dashboard
-    version: 0.2.9
-    repository: "https://opendatacube.github.io/datacube-charts/charts/"
-    condition: cubedash.enabled
-  - name: datacube-data
-    version: 0.1.5
-    repository: "https://opendatacube.github.io/datacube-charts/charts/"
-    condition: data_orchestration.enabled
+- name: postgresql
+  version: 3.11.5
+  repository: "@stable"
+  condition: postgresql.enabled

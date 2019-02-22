@@ -1,0 +1,78 @@
+apiVersion: batch/v1
+kind: Job
+{{ $externalDb := .Values.global.externalDatabase }}
+metadata:
+  name: "{{ include "datacube.fullname" . }}-dc-init"
+  labels:
+    heritage: {{.Release.Service | quote }}
+    release: {{.Release.Name | quote }}
+    chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+  annotations:
+    "helm.sh/hook": "post-install,post-upgrade"
+    "helm.sh/hook-weight": "-4"
+    "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
+spec:
+  template:
+    metadata:
+      name: "{{ include "datacube.name" . }}-dc-init"
+      labels:
+        heritage: {{.Release.Service | quote }}
+        release: {{.Release.Name | quote }}
+        chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+    spec:
+      initContainers:
+      - name: wait-for
+        image: alpine:latest
+        args:
+        - "/bin/sh"
+        - "-c"
+        - >
+          wget https://raw.githubusercontent.com/eficode/wait-for/f71f8199a0dd95953752fb5d3f76f79ced16d47d/wait-for;
+          chmod +x wait-for;
+          {{ if .Values.postgresql.enabled }}
+          ./wait-for {{ include "postgres.fullname" . }}:{{ .Values.postgresql.service.port }}
+          {{ else }}
+          ./wait-for {{ $externalDb.host }}:{{ $externalDb.port }}
+          {{ end }}
+      containers:
+      - name: initialize-datacube
+        image: "{{ .Values.global.image.repository }}:{{ .Values.global.image.tag }}"
+        args:
+        - "/bin/bash"
+        - "-c"
+        - datacube system check || datacube system init --no-init-users
+        imagePullPolicy: {{ .Values.global.image.pullPolicy }}
+        env:
+        - name: DB_HOSTNAME
+          {{- if .Values.postgresql.enabled }}
+          value: {{ include "postgres.fullname" . }}
+          {{- else }}
+          value: {{ $externalDb.host | quote }}
+          {{ end }}
+        - name: DB_PORT
+          {{- if .Values.postgresql.enabled }}
+          value: {{ .Values.postgresql.service.port | quote }}
+          {{- else }}
+          value: {{ $externalDb.port | quote }}
+          {{- end }}
+        - name: DB_DATABASE
+          {{- if .Values.postgresql.enabled }}
+          value: {{ .Values.postgresql.postgresqlDatabase | quote }}
+          {{- else }}
+          value: {{ $externalDb.database | quote }}
+          {{- end }}
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              {{- if .Values.postgresql.enabled }}
+              name: {{ .Values.postgresql.postgresqlUsername }}
+              {{- else }}
+              name: {{ $externalDb.database }}
+              {{- end }}
+              key: postgres-username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ $externalDb.database }}
+              key: postgres-password
+      restartPolicy: Never

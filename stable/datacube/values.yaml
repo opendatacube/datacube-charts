@@ -12,8 +12,27 @@ global:
   clusterInfo:
     envName:
   externalDatabase:
-    database: ows
+    database: datacube
+  image:
+    repository: opendatacube/wms
+    tag: latest
+    pullPolicy: Always
 
+
+postgresql:
+  enabled: false
+  postgresqlUsername: datacube
+  postgresqlDatabase: datacube
+  existingSecret: datacube
+  service:
+    port: 5432
+  master:
+    nodeSelector: {}
+    affinity: {}
+    tolerations: []
+    podAnnotations: {}
+    podLabels: {}
+  resources: {}
 
 ##
 ## Datacube WMS configuration
@@ -51,17 +70,6 @@ profiling:
   enabled: true
   path: "/opt/profiling/"
 
-##
-## DB setup config
-##
-setup:
-  dockerArgs: [ "/bin/bash", "-c", "cd setup; ./create-db.sh" ]
-
-##
-## DB cleanup config
-##
-cleanup:
-  dockerArgs: [ "/bin/bash", "-c", "cd setup; ./drop-db.sh" ]
 wps:
   enabled: false
 

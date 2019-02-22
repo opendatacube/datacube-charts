@@ -53,15 +53,31 @@ spec:
           name: WMS_CONFIG_PATH
 {{- end }}
         - name: DB_HOSTNAME
+          {{- if .Values.postgresql.enabled }}
+          value: {{ include "postgres.fullname" . }}
+          {{- else }}
           value: {{ $externalDb.host | quote }}
+          {{ end }}
         - name: DB_PORT
+          {{- if .Values.postgresql.enabled }}
+          value: {{ .Values.postgresql.service.port | quote }}
+          {{- else }}
           value: {{ $externalDb.port | quote }}
+          {{- end }}
         - name: DB_DATABASE
+          {{- if .Values.postgresql.enabled }}
+          value: {{ .Values.postgresql.postgresqlDatabase | quote }}
+          {{- else }}
           value: {{ $externalDb.database | quote }}
+          {{- end }}
         - name: DB_USERNAME
           valueFrom:
             secretKeyRef:
+              {{- if .Values.postgresql.enabled }}
+              name: {{ .Values.postgresql.postgresqlUsername }}
+              {{- else }}
               name: {{ $externalDb.database }}
+              {{- end }}
               key: postgres-username
         - name: DB_PASSWORD
           valueFrom:

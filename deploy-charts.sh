@@ -15,6 +15,7 @@ folder="$2"
 # build helm charts and dependencies
 helm init --client-only
 helm repo add datacube-charts $repo
+helm repo add stable https://kubernetes-charts.storage.googleapis.com
 helm repo update
 
 # Find dependencies in datacube-charts which match $REPO

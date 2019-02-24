@@ -25,14 +25,15 @@ do
 
     # Create local charts, do before remote to allow use of
     # freshly updated local charts
-    helm dependency list $chart \
+    helm dependency list "$chart" \
     | awk -v r="$repo" 'NR>1 {if (($3 == r) && ($4 != "ok")) print $1;}' \
     | xargs -n1 -I'{}' helm package "${folder}/{}" -d "${chart}/charts"
     
     #Manual fetch of remote charts
     helm dependency list "$chart" \
-    | awk -v r="$repo" 'NR>1 {if (($3 != r) && ($4 != "ok")) print $1;}' \
-    | xargs -n1 -I'{}' helm fetch --repo "$repo" --destination "${chart}/charts" "{}"
+    | awk -v r="$repo" 'NR>1 {if (($3 != r) && ($4 != "ok")) print $3,$1;}' \
+    | cut -d' ' -f1,2 \
+    | xargs -n 2 /bin/bash -c 'helm fetch --repo "$1" --destination "$0/charts" "$2"' "$chart"
 
     helm package "$chart"
 done

@@ -1,5 +1,5 @@
 dependencies:
 - name: postgresql
   version: 3.11.5
-  repository: "@stable"
+  repository: https://kubernetes-charts.storage.googleapis.com
   condition: postgresql.enabled

@@ -58,6 +58,8 @@ spec:
           value: {{ template "helm-toolkit.utils.joinListWithSpace" $index.prefix }}
         - name: DC_S3_INDEX_SUFFIX
           value: {{ $index.suffix | quote }}
+        - name: DC_S3_IGNORE_SUFFIX
+          value: {{ template "helm-toolkit.utils.joinListWithSpace" $index.ignore }}
         - name: DB_HOSTNAME
           value: {{ $externalDb.host | quote }}
         - name: DB_PORT

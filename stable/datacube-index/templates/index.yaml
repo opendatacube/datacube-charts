@@ -48,6 +48,10 @@ spec:
         - name: PRODUCT_URLS
           value: {{ template "helm-toolkit.utils.joinListWithSpace" $dc.products }}
 {{- end }}
+{{- if $index.product_ranges }}
+        - name: DC_RANGES_PRODUCT
+          value: {{ $index.product_ranges | quote }}
+{{- end }}
         - name: DC_S3_INDEX_BUCKET
           value: {{ $index.bucket | quote }}
         - name: DC_S3_INDEX_PREFIX

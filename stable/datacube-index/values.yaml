@@ -20,6 +20,7 @@ index:
   additionalEnvironmentVars: { }
   wmsConfigURL:
   products:
+  product_ranges:
 
 archive:
   dockerArgs: [ "/bin/bash", "-c", "cd archive; ./archive-wrapper.sh" ]

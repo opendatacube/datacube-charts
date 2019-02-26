@@ -7,6 +7,7 @@ index:
   bucket: dea-public-data
   suffix: .yaml
   prefix: []
+  ignore: []
   annotations:
     iam.amazonaws.com/role: kubernetes-wms
   resources:

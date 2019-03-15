@@ -21,6 +21,7 @@ index:
   wmsConfigURL:
   products:
   product_ranges:
+  yaml_safety:
 
 archive:
   dockerArgs: [ "/bin/bash", "-c", "cd archive; ./archive-wrapper.sh" ]

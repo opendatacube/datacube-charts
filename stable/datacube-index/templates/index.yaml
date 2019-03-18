@@ -62,6 +62,10 @@ spec:
           value: {{ template "helm-toolkit.utils.joinListWithSpace" $index.ignore }}
         - name: DC_INDEX_YAML_SAFETY
           value: {{ $index.yaml_safety | quote }}
+{{- if $index.ignore_lineage }}
+        - name: DC_IGNORE_LINEAGE
+          value: {{ $index.ignore_lineage | quote }}
+{{- end }}
         - name: DB_HOSTNAME
           value: {{ $externalDb.host | quote }}
         - name: DB_PORT

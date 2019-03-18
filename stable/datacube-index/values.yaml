@@ -22,6 +22,7 @@ index:
   products:
   product_ranges:
   yaml_safety:
+  ignore_lineage:
 
 archive:
   dockerArgs: [ "/bin/bash", "-c", "cd archive; ./archive-wrapper.sh" ]

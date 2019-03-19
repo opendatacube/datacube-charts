@@ -13,6 +13,7 @@ global:
     envName:
   externalDatabase:
     database: datacube
+    create: false
   image:
     repository: opendatacube/wms
     tag: latest

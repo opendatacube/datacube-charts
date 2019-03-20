@@ -1,0 +1,8 @@
+{{- if not .Values.wms.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "datacube-dask.fullname" . }}-dummy
+data:
+  dummydata: donotuse
+{{- end }}

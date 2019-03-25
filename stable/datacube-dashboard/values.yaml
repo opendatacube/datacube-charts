@@ -8,10 +8,11 @@ image:
   tag: 'stable'
   pullPolicy: Always
 
-
 global:
   datacube:
     configPath: /opt/odc/datacube.conf
+  externalDatabase:
+    database:
 
 resources:
   limits:

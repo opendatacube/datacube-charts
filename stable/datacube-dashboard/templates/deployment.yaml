@@ -1,5 +1,6 @@
 {{- $externalDb := .Values.global.externalDatabase }}
 {{- $dc := .Values.global.datacube }}
+{{- $secretName := empty .Values.secretName | ternary .Values.global.externalDatabase.database .Values.secretName }}
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -32,12 +33,12 @@ spec:
         - name: DB_USERNAME
           valueFrom:
             secretKeyRef:
-              name: {{ $externalDb.database }}
+              name: {{ $secretName }}
               key: postgres-username
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ $externalDb.database }}
+              name: {{ $secretName }}
               key: postgres-password
         - name: VIRTUAL_HOST
           value: localhost,127.0.0.

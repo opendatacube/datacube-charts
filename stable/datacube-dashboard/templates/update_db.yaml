@@ -1,6 +1,7 @@
 {{- if .Values.update.enabled }}
 {{- $externalDb := .Values.global.externalDatabase }}
 {{- $dc := .Values.global.datacube }}
+{{- $secretName := empty .Values.secretName | ternary .Values.global.externalDatabase.database .Values.secretName }}
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
@@ -43,12 +44,12 @@ spec:
             - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: {{ $externalDb.database }}
+                  name: {{ $secretName }}
                   key: postgres-username
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ $externalDb.database }}
+                  name: {{ $secretName }}
                   key: postgres-password
             {{- if .Values.additionalEnvironmentVars }}
             {{- range $arg, $value := .Values.update.additionalEnvironmentVars }}

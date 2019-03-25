@@ -1,6 +1,8 @@
 apiVersion: batch/v1
 kind: Job
 {{ $externalDb := .Values.global.externalDatabase }}
+{{- $secretName := empty .Values.secretName | ternary .Values.global.externalDatabase.database .Values.secretName }}
+{{- $adminSecretName := empty .Values.adminSecretName | ternary .Values.global.externalDatabase.database .Values.adminSecretName }}
 metadata:
   name: "{{ include "datacube-dashboard.fullname" . }}-postgis-install"
   labels:
@@ -35,21 +37,21 @@ spec:
         - name: DB_USERNAME
           valueFrom:
             secretKeyRef:
-              name: {{ $externalDb.database }}
+              name: {{ $secretName }}
               key: postgres-username
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ $externalDb.database }}
+              name: {{ $secretName }}
               key: postgres-password
         - name: ADMIN_USERNAME
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.global.clusterSecret }}
+              name: {{ $adminSecretName }}
               key: postgres-username
         - name: ADMIN_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.global.clusterSecret }}
+              name: {{ $adminSecretName }}
               key: postgres-password
       restartPolicy: Never

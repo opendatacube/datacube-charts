@@ -54,6 +54,10 @@ spec:
           value: localhost,127.0.0.
         - name: DATACUBE_CONFIG_PATH
           value: {{ $dc.configPath }}
+        {{- if not (empty .Values.additionalSettings) }}
+        - name: CUBEDASH_SETTINGS
+          value: /etc/cubedash/config/settings.env.py
+        {{- end }}
         {{- if .Values.additionalEnvironmentVars }}
         {{- range $arg, $value := .Values.additionalEnvironmentVars }}
         - name: {{ $arg | quote }}

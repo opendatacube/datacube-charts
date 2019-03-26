@@ -21,6 +21,16 @@ spec:
         {{ $key }}: {{ $value | quote }}
       {{- end }}
     spec:
+      {{- if not (empty .Values.additionalSettings) }}
+      initContainers:
+      - name: config-copy
+        image: "{{ .Values.setup.image.repository }}:{{ .Values.setup.image.tag }}"
+        args: [ "/bin/bash", "-c", "cp", "/etc/cubedash/config/settings.env.py", "/code/" ]
+        imagePullPolicy: {{ .Values.setup.image.pullPolicy }}
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/cubedash/config
+      {{- end }}
       containers:
       - name: cubedash
         env:
@@ -60,6 +70,11 @@ spec:
 {{ toYaml .Values.resources | indent 12 }}
         args: [ {{- range .Values.dockerArgs }} {{ . | quote }}, {{ end -}} ]
         terminationGracePeriodSeconds: 60
+        {{- if not (empty .Values.additionalSettings) }}
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/cubedash/config
+        {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
@@ -71,5 +86,11 @@ spec:
     {{- with .Values.tolerations }}
       tolerations:
 {{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- if not (empty .Values.additionalSettings) }}
+      volumes:
+      - name: config-volume
+        configMap:
+          name: {{ include "datacube-dashboard.fullname" . }}
     {{- end }}
 status: {}

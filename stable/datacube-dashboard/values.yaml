@@ -46,3 +46,5 @@ ingress:
   ##
   enabled: false
   host:
+
+additionalSettings:

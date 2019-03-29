@@ -21,16 +21,6 @@ spec:
         {{ $key }}: {{ $value | quote }}
       {{- end }}
     spec:
-      {{- if not (empty .Values.additionalSettings) }}
-      initContainers:
-      - name: config-copy
-        image: "{{ .Values.setup.image.repository }}:{{ .Values.setup.image.tag }}"
-        args: [ "/bin/bash", "-c", "cp", "/etc/cubedash/config/settings.env.py", "/code/" ]
-        imagePullPolicy: {{ .Values.setup.image.pullPolicy }}
-        volumeMounts:
-        - name: config-volume
-          mountPath: /etc/cubedash/config
-      {{- end }}
       containers:
       - name: cubedash
         env:

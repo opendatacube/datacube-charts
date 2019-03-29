@@ -9,5 +9,5 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 data:
-  settings.env.py: {{ .Values.additionalSettings }}
+  settings.env.py: {{ .Values.additionalSettings | quote }}
 {{- end }}

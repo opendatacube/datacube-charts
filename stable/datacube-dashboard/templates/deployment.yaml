@@ -63,18 +63,14 @@ spec:
         resources:
 {{ toYaml .Values.resources | indent 12 }}
         args: [ {{- range .Values.dockerArgs }} {{ . | quote }}, {{ end -}} ]
-        terminationGracePeriodSeconds: 60
+        terminationGracePeriodSeconds: 30
         {{- if not (empty .Values.additionalSettings) }}
         volumeMounts:
         - name: config-volume
           mountPath: /etc/cubedash/config
         {{- end }}
         livenessProbe:
-          httpGet:
-            path: "/"
-            port: 8080
-          initialDelaySeconds: 60
-          periodSeconds: 30
+{{ toYaml .Values.livenessProbe | indent 12 }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}

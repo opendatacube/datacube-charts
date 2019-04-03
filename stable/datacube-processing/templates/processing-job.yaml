@@ -1,0 +1,100 @@
+{{- $db := .Values.global.externalDatabase }}
+{{- $job := .Values.job }}
+{{- $sqs := .Values.sqs }}
+{{- $cron := .Values.cron }}
+{{- $res := .Values.resources }}
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ include "datacube-processing.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "datacube-processing.name" . }}
+    helm.sh/chart: {{ include "datacube-processing.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    heritage: {{ include "datacube-processing.fullname" . }}
+spec:
+  schedule: {{ $cron.schedule | quote }}
+  concurrencyPolicy: {{ $cron.concurrencyPolicy }}
+  successfulJobsHistoryLimit: {{ $cron.historyLimit}}
+  failedJobsHistoryLimit: {{ $cron.historyLimit}}
+  suspend: {{ $cron.suspend }}
+  backoffLimit: 1
+  jobTemplate:
+    spec: 
+      template:
+        metadata:
+          name: {{ include "datacube-processing.fullname" . }}
+          labels:
+            app.kubernetes.io/name: {{ include "datacube-processing.name" . }}
+            app.kubernetes.io/instance: {{ .Release.Name }}
+            heritage: {{ include "datacube-processing.fullname" . }}
+          annotations:
+          {{- range $key, $value := .Values.annotations }}
+            {{ $key }}: {{ $value | quote }}
+          {{- end }}
+        spec:
+          restartPolicy: Never
+          initContainers:
+            - name: postgres-listener
+              image: alpine
+              command:
+                [
+                  "sh",
+                  "-c",
+                  "for i in $(seq 1 200); do nc -z -w3 {{ $db.host }} {{ $db.port }} && exit 0 || sleep 3; done; exit 1",
+                ]
+          containers:
+            - name: datacube-index
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              imagePullPolicy: {{ .Values.image.imagePullPolicy }}
+              resources:
+                limits:
+                  cpu: {{ $res.limits.cpu }}
+                  memory: {{ $res.limits.memory }}
+                requests:
+                  cpu: {{ $res.requests.cpu }}
+                  memory: {{ $res.requests.memory }}
+              env:
+                - name: LOG_LEVEL
+                  value: {{ .Values.logLevel | quote }}
+                - name: AWS_DEFAULT_REGION
+                  value: {{ $sqs.region | quote}}
+                - name: SQS_QUEUE_URL
+                  value: {{ $sqs.queue | quote }}
+                - name: SQS_MESSAGE_PREFIX
+                  value: {{ $sqs.messagePrefix | quote }}
+                - name: SQS_POLL_TIME_SEC
+                  value: {{ $sqs.pollTimeSec | quote }}
+                - name: JOB_MAX_TIME_SEC
+                  value: {{ $job.maxTime | quote }}
+                - name: MAX_JOB_PER_WORKER
+                  value: {{ $job.jobsPerWorker | quote }}
+                - name: INPUT_S3_BUCKET
+                  value: {{ $job.inputS3Bucket | quote }}
+                - name: OUTPUT_S3_BUCKET
+                  value: {{ $job.outputS3Bucket | quote }}
+                - name: OUTPUT_PATH
+                  value: {{ $job.outputPath | quote }}
+                - name: FILE_PREFIX
+                  value: {{ $job.filePrefix | quote }}
+                - name: DB_HOSTNAME
+                  value: {{ $db.host | quote }}
+                - name: DB_PORT
+                  value: {{ $db.port | quote }}
+                - name: DB_DATABASE
+                  value: {{ $db.database | quote }}
+                - name: DB_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      key: postgres-username
+                      name: {{ $db.database }}
+                - name: DB_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: postgres-password
+                      name: {{ $db.database }}
+                - name: AWS_METADATA_SERVICE_NUM_ATTEMPTS
+                  value: "30"
+                - name: AWS_METADATA_SERVICE_TIMEOUT
+                  value: "60"

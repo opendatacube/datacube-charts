@@ -8,6 +8,10 @@ metadata:
     helm.sh/chart: {{ include "restcube.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
+  {{- with .Values.annotations }}
+  annotations:
+{{ toYaml . | indent 4}}
+  {{- end }}    
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -24,6 +28,7 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: [ {{- range .Values.dockerArgs }} {{ . | quote }}, {{ end -}} ]
           env:
           - name: DB_HOSTNAME
             value: {{ $externalDb.host | quote }}

@@ -60,6 +60,10 @@ environment: {}
 livenessProbe: {}
 readinessProbe: {}
 
+dockerArgs: []
+
+annotations: {}
+
 worker:
   resources: {}
   nodeSelector: {}
@@ -69,4 +73,6 @@ worker:
   replicaCount: 1
   livenessProbe: {}
   readinessProbe: {}
+  dockerArgs: []
+  annotations: {}
 

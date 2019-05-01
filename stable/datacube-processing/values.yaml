@@ -7,7 +7,7 @@ logLevel: INFO
 
 image:
   repository: opendatacube/pipelines
-  tag: wofs-1.13
+  tag: wofs-1.19
   imagePullPolicy: IfNotPresent
 
 annotations:
@@ -29,7 +29,7 @@ job:
 
 cron:
   # Every 5 minutes
-  schedule: "*/5 * * * *"
+  schedule: "*/10 * * * *"
   suspend: false
   concurrencyPolicy: Allow
   historyLimit: 1

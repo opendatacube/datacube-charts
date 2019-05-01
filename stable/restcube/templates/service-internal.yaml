@@ -1,4 +1,4 @@
-{{- if .Values.service.internal }}
+{{- if .Values.service.internal.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -9,6 +9,7 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
   {{- with .Values.service.internal.annotations }}
+  annotations:
 {{ toYaml . | indent 4 }}
   {{- end }}
 spec:

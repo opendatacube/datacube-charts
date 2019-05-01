@@ -1,0 +1,74 @@
+{{- $externalDb := .Values.global.externalDatabase }}
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ include "restcube.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "restcube.name" . }}
+    helm.sh/chart: {{ include "restcube.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "restcube.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "restcube.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          - name: DB_HOSTNAME
+            value: {{ $externalDb.host | quote }}
+          - name: DB_PORT
+            value: {{ $externalDb.port | quote }}
+          - name: DB_DATABASE
+            value: {{ $externalDb.database | quote }}
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: {{ $externalDb.database }}
+                key: postgres-username
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ $externalDb.database }}
+                key: postgres-password
+          - name: VIRTUAL_HOST
+            value: localhost,127.0.0.
+          {{- with .Values.environment }}
+{{ toYaml . | indent 10 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          {{- with .Values.worker.livenessProbe }}
+          livenessProbe:
+{{ toYaml . | indent 12 }}
+          {{- end }}
+          {{- with .Values.worker.readinessProbe }}
+          readinessProbe:
+{{ toYaml . | indent 12 }}
+          {{- end }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

@@ -8,10 +8,6 @@ metadata:
     helm.sh/chart: {{ include "restcube.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-  {{- with .Values.worker.annotations }}
-  annotations:
-{{ toYaml . | indent 4}}
-  {{- end }}
 spec:
   replicas: {{ .Values.worker.replicaCount }}
   selector:
@@ -23,6 +19,10 @@ spec:
       labels:
         app.kubernetes.io/name: {{ include "restcube.name" . }}-worker
         app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- with .Values.worker.annotations }}
+      annotations:
+{{ toYaml . | indent 8}}
+      {{- end }}
     spec:
       containers:
         - name: {{ .Chart.Name }}

@@ -7,7 +7,7 @@ logLevel: INFO
 
 image:
   repository: opendatacube/pipelines
-  tag: wofs-1.21
+  tag: wofs-1.22
   imagePullPolicy: IfNotPresent
 
 annotations:

@@ -60,6 +60,10 @@ spec:
         - name: DC_EXCLUDE_PRODUCT
           value: {{ $index.exclude_product | quote }}
 {{- end }}
+{{- if $index.thredds_days }}
+        - name: DC_THREDDS_DAYS
+          value: {{ $index.thredds_days | quote }}
+{{- end }}
         - name: DC_S3_INDEX_BUCKET
           value: {{ $index.bucket | quote }}
         - name: DC_S3_INDEX_PREFIX

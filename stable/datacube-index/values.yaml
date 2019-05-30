@@ -25,6 +25,8 @@ index:
   ignore_lineage:
   multiproduct_ranges:
   exclude_product:
+  #set threddsky days to index from current day-threddsky days
+  thredds_days:
 
 archive:
   dockerArgs: [ "/bin/bash", "-c", "cd archive; ./archive-wrapper.sh" ]

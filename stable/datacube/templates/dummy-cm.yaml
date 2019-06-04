@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "datacube.fullname" . }}-dummy
+  name: {{ template "datacube.fullname" . }}-dummy
 data:
   dummydata: donotuse
 {{- end }}

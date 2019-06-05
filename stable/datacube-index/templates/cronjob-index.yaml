@@ -3,7 +3,7 @@
 {{- $dc := .Values.global.datacube }}
 {{- $index := .Values.index }}
 {{- $image := .Values.global.image }}
-apiVersion: batch/v1
+apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: {{ include "datacube-index.fullname" . }}

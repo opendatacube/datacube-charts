@@ -1,7 +1,6 @@
 apiVersion: apps/v1beta2
 kind: Deployment
-{{ $externalDb := .Values.global.externalDatabase }}
-{{ $dc := .Values.global.datacube }}
+{{ $dc := .Values.datacube }}
 metadata:
   name: {{ include "datacube-wps.fullname" . }}
   labels:
@@ -47,20 +46,20 @@ spec:
             name: WPS_CONFIG_PATH
           {{- end }}
           - name: DB_HOSTNAME
-            value: {{ $externalDb.host | quote }}
+            value: {{ .Values.database.host | quote }}
           - name: DB_PORT
-            value: {{ $externalDb.port | quote }}
+            value: {{ .Values.database.port | quote }}
           - name: DB_DATABASE
-            value: {{ $externalDb.database | quote }}
+            value: {{ .Values.database.database | quote }}
           - name: DB_USERNAME
             valueFrom:
               secretKeyRef:
-                name: {{ $externalDb.database }}
+                name: {{ .Values.database.existingSecret }}
                 key: postgres-username
           - name: DB_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: {{ $externalDb.database }}
+                name: {{ .Values.database.existingSecret }}
                 key: postgres-password
           - name: VIRTUAL_HOST
             value: localhost,127.0.0.

@@ -35,8 +35,7 @@ spec:
               serviceName: {{ $fullName }}
               servicePort: http
   {{- end }}
-  {{- if and .Values.global.domain .Values.ingress.prefixes }}
-  {{- $domain := .Values.global.domain }}
+  {{- $domain := .Values.ingress.domain }}
   {{- range .Values.ingress.prefixes }}
     - host: "{{ . }}.{{ $domain }}"
       http:
@@ -45,6 +44,5 @@ spec:
             backend:
               serviceName: {{ $fullName }}
               servicePort: http
-  {{- end }}
   {{- end }}
 {{- end }}

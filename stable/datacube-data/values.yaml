@@ -4,6 +4,12 @@
 
 replicaCount: 1
 
+database:
+  database: datacube
+  host: localhost
+  port: 5432
+  existingSecret: datacube
+
 image:
   repository: geoscienceaustralia/dea-k8s-data
   tag: latest

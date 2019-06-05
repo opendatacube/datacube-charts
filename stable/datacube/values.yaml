@@ -4,36 +4,26 @@
 minReplicas: 1
 maxReplicas: 2
 
-global:
-  datacube:
-    configPath: /opt/odc/datacube.conf
-    products: raw.githubusercontent.com/GeoscienceAustralia/dea-config/master/prod/products/nrt/sentinel/products.yaml
-  clusterSecret: datakube.gadevs.ga
-  clusterInfo:
-    envName:
-  externalDatabase:
-    database: datacube
-    create: false
-  image:
-    repository: opendatacube/wms
-    tag: latest
-    pullPolicy: Always
-
-
-postgresql:
-  enabled: false
-  postgresqlUsername: datacube
-  postgresqlDatabase: datacube
-  existingSecret: datacube
-  service:
-    port: 5432
-  master:
-    nodeSelector: {}
-    affinity: {}
-    tolerations: []
-    podAnnotations: {}
-    podLabels: {}
-  resources: {}
+datacube:
+  configPath: /opt/odc/datacube.conf
+clusterInfo:
+  envName: dev
+database:
+  adminSecret:
+  existingSecret:
+  database: datacube
+  host: localhost
+  port: 5432
+  create: false
+  creation:
+    dockerArgs:
+      - "/bin/sh"
+      - "-c"
+      - "/code/setup/create-db.sh"
+image:
+  repository: opendatacube/wms
+  tag: latest
+  pullPolicy: Always
 
 ##
 ## Datacube WMS configuration
@@ -53,9 +43,17 @@ wms:
   autoscaling: True
   annotations:
     iam.amazonaws.com/role: kubernetes-wms
+  livenessProbe:
+    exec:
+      command:
+      - "/bin/sh"
+      - "-c"
+      - "curl --silent 'http://localhost:8000/?service=WMS&request=GetCapabilities&version=1.3.0' | grep -q -F '<Layer queryable=\"1\">'"
+    initialDelaySeconds: 30
+    periodSeconds: 30
+  readinessProbe: {}
 wmsConfig:
   image: { }
-
 
 ##
 ## Prometheus Monitoring
@@ -70,15 +68,6 @@ prometheus:
 profiling:
   enabled: true
   path: "/opt/profiling/"
-
-wps:
-  enabled: false
-
-cubedash:
-  enabled: false
-
-data_orchestration:
-  enabled: true
 
 service:
   type: NodePort

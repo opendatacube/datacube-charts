@@ -8,10 +8,11 @@ image:
   tag: 'latest'
   pullPolicy: Always
 
-global:
-  clusterInfo:
-    envName:
-  externalDatabase: { }
+database:
+  database: datacube
+  host: localhost
+  port: 5432
+  existingSecret: datacube
 
 ##
 ## Datacube WMS configuration
@@ -30,6 +31,7 @@ wpsConfig:
 ingress:
   enabled: false
   prefixes: [ ]
+  domain: ""
 
 service:
   type: NodePort

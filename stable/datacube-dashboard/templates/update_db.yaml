@@ -1,7 +1,5 @@
 {{- if .Values.update.enabled }}
-{{- $externalDb := .Values.global.externalDatabase }}
-{{- $dc := .Values.global.datacube }}
-{{- $secretName := empty .Values.secretName | ternary .Values.global.externalDatabase.database .Values.secretName }}
+{{- $dc := .Values.datacube }}
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
@@ -36,20 +34,20 @@ spec:
             args: [ {{- range .Values.update.dockerArgs }} {{ . | quote }}, {{ end -}} ]
             env:
             - name: DB_HOSTNAME
-              value: {{ $externalDb.host | quote }}
+              value: {{ .Values.database.host | quote }}
             - name: DB_PORT
-              value: {{ $externalDb.port | quote }}
+              value: {{ .Values.database.port | quote }}
             - name: DB_DATABASE
-              value: {{ $externalDb.database | quote }}
+              value: {{ .Values.database.database | quote }}
             - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: {{ $secretName }}
+                  name: {{ .Values.database.existingSecret }}
                   key: postgres-username
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ $secretName }}
+                  name: {{ .Values.database.existingSecret }}
                   key: postgres-password
             {{- if .Values.additionalEnvironmentVars }}
             {{- range $arg, $value := .Values.update.additionalEnvironmentVars }}

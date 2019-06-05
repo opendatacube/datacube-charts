@@ -8,11 +8,14 @@ image:
   tag: 'stable'
   pullPolicy: Always
 
-global:
-  datacube:
-    configPath: /opt/odc/datacube.conf
-  externalDatabase:
-    database:
+datacube:
+  configPath: /opt/odc/datacube.conf
+database:
+  database: datacube
+  host: localhost
+  port: 5432
+  existingSecret: datacube
+  adminSecret: datacube
 
 resources:
   limits:

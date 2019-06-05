@@ -48,7 +48,15 @@ archive:
       cpu: 500m
       memory: 1024Mi
   additionalEnvironmentVars: { }
-
+  
+cron:
+  # Every day at 12.00 am
+  enabled: false
+  schedule: "0 0 * * *"
+  suspend: false
+  concurrencyPolicy: Allow
+  historyLimit: 1
+  
 global:
   datacube:
     configPath: /opt/odc/datacube.conf

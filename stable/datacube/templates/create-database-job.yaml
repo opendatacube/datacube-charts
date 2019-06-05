@@ -1,10 +1,9 @@
-{{- if .Values.global.externalDatabase.create }}
+{{- if .Values.database.create }}
 apiVersion: batch/v1
 kind: Job
-{{ $externalDb := .Values.global.externalDatabase }}
-{{ $image := .Values.global.image }}
+{{ $image := .Values.image }}
 metadata:
-  name: "{{ $externalDb.database }}-db-creation"
+  name: {{ template "datacube.fullname" . }}-db-creation
   labels:
     heritage: {{.Release.Service | quote }}
     release: {{.Release.Name | quote }}
@@ -16,7 +15,7 @@ metadata:
 spec:
   template:
     metadata:
-      name: "{{ $externalDb.database }}-db"
+      name: "{{ .Values.database.database }}-db"
       labels:
         heritage: {{.Release.Service | quote }}
         release: {{.Release.Name | quote }}
@@ -25,34 +24,34 @@ spec:
       containers:
       - name: create-db
         image: "{{ $image.repository }}:{{ $image.tag }}"
-        args: [ {{- range .Values.setup.dockerArgs }} {{ . | quote }}, {{ end -}} ]
+        args: [ {{- range .Values.database.creation.dockerArgs }} {{ . | quote }}, {{ end -}} ]
         imagePullPolicy: {{ $image.pullPolicy }}
         env:
         - name: DB_HOSTNAME
-          value: {{ $externalDb.host | quote }}
+          value: {{ .Values.database.host | quote }}
         - name: DB_PORT
-          value: {{ $externalDb.port | quote }}
+          value: {{ .Values.database.port | quote }}
         - name: DB_DATABASE
-          value: {{ $externalDb.database | quote }}
+          value: {{ .Values.database.database | quote }}
         - name: DB_USERNAME
           valueFrom:
             secretKeyRef:
-              name: {{ $externalDb.database }}
+              name: {{ template "datacube.secretName" . }}
               key: postgres-username
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ $externalDb.database }}
+              name: {{ template "datacube.secretName" . }}
               key: postgres-password
         - name: ADMIN_USERNAME
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.global.clusterSecret }}
+              name: {{ .Values.database.adminSecret }}
               key: postgres-username
         - name: ADMIN_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.global.clusterSecret }}
+              name: {{ .Values.database.adminSecret }}
               key: postgres-password
       restartPolicy: Never
   backoffLimit: 2

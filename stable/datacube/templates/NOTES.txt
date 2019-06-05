@@ -2,10 +2,7 @@
 *** PLEASE BE PATIENT: Datacube may take a while to build the index ***
 ***********************************************************************
 
-1. You can watch the index by running these commands:
-  kubectl logs job/{{ .Values.global.externalDatabase.database }}-index -f
-
-2. Get the application URL by running these commands:
+1. Get the application URL by running these commands:
 {{- if .Values.ingress.enabled }}
 {{- range .Values.ingress.hosts }}
   http://{{ . }}

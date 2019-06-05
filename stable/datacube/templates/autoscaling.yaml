@@ -3,7 +3,7 @@
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: "{{ .Release.Name }}-pod-autoscaler"
+  name: {{ template "datacube.fullname" . }}
   labels:
     app: {{ template "datacube.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
@@ -13,7 +13,7 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ .Release.Name }}-{{ .Values.global.clusterInfo.envName }}-wms
+    name: {{ .Release.Name }}-{{ .Values.clusterInfo.envName }}-wms
   minReplicas: {{ .Values.minReplicas }}
   maxReplicas: {{ .Values.maxReplicas }}
   metrics:

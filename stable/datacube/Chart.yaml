@@ -1,7 +1,7 @@
 apiVersion: v1
 description: Datacube Web Map Service
 name: datacube
-version: 0.16.2
+version: 0.17.0
 keywords:
 - datacube
 - http

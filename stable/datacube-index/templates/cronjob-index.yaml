@@ -8,10 +8,11 @@ kind: CronJob
 metadata:
   name: {{ include "datacube-index.fullname" . }}
   labels:
+    app.kubernetes.io/name: {{ include "datacube-index.name" . }}
+    helm.sh/chart: {{ include "datacube-index.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
     heritage: {{ include "datacube-index.fullname" . }}
-    release: {{ include "datacube-index.fullname" . }}
-    chart: "{{.Chart.Name}}-{{.Chart.Version}}"
-    component: index
 spec:
   schedule: {{ .Values.cron.schedule | quote }}
   successfulJobsHistoryLimit: {{ .Values.cron.historyLimit}}
@@ -22,9 +23,9 @@ spec:
     metadata:
       name: {{ include "datacube-index.fullname" . }}
       labels:
+        app.kubernetes.io/name: {{ include "datacube-index.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
         heritage: {{ include "datacube-index.fullname" . }}
-        release: {{ include "datacube-index.fullname" . }}
-        chart: "{{.Chart.Name}}-{{.Chart.Version}}"
       annotations:
 {{ toYaml $index.annotations | indent 8 }}
     spec:

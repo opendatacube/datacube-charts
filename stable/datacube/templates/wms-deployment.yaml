@@ -1,14 +1,12 @@
 {{- if .Values.wms.enabled }}
 apiVersion: extensions/v1beta1
 kind: Deployment
-{{- $externalDb := .Values.global.externalDatabase }}
-{{- $dc := .Values.global.datacube }}
-{{- $image := .Values.global.image }}
+{{- $dc := .Values.datacube }}
+{{- $image := .Values.image }}
 {{- $prometheus := .Values.prometheus }}
 {{- $profiling := .Values.profiling }}
-{{- $envname := .Values.global.clusterInfo }}
 metadata:
-  name: "{{ .Release.Name }}-{{ $envname.envName }}-wms"
+  name: "{{ template "datacube.fullname" . }}-{{ .Values.clusterInfo.envName }}"
   labels:
     app: {{ template "datacube.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
@@ -53,36 +51,20 @@ spec:
           name: WMS_CONFIG_PATH
 {{- end }}
         - name: DB_HOSTNAME
-          {{- if .Values.postgresql.enabled }}
-          value: {{ include "postgres.fullname" . }}
-          {{- else }}
-          value: {{ $externalDb.host | quote }}
-          {{ end }}
+          value: {{ .Values.database.host | quote }}
         - name: DB_PORT
-          {{- if .Values.postgresql.enabled }}
-          value: {{ .Values.postgresql.service.port | quote }}
-          {{- else }}
-          value: {{ $externalDb.port | quote }}
-          {{- end }}
+          value: {{ .Values.database.port | quote }}
         - name: DB_DATABASE
-          {{- if .Values.postgresql.enabled }}
-          value: {{ .Values.postgresql.postgresqlDatabase | quote }}
-          {{- else }}
-          value: {{ $externalDb.database | quote }}
-          {{- end }}
+          value: {{ .Values.database.database | quote }}
         - name: DB_USERNAME
           valueFrom:
             secretKeyRef:
-              {{- if .Values.postgresql.enabled }}
-              name: {{ .Values.postgresql.postgresqlUsername }}
-              {{- else }}
-              name: {{ $externalDb.database }}
-              {{- end }}
+              name: {{ template "datacube.secretName" . }}
               key: postgres-username
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ $externalDb.database }}
+              name: {{ template "datacube.secretName" . }}
               key: postgres-password
         - name: VIRTUAL_HOST
           value: localhost,127.0.0.
@@ -110,14 +92,14 @@ spec:
         - containerPort: 8000
         resources:
 {{ toYaml .Values.wms.resources | indent 10 }}
+        {{- with .Values.wms.livenessProbe }}
         livenessProbe:
-          exec:
-            command:
-            - "/bin/sh"
-            - "-c"
-            - "curl --silent 'http://localhost:8000/?service=WMS&request=GetCapabilities&version=1.3.0' | grep -q -F '<Layer queryable=\"1\">'"
-          initialDelaySeconds: 30
-          periodSeconds: 30
+{{ toYaml . | indent 10 }}
+        {{- end }}
+        {{- with .Values.wms.readinessProbe }}
+        readinessProbe:
+{{ toYaml . | indent 10 }}
+        {{- end }}
         args: [ {{- range .Values.wms.dockerArgs }} {{ . | quote }}, {{ end -}} ]
         terminationGracePeriodSeconds: 60
         volumeMounts:

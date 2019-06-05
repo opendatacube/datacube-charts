@@ -1,8 +1,7 @@
 apiVersion: batch/v1
 kind: Job
-{{ $externalDb := .Values.global.externalDatabase }}
 metadata:
-  name: "{{ include "datacube.fullname" . }}-dc-init"
+  name: {{ template "datacube.fullname" . }}-dc-init
   labels:
     heritage: {{.Release.Service | quote }}
     release: {{.Release.Name | quote }}
@@ -29,50 +28,30 @@ spec:
         - >
           wget https://raw.githubusercontent.com/eficode/wait-for/f71f8199a0dd95953752fb5d3f76f79ced16d47d/wait-for;
           chmod +x wait-for;
-          {{ if .Values.postgresql.enabled }}
-          ./wait-for {{ include "postgres.fullname" . }}:{{ .Values.postgresql.service.port }}
-          {{ else }}
-          ./wait-for {{ $externalDb.host }}:{{ $externalDb.port }}
-          {{ end }}
+          ./wait-for {{ .Values.database.host }}:{{ .Values.database.port }}
       containers:
       - name: initialize-datacube
-        image: "{{ .Values.global.image.repository }}:{{ .Values.global.image.tag }}"
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         args:
         - "/bin/bash"
         - "-c"
         - datacube system check || datacube system init --no-init-users
-        imagePullPolicy: {{ .Values.global.image.pullPolicy }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
         - name: DB_HOSTNAME
-          {{- if .Values.postgresql.enabled }}
-          value: {{ include "postgres.fullname" . }}
-          {{- else }}
-          value: {{ $externalDb.host | quote }}
-          {{ end }}
+          value: {{ .Values.database.host | quote }}
         - name: DB_PORT
-          {{- if .Values.postgresql.enabled }}
-          value: {{ .Values.postgresql.service.port | quote }}
-          {{- else }}
-          value: {{ $externalDb.port | quote }}
-          {{- end }}
+          value: {{ .Values.database.port | quote }}
         - name: DB_DATABASE
-          {{- if .Values.postgresql.enabled }}
-          value: {{ .Values.postgresql.postgresqlDatabase | quote }}
-          {{- else }}
-          value: {{ $externalDb.database | quote }}
-          {{- end }}
+          value: {{ .Values.database.database | quote }}
         - name: DB_USERNAME
           valueFrom:
             secretKeyRef:
-              {{- if .Values.postgresql.enabled }}
-              name: {{ .Values.postgresql.postgresqlUsername }}
-              {{- else }}
-              name: {{ $externalDb.database }}
-              {{- end }}
+              name: {{ template "datacube.secretName" . }}
               key: postgres-username
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ $externalDb.database }}
+              name: {{ template "datacube.secretName" . }}
               key: postgres-password
       restartPolicy: Never

@@ -21,3 +21,14 @@ Chart name of the postgres requirement
 {{- define "postgres.fullname" -}}
 {{- printf "%s-postgresql" .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+
+{{/*
+Get the password secret.
+*/}}
+{{- define "datacube.secretName" -}}
+{{- if .Values.database.existingSecret }}
+    {{- printf "%s" .Values.database.existingSecret -}}
+{{- else -}}
+    {{- printf "%s" (include "datacube.fullname" .) -}}
+{{- end -}}
+{{- end -}}

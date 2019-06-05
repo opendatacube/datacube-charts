@@ -1,6 +1,4 @@
-{{- $externalDb := .Values.global.externalDatabase }}
-{{- $dc := .Values.global.datacube }}
-{{- $secretName := empty .Values.secretName | ternary .Values.global.externalDatabase.database .Values.secretName }}
+{{- $dc := .Values.datacube }}
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -26,20 +24,20 @@ spec:
       - name: cubedash
         env:
         - name: DB_HOSTNAME
-          value: {{ $externalDb.host | quote }}
+          value: {{ .Values.database.host | quote }}
         - name: DB_PORT
-          value: {{ $externalDb.port | quote }}
+          value: {{ .Values.database.port | quote }}
         - name: DB_DATABASE
-          value: {{ $externalDb.database | quote }}
+          value: {{ .Values.database.database | quote }}
         - name: DB_USERNAME
           valueFrom:
             secretKeyRef:
-              name: {{ $secretName }}
+              name: {{ .Values.database.existingSecret }}
               key: postgres-username
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ $secretName }}
+              name: {{ .Values.database.existingSecret }}
               key: postgres-password
         - name: VIRTUAL_HOST
           value: localhost,127.0.0.

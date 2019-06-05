@@ -1,8 +1,5 @@
 apiVersion: batch/v1
 kind: Job
-{{ $externalDb := .Values.global.externalDatabase }}
-{{- $secretName := empty .Values.secretName | ternary .Values.global.externalDatabase.database .Values.secretName }}
-{{- $adminSecretName := empty .Values.adminSecretName | ternary .Values.global.externalDatabase.database .Values.adminSecretName }}
 metadata:
   name: "{{ include "datacube-dashboard.fullname" . }}-postgis-install"
   labels:
@@ -29,29 +26,29 @@ spec:
         imagePullPolicy: {{ .Values.setup.image.pullPolicy }}
         env:
         - name: DB_HOSTNAME
-          value: {{ $externalDb.host | quote }}
+          value: {{ .Values.database.host | quote }}
         - name: DB_PORT
-          value: {{ $externalDb.port | quote }}
+          value: {{ .Values.database.port | quote }}
         - name: DB_DATABASE
-          value: {{ $externalDb.database | quote }}
+          value: {{ .Values.database.database | quote }}
         - name: DB_USERNAME
           valueFrom:
             secretKeyRef:
-              name: {{ $secretName }}
+              name: {{ .Values.database.existingSecret }}
               key: postgres-username
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ $secretName }}
+              name: {{ .Values.database.existingSecret }}
               key: postgres-password
         - name: ADMIN_USERNAME
           valueFrom:
             secretKeyRef:
-              name: {{ $adminSecretName }}
+              name: {{ .Values.database.adminSecret }}
               key: postgres-username
         - name: ADMIN_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ $adminSecretName }}
+              name: {{ .Values.database.adminSecret }}
               key: postgres-password
       restartPolicy: Never

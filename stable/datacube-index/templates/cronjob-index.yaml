@@ -29,8 +29,7 @@ spec:
             app.kubernetes.io/instance: {{ .Release.Name }}
             heritage: {{ include "datacube-index.fullname" . }}
           annotations:
-
-{{ toYaml $index.annotations | indent 8 }}
+          {{ toYaml $index.annotations | indent 8 }}
         spec:
           restartPolicy: Never
           initContainers:
@@ -43,71 +42,62 @@ spec:
             imagePullPolicy: {{ $image.pullPolicy }}
             args: [ {{- range $index.dockerArgs }} {{ . | quote }}, {{ end -}} ]
             resources:
-{{ toYaml $index.resources | indent 10 }}
+            {{ toYaml $index.resources | indent 10 }}
             env:
-            - name: WMS_CONFIG_URL
-{{- if $index.wmsConfigURL }}
-              value: {{ $index.wmsConfigURL | quote }}
-{{- else }}
-              value: {{ $dc.wmsConfigURL | quote }}
-{{- end }}
-{{- if $index.products }}
-            - name: PRODUCT_URLS
-              value: {{ template "helm-toolkit.utils.joinListWithSpace" $index.products }}
-{{- else if $dc.products}}
-            - name: PRODUCT_URLS
-              value: {{ template "helm-toolkit.utils.joinListWithSpace" $dc.products }}
-{{- end }}
-{{- if $index.product_ranges }}
-            - name: DC_RANGES_PRODUCT
-              value: {{ $index.product_ranges | quote }}
-{{- end }}
-{{- if $index.multiproduct_ranges }}
-            - name: DC_RANGES_MULTIPRODUCT
-              value: {{ $index.multiproduct_ranges | quote }}
-{{- end }}
-{{- if $index.exclude_product }}
-            - name: DC_EXCLUDE_PRODUCT
-              value: {{ $index.exclude_product | quote }}
-{{- end }}
-{{- if $index.thredds_days }}
-            - name: DC_THREDDS_DAYS
-              value: {{ $index.thredds_days | quote }}
-{{- end }}
-            - name: DC_S3_INDEX_BUCKET
-              value: {{ $index.bucket | quote }}
-            - name: DC_S3_INDEX_PREFIX
-              value: {{ template "helm-toolkit.utils.joinListWithSpace" $index.prefix }}
-            - name: DC_S3_INDEX_SUFFIX
-              value: {{ $index.suffix | quote }}
-            - name: DC_S3_IGNORE_SUFFIX
-              value: {{ template "helm-toolkit.utils.joinListWithSpace" $index.ignore }}
-            - name: DC_INDEX_YAML_SAFETY
-              value: {{ $index.yaml_safety | quote }}
-{{- if $index.ignore_lineage }}
-            - name: DC_IGNORE_LINEAGE
-              value: {{ $index.ignore_lineage | quote }}
-{{- end }}
-            - name: DB_HOSTNAME
-              value: {{ $externalDb.host | quote }}
-            - name: DB_PORT
-              value: {{ $externalDb.port | quote }}
-            - name: DB_DATABASE
-              value: {{ $externalDb.database | quote }}
-            - name: DB_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: {{ $externalDb.database }}
-                  key: postgres-username
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ $externalDb.database }}
-                  key: postgres-password
-{{- if $index.additionalEnvironmentVars }}
-{{- range $arg, $value := $index.additionalEnvironmentVars }}
-            - name: {{ $arg | quote }}
-              value: {{ $value | quote }}
-{{- end }}
-{{- end }}
+              - name: WMS_CONFIG_URL
+                value: {{ $index.wmsConfigURL | quote }}
+              - name: PRODUCT_URLS
+                value: {{ template "helm-toolkit.utils.joinListWithSpace" $index.products }}
+            {{- if $index.product_ranges }}
+              - name: DC_RANGES_PRODUCT
+                value: {{ $index.product_ranges | quote }}
+            {{- end }}
+            {{- if $index.multiproduct_ranges }}
+              - name: DC_RANGES_MULTIPRODUCT
+                value: {{ $index.multiproduct_ranges | quote }}
+            {{- end }}
+            {{- if $index.exclude_product }}
+              - name: DC_EXCLUDE_PRODUCT
+                value: {{ $index.exclude_product | quote }}
+            {{- end }}
+            {{- if $index.thredds_days }}
+              - name: DC_THREDDS_DAYS
+                value: {{ $index.thredds_days | quote }}
+            {{- end }}
+              - name: DC_S3_INDEX_BUCKET
+                value: {{ $index.bucket | quote }}
+              - name: DC_S3_INDEX_PREFIX
+                value: {{ template "helm-toolkit.utils.joinListWithSpace" $index.prefix }}
+              - name: DC_S3_INDEX_SUFFIX
+                value: {{ $index.suffix | quote }}
+              - name: DC_S3_IGNORE_SUFFIX
+                value: {{ template "helm-toolkit.utils.joinListWithSpace" $index.ignore }}
+              - name: DC_INDEX_YAML_SAFETY
+                value: {{ $index.yaml_safety | quote }}
+            {{- if $index.ignore_lineage }}
+              - name: DC_IGNORE_LINEAGE
+                value: {{ $index.ignore_lineage | quote }}
+            {{- end }}
+              - name: DB_HOSTNAME
+                value: {{ $externalDb.host | quote }}
+              - name: DB_PORT
+                value: {{ $externalDb.port | quote }}
+              - name: DB_DATABASE
+                value: {{ $externalDb.database | quote }}
+              - name: DB_USERNAME
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ $externalDb.database }}
+                    key: postgres-username
+              - name: DB_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ $externalDb.database }}
+                    key: postgres-password
+          {{- if $index.additionalEnvironmentVars }}
+          {{- range $arg, $value := $index.additionalEnvironmentVars }}
+              - name: {{ $arg | quote }}
+                value: {{ $value | quote }}
+          {{- end }}
+          {{- end }}
 {{- end }}

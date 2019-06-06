@@ -42,7 +42,7 @@ spec:
             imagePullPolicy: {{ $image.pullPolicy }}
             args: [ {{- range $index.dockerArgs }} {{ . | quote }}, {{ end -}} ]
             resources:
-            {{ toYaml $index.resources | indent 10 }}
+{{ toYaml $index.resources | indent 12 }}
             env:
               - name: WMS_CONFIG_URL
                 value: {{ $index.wmsConfigURL | quote }}

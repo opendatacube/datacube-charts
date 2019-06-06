@@ -13,7 +13,7 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ template "datacube.fullname" . }}
+    name: "{{ template "datacube.fullname" . }}-{{ .Values.clusterInfo.envName }}"
   minReplicas: {{ .Values.minReplicas }}
   maxReplicas: {{ .Values.maxReplicas }}
   metrics:

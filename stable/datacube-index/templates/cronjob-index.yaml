@@ -32,6 +32,7 @@ spec:
 
 {{ toYaml $index.annotations | indent 8 }}
         spec:
+          restartPolicy: Never
           initContainers:
           - name: postgres-listener
             image: alpine
@@ -109,5 +110,4 @@ spec:
               value: {{ $value | quote }}
 {{- end }}
 {{- end }}
-            restartPolicy: Never
 {{- end }}

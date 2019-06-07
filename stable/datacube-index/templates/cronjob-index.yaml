@@ -3,7 +3,7 @@
 {{- $dc := .Values.global.datacube }}
 {{- $index := .Values.index }}
 {{- $image := .Values.global.image }}
-apiVersion: batch/v1beta1
+{{- $res := .Values.resources }}apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: {{ include "datacube-index.fullname" . }}
@@ -15,6 +15,7 @@ metadata:
     heritage: {{ include "datacube-index.fullname" . }}
 spec:
   schedule: {{ .Values.cron.schedule | quote }}
+  concurrencyPolicy: {{ $cron.concurrencyPolicy }}
   successfulJobsHistoryLimit: {{ .Values.cron.historyLimit}}
   failedJobsHistoryLimit: {{ .Values.cron.historyLimit }}
   suspend: {{ .Values.cron.suspend }}
@@ -29,8 +30,9 @@ spec:
             app.kubernetes.io/instance: {{ .Release.Name }}
             heritage: {{ include "datacube-index.fullname" . }}
           annotations:
-{{ toYaml $index.annotations | indent 10 }}
-        spec:
+          {{- range $key, $value := .Values.annotations }}
+            {{ $key }}: {{ $value | quote }}
+          {{- end }}        spec:
           restartPolicy: Never
           initContainers:
           - name: postgres-listener
@@ -42,7 +44,12 @@ spec:
             imagePullPolicy: {{ $image.pullPolicy }}
             args: [ {{- range $index.dockerArgs }} {{ . | quote }}, {{ end -}} ]
             resources:
-{{ toYaml $index.resources | indent 12 }}
+              limits:
+                cpu: {{ $res.limits.cpu }}
+                memory: {{ $res.limits.memory }}
+              requests:
+                cpu: {{ $res.requests.cpu }}
+                memory: {{ $res.requests.memory }}
             env:
               - name: WMS_CONFIG_URL
                 value: {{ $index.wmsConfigURL | quote }}

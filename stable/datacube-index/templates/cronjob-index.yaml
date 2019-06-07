@@ -16,7 +16,7 @@ metadata:
     heritage: {{ include "datacube-index.fullname" . }}
 spec:
   schedule: {{ .Values.cron.schedule | quote }}
-  concurrencyPolicy: {{ $cron.concurrencyPolicy }}
+  concurrencyPolicy: {{ .Values.cron.concurrencyPolicy}}
   successfulJobsHistoryLimit: {{ .Values.cron.historyLimit}}
   failedJobsHistoryLimit: {{ .Values.cron.historyLimit }}
   suspend: {{ .Values.cron.suspend }}

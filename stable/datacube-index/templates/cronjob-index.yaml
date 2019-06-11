@@ -29,7 +29,7 @@ spec:
             app.kubernetes.io/instance: {{ .Release.Name }}
             heritage: {{ include "datacube-index.fullname" . }}
           annotations:
-{{ toYaml $index.annotations | indent 10 }}
+{{ toYaml $index.annotations | indent 12 }}
         spec:
           restartPolicy: Never
           initContainers:
@@ -42,7 +42,7 @@ spec:
             imagePullPolicy: {{ $image.pullPolicy }}
             args: [ {{- range $index.dockerArgs }} {{ . | quote }}, {{ end -}} ]
             resources:
-{{ toYaml $index.resources | indent 12 }}
+{{ toYaml $index.resources | indent 14 }}
             env:
               - name: WMS_CONFIG_URL
                 value: {{ $index.wmsConfigURL | quote }}

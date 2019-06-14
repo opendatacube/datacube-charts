@@ -78,6 +78,11 @@ $ helm delete my-release
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 
 ## Indexing multiple folders at once
+
+### Future improvements
+Ideally this level of parallelism could be encoded into the values of a helm chart and the helm chart could spawn many jobs instead of the this method which spawns a number of helm releases all with a single job.
+
+### dea-public-data
 Using a small bash command and YAML config file can be used so that multiple index jobs can be created at once. For example to index WOFLs create a YAML configuration replacing the `database` section with the appropriate database information and the `annotations` section with the appropriate AWS IAM role (generally the same role used for a datacube WMS / WCS):
 ```YAML
 image:
@@ -97,6 +102,10 @@ index:
     AWS_DEFAULT_REGION: ap-southeast-2
   annotations:
     iam.amazonaws.com/role: kube2iam_iam_role
+  dockerArgs:
+  - "/bin/bash"
+  - "-c"
+  - ""
   resources:
     requests:
       cpu: 300m
@@ -105,7 +114,12 @@ index:
       cpu: 500m
       memory: 2Gi
 ```
-then run the following (will use `datacube-index` version `0.4.0`):
+save this YAML file (in the example it is `ows_index.yaml`) then run the following (will use `datacube-index` version `0.4.0`):
 ```console
 aws s3 ls s3://dea-public-data/WOfS/WOFLs/v2.1.5/combined/ | grep PRE | awk '{print $2}' | tr -d x | tr -d _ | tr -d / | xargs -n 1 -I {} helm upgrade --install --wait wofls-{} "https://opendatacube.github.io/datacube-charts/charts/datacube-index-0.4.0.tgz" -f ows_index.yaml --set index.dockerArgs[2]="s3-find s3://dea-public-data/WOfS/WOFLs/v2.1.5/combined/x_{}/**/*.yaml | s3-to-tar | dc-index-from-tar"
+```
+### THREDDS
+A similar method can be used to index data in THREDDS. For example using the same YAML file from above to index all available S2 ARD data:
+```console
+ curl http://dapds00.nci.org.au/thredds/catalog/if87/catalog.xml | grep catalogRef | awk 'match($0,/[0-9]+\-[0-9]+\-[0-9]+/) {print substr($0,RSTART,RLENGTH)}' | xargs -n 1 -I \% helm upgrade --install  thredds-% stable/datacube-index -f ows_index.yaml --set index.dockerArgs[2]="thredds-to-tar -c http://dapds00.nci.org.au/thredds/catalog/if87/% -t \".*ARD-METADATA.yaml\"; dc-index-from-tar -x s2a_msiard_nrt_granule -x s2b_msiard_nrt_granule --protocol \"http\" metadata.tar.gz;"
 ```

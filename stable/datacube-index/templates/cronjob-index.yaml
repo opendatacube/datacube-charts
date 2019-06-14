@@ -1,8 +1,7 @@
 {{- if .Values.cron.enabled }}
-{{- $externalDb := .Values.global.externalDatabase }}
-{{- $dc := .Values.global.datacube }}
+{{- $dc := .Values.datacube }}
 {{- $index := .Values.index }}
-{{- $image := .Values.global.image }}
+{{- $image := .Values.image }}
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
@@ -35,7 +34,7 @@ spec:
           initContainers:
           - name: postgres-listener
             image: alpine
-            command: ["sh", "-c", "for i in $(seq 1 200); do nc -z -w3 {{ $externalDb.host }} {{ $externalDb.port }} && exit 0 || sleep 3; done; exit 1"]
+            command: ["sh", "-c", "for i in $(seq 1 200); do nc -z -w3 {{ .Values.database.host }} {{ .Values.database.port }} && exit 0 || sleep 3; done; exit 1"]
           containers:
           - name: datacube-index
             image: "{{ $image.repository }}:{{ $image.tag }}"
@@ -79,20 +78,20 @@ spec:
                 value: {{ $index.ignore_lineage | quote }}
             {{- end }}
               - name: DB_HOSTNAME
-                value: {{ $externalDb.host | quote }}
+                value: {{ .Values.database.host | quote }}
               - name: DB_PORT
-                value: {{ $externalDb.port | quote }}
+                value: {{ .Values.database.port | quote }}
               - name: DB_DATABASE
-                value: {{ $externalDb.database | quote }}
+                value: {{ .Values.database.database | quote }}
               - name: DB_USERNAME
                 valueFrom:
                   secretKeyRef:
-                    name: {{ $externalDb.database }}
+                    name: {{ .Values.database.existingSecret }}
                     key: postgres-username
               - name: DB_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: {{ $externalDb.database }}
+                    name: {{ .Values.database.existingSecret }}
                     key: postgres-password
           {{- if $index.additionalEnvironmentVars }}
           {{- range $arg, $value := $index.additionalEnvironmentVars }}

@@ -25,6 +25,7 @@ wps:
       cpu: "2"
       memory: 2048Mi
   annotations: { }
+  additionalEnvironmentVars: { }
 wpsConfig:
   image: { }
     

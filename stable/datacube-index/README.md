@@ -76,3 +76,36 @@ $ helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
+
+## Indexing multiple folders at once
+Using a small bash command and YAML config file can be used so that multiple index jobs can be created at once. For example to index WOFLs create a YAML configuration replacing the `database` section with the appropriate database information and the `annotations` section with the appropriate AWS IAM role (generally the same role used for a datacube WMS / WCS):
+```YAML
+image:
+  registry: docker.io
+  tag: latest
+  repository: opendatacube/datacube-index
+  pullPolicy: IfNotPresent
+database:
+  database: ows
+  host: database.hostname.com
+  username: ows
+  existingSecret: ows
+datacube:
+  configPath: /opt/odc/datacube.conf
+index:
+  additionalEnvironmentVars:
+    AWS_DEFAULT_REGION: ap-southeast-2
+  annotations:
+    iam.amazonaws.com/role: kube2iam_iam_role
+  resources:
+    requests:
+      cpu: 300m
+      memory: 768Mi
+    limits:
+      cpu: 500m
+      memory: 2Gi
+```
+then run the following (will use `datacube-index` version `0.4.0`):
+```console
+aws s3 ls s3://dea-public-data/WOfS/WOFLs/v2.1.5/combined/ | grep PRE | awk '{print $2}' | tr -d x | tr -d _ | tr -d / | xargs -n 1 -I {} helm upgrade --install --wait wofls-{} "https://opendatacube.github.io/datacube-charts/charts/datacube-index-0.4.0.tgz" -f ows_index.yaml --set index.dockerArgs[2]="s3-find s3://dea-public-data/WOfS/WOFLs/v2.1.5/combined/x_{}/**/*.yaml | s3-to-tar | dc-index-from-tar"
+```

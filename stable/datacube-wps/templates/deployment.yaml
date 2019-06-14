@@ -67,6 +67,12 @@ spec:
             value: {{ $dc.configPath }}
           - name: WPS_BASEURL
             value: {{ tpl .Values.wps.baseurl .  | quote }}
+          {{- if .Values.wps.additionalEnvironmentVars }}
+          {{- range $arg, $value := .Values.wps.additionalEnvironmentVars }}
+          - name: {{ $arg | quote }}
+            value: {{ $value | quote }}
+          {{- end }}
+          {{- end }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:

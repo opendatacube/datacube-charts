@@ -1,11 +1,11 @@
-{{- $externalDb := .Values.global.externalDatabase }}
-{{- $dc := .Values.global.datacube }}
+{{- if .Values.archive.enable }}
+{{- $dc := .Values.datacube }}
 {{- $archive := .Values.archive }}
-{{- $image := .Values.global.image }}
+{{- $image := .Values.image }}
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: "{{ $externalDb.database }}-archive"
+  name: {{template "datacube-index.fullname" .}}-archive
   labels:
     heritage: {{.Release.Service | quote }}
     release: {{.Release.Name | quote }}
@@ -20,7 +20,7 @@ spec:
     spec:
       template:
         metadata:
-          name: "{{ $externalDb.database }}-archive"
+          name: {{template "datacube-index.fullname" .}}-archive
           labels:
             heritage: {{.Release.Service | quote }}
             release: {{.Release.Name | quote }}
@@ -33,7 +33,7 @@ spec:
           initContainers:
           - name: postgres-listener
             image: alpine
-            command: ["sh", "-c", "for i in $(seq 1 200); do nc -z -w3 {{ $externalDb.host }} {{ $externalDb.port }} && exit 0 || sleep 3; done; exit 1"]
+            command: ["sh", "-c", "for i in $(seq 1 200); do nc -z -w3 {{ .Values.database.host }} {{ .Values.database.port }} && exit 0 || sleep 3; done; exit 1"]
           containers:
           - name: datacube-archive
             image: "{{ $image.repository }}:{{ $image.tag }}"
@@ -53,20 +53,20 @@ spec:
             - name: DC_ARCHIVE_DAYS
               value: {{ $archive.days | quote }}
             - name: DB_HOSTNAME
-              value: {{ $externalDb.host | quote }}
+              value: {{ .Values.database.host | quote }}
             - name: DB_PORT
-              value: {{ $externalDb.port | quote }}
+              value: {{ .Values.database.port | quote }}
             - name: DB_DATABASE
-              value: {{ $externalDb.database | quote }}
+              value: {{ .Values.database.database | quote }}
             - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: {{ $externalDb.database }}
+                  name: {{ .Values.database.existingSecret }}
                   key: postgres-username
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ $externalDb.database }}
+                  name: {{ .Values.database.existingSecret }}
                   key: postgres-password
             {{- if $archive.additionalEnvironmentVars }}
             {{- range $arg, $value := $archive.additionalEnvironmentVars }}
@@ -88,3 +88,4 @@ spec:
               {{ if .memory }}memory: {{ .memory | quote }} {{ end }}
             {{- end }}
           {{- end }}
+{{- end }}

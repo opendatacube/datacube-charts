@@ -4,7 +4,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{template "datacube-index.fullname" .}}
+  name: {{include "datacube-index.name" .}}
   labels:
     app.kubernetes.io/name: {{ include "datacube-index.name" . }}
     helm.sh/chart: {{ include "datacube-index.chart" . }}
@@ -14,7 +14,7 @@ spec:
   backoffLimit: 1
   template:
     metadata:
-      name: {{ include "datacube-index.fullname" . }}
+      name: {{ include "datacube-index.name" . }}
       labels:
         heritage: {{ include "datacube-index.fullname" . }}
         release: {{ .Release.Name }}

@@ -121,5 +121,13 @@ aws s3 ls s3://dea-public-data/WOfS/WOFLs/v2.1.5/combined/ | grep PRE | awk '{pr
 ### THREDDS
 A similar method can be used to index data in THREDDS. For example using the same YAML file from above to index all available S2 ARD data:
 ```console
- curl http://dapds00.nci.org.au/thredds/catalog/if87/catalog.xml | grep catalogRef | awk 'match($0,/[0-9]+\-[0-9]+\-[0-9]+/) {print substr($0,RSTART,RLENGTH)}' | xargs -n 1 -I \% helm upgrade --install  thredds-% stable/datacube-index -f ows_index.yaml --set index.dockerArgs[2]="thredds-to-tar -c http://dapds00.nci.org.au/thredds/catalog/if87/% -t \".*ARD-METADATA.yaml\"; dc-index-from-tar -x s2a_msiard_nrt_granule -x s2b_msiard_nrt_granule --protocol \"http\" metadata.tar.gz;"
+ curl http://dapds00.nci.org.au/thredds/catalog/if87/catalog.xml | grep catalogRef | awk 'match($0,/[0-9]+\-[0-9]+\-[0-9]+/) {print substr($0,RSTART,RLENGTH)}' | xargs -n 1 -I % helm upgrade --install  thredds-% stable/datacube-index -f ows_index.yaml --set index.dockerArgs[2]="thredds-to-tar -c http://dapds00.nci.org.au/thredds/catalog/if87/% -t \".*ARD-METADATA.yaml\"; dc-index-from-tar -x s2a_msiard_nrt_granule -x s2b_msiard_nrt_granule --protocol \"http\" metadata.tar.gz;"
 ```
+
+To clean up all successful thredds jobs created by the above script run:
+```console
+kubectl get jobs | grep "thredds" | grep "1/1" | awk '{print $1}' | sed 's/-datacube-index//g' | xargs -n 1 helm delete --purge
+```
+
+### Running in parallel
+To speed up the processing for large batch jobs pass the `-P 2` argument to xargs the number of processes can be increased by increasing the value of `-P`

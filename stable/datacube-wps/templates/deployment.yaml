@@ -79,14 +79,14 @@ spec:
             - name: http
               containerPort: 8000
               protocol: TCP
+          {{- with .Values.wps.livenessProbe }}
           livenessProbe:
-            httpGet:
-              path: /?service=WPS&request=GetCapabilities&version=1.0.0
-              port: http
+{{ toYaml . | indent 12 }}
+          {{- end }}
+          {{- with .Values.wps.readinessProbe }}
           readinessProbe:
-            httpGet:
-              path: /?service=WPS&request=GetCapabilities&version=1.0.0
-              port: http
+{{ toYaml . | indent 12 }}
+          {{- end }}
           volumeMounts:
           - mountPath: /opt/outputs/
             name: output-volume

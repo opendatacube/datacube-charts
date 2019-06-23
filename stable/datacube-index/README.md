@@ -1,53 +1,6 @@
-# Datacube WMS
+# Datacube Index
 
 [Datacube](https://www.opendatacube.org/) Index Generation Job Template
-
-## Example Config
-
-This example works on docker for mac, with a pre-indexed postgres database hosted on the host machine
-
-```yaml
-# Example YAML configuration for running an index job on a k8s datacube using
-# YAML files in S3
-index:
-  # Change the name of the job here
-  # Cannot have 2 jobs with the same name
-  jobname: geomedian-test-index
-  # S3 bucket where YAML files
-  bucket: dea-public-data
-  # List of product URLs that will be added to the datacube
-  # optional
-  products: 
-    - https://raw.githubusercontent.com/GeoscienceAustralia/dea-config/master/dev/products/geomedian-au/geomedian_nbart_annual.yaml
-  # List of S3 prefixes to search for datasets
-  prefix:
-    - geomedian-australia/v2.1.0/
-  # suffix of datasets. While this can be anything the index job currently only supports YAML files
-  suffix: .yaml
-  # Additional Environment Variables to pass to the index container
-  additionalEnvironmentVars:
-    AWS_METADATA_SERVICE_TIMEOUT: 60
-    AWS_METADATA_SERVICE_NUM_ATTEMPTS: 30
-  # Configuration URL for the WMS
-  wmsConfigURL: "https://raw.githubusercontent.com/GeoscienceAustralia/dea-config/master/dev/services/wms/ows/wms_cfg.py"
-global:
-  image:
-    repository: opendatacube/wms
-    tag: "latest"
-  externalDatabase:
-    database: ows
-    port: 5432
-    # Hostname of the Database as accessible from the k8s cluster
-    host: host.docker.internal
-```
-
-Adjust these variables for your environment
-
-```console
-$ helm fetch --untar datacube-charts/datacube-index
-$ helm template datacube-index -x templates/index.yaml -f $template -f $name | kubectl create -f -
-rm -r datacube-index
-```
 
 ## Introduction
 
@@ -55,29 +8,8 @@ This chart creates a [Kubernetes](http://kubernetes.io) job to generate a [Datac
 
 This chart will read Datacube metadata files from AWS S3, and index them into a postgres database.
 
-## Installing the Chart
-
-To install the chart with the release name `my-release`:
-
-```console
-$ helm install --name my-release -f config.yaml stable/datacube-wms 
-```
-
-The command deploys the job on the Kubernetes cluster in the default namespace. 
-
-> **Tip**: List all releases using `helm list`
-
-## Uninstalling the Chart
-
-To uninstall/delete the `my-release` deployment:
-
-```console
-$ helm delete my-release
-```
-
-The command removes all the Kubernetes components associated with the chart and deletes the release.
-
 ## Indexing multiple folders at once
+These examples are all applicable to performing single large index jobs as well.
 
 ### Future improvements
 Ideally this level of parallelism could be encoded into the values of a helm chart and the helm chart could spawn many jobs instead of the this method which spawns a number of helm releases all with a single job.
@@ -131,3 +63,13 @@ kubectl get jobs | grep "thredds" | grep "1/1" | awk '{print $1}' | sed 's/-data
 
 ### Running in parallel
 To speed up the processing for large batch jobs pass the `-P 2` argument to xargs the number of processes can be increased by increasing the value of `-P`
+
+### Single jobs
+Single jobs can easily be run with a similar process
+```console
+helm upgrade --install wofls "https://opendatacube.github.io/datacube-charts/charts/datacube-index-0.4.0.tgz" -f ows_index.yaml --set index.dockerArgs[2]="s3-find s3://dea-public-data/WOfS/WOFLs/v2.1.5/combined/**/*.yaml | s3-to-tar | dc-index-from-tar"
+```
+And cleaned up with
+```console
+helm delete --purge wofls
+```

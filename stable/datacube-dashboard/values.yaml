@@ -30,7 +30,7 @@ update:
   historyLimit: 1
   cron: "0 0 31 2 *"
   suspend: true
-  dockerArgs: [ "python3", "-m", "cubedash.generate", "--all", "||", "true"]
+  dockerArgs: [ "cubedash-gen", "--all", "||", "true"]
 
 service:
   type: NodePort

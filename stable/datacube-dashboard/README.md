@@ -21,3 +21,6 @@ additionalSettings: |
   CUBEDASH_DEFAULT_PRODUCTS = ('ls8_nbar_scene', 'ls8_nbar_albers',)
   CUBEDASH_PROVENANCE_DISPLAY_LIMIT = 30
 ```
+
+## Updating CubeDash Datasets
+The `update_db.yaml` template is provided to create a cronjob which can update the cubedash database at regular intervals. It should generally call `cubedash-gen --all` which will update the cubedash database for all the datasets in the current datacube database.

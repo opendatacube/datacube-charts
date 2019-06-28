@@ -1,4 +1,4 @@
-{{- $db := .Values.global.externalDatabase }}
+{{- $db := .Values.database }}
 {{- $job := .Values.job }}
 {{- $sqs := .Values.sqs }}
 {{- $cron := .Values.cron }}
@@ -87,13 +87,13 @@ spec:
                 - name: DB_USERNAME
                   valueFrom:
                     secretKeyRef:
+                      name: {{ .Values.database.existingSecret }}
                       key: postgres-username
-                      name: {{ $db.database }}
                 - name: DB_PASSWORD
                   valueFrom:
                     secretKeyRef:
+                      name: {{ .Values.database.existingSecret }}
                       key: postgres-password
-                      name: {{ $db.database }}
                 - name: AWS_METADATA_SERVICE_NUM_ATTEMPTS
                   value: "30"
                 - name: AWS_METADATA_SERVICE_TIMEOUT

@@ -48,8 +48,8 @@ tolerations: []
 
 affinity: {}
 
-global:
-  externalDatabase:
-    host: devkube-dea-ga-gov-au-datakube-dev-mydb-rds.cxhoeczwhtar.ap-southeast-2.rds.amazonaws.com
-    port: 5432
-    database: ows
+database:
+  host: db-dev-eks-datacube-default.cxhoeczwhtar.ap-southeast-2.rds.amazonaws.com
+  port: 5432
+  database: ows
+  existingSecret: datacube

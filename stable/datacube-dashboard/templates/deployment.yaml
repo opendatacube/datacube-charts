@@ -62,7 +62,6 @@ spec:
         resources:
 {{ toYaml .Values.resources | indent 12 }}
         args: [ {{- range .Values.dockerArgs }} {{ . | quote }}, {{ end -}} ]
-        terminationGracePeriodSeconds: 30
         {{- if not (empty .Values.additionalSettings) }}
         volumeMounts:
         - name: config-volume

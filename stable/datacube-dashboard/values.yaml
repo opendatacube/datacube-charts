@@ -4,7 +4,7 @@
 replicaCount: 1
 image:
   registry: docker.io
-  repository: opendatacube/datacube-explorer
+  repository: opendatacube/datacube
   tag: 'stable'
   pullPolicy: Always
 
@@ -23,10 +23,10 @@ resources:
     memory: 1024Mi
 dockerArgs: [ "gunicorn", "-b", "0.0.0.0:8080", "-w", "4", "--timeout", "60", "cubedash:app" ]
 annotations:
-  iam.amazonaws.com/role: user.dev-eks-datacube
+  iam.amazonaws.com/role: dev-eks-datacube-cubedash
 additionalEnvironmentVars: { }
 update:
-  enabled: true
+  enabled: false
   historyLimit: 1
   cron: "15 14 * * *"  ## Run every midnight at 00:15:00 am AEST
   suspend: false

@@ -4,7 +4,7 @@
 replicaCount: 1
 image:
   registry: docker.io
-  repository: opendatacube/datacube
+  repository: opendatacube/dashboard
   tag: 'stable'
   pullPolicy: Always
 

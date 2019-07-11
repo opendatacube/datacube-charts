@@ -19,6 +19,7 @@ spec:
         release: {{.Release.Name | quote }}
         chart: "{{.Chart.Name}}-{{.Chart.Version}}"
     spec:
+      terminationGracePeriodSeconds: 30
       containers:
       - name: install-postgis-extension
         image: "{{ .Values.setup.image.repository }}:{{ .Values.setup.image.tag }}"

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "datacube-dashboard.fullname" . }}
+  name: "{{ include "datacube-dashboard.fullname" . }}-service"
   labels:
     app.kubernetes.io/name: {{ include "datacube-dashboard.name" . }}
     helm.sh/chart: {{ include "datacube-dashboard.chart" . }}

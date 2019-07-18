@@ -5,31 +5,32 @@ replicaCount: 1
 image:
   registry: docker.io
   repository: opendatacube/dashboard
-  tag: 'stable'
+  tag: latest
   pullPolicy: Always
 
 datacube:
   configPath: /opt/odc/datacube.conf
 database:
-  database: datacube
-  host: localhost
+  create: true
+  database: ows-test-db
+  host: db-dev-eks-datacube-default.cxhoeczwhtar.ap-southeast-2.rds.amazonaws.com
   port: 5432
-  existingSecret: datacube
-  adminSecret: datacube
+  adminSecret: dev-eks-datacube
+  existingSecret: dev-eks-datacube
 
 resources:
   limits:
     cpu: "300m"
     memory: 1024Mi
-dockerArgs: [ "gunicorn", "-b", "0.0.0.0:8080", "-w", "1", "--timeout", "60", "cubedash:app" ]
+dockerArgs: [ "gunicorn", "-b", "0.0.0.0:8080", "-w", "4", "--timeout", "60", "cubedash:app" ]
 annotations:
-  iam.amazonaws.com/role: kubernetes-wms
+  iam.amazonaws.com/role: dev-eks-datacube-wms
 additionalEnvironmentVars: { }
 update:
   enabled: false
   historyLimit: 1
-  cron: "0 0 31 2 *"
-  suspend: true
+  cron: "15 14 * * *"  ## Run every midnight at 00:15:00 am AEST
+  suspend: false
   dockerArgs: [ "cubedash-gen", "--all", "||", "true"]
 
 service:
@@ -41,7 +42,7 @@ setup:
   image:
     registry: docker.io
     repository: postgres
-    tag: 10
+    tag: latest
     pullPolicy: IfNotPresent
 
 ingress:

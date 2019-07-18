@@ -2,7 +2,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ include "datacube-dashboard.fullname" . }}
+  name: "{{ include "datacube-dashboard.fullname" . }}-deployment"
   labels:
     app.kubernetes.io/name: {{ include "datacube-dashboard.name" . }}
     helm.sh/chart: {{ include "datacube-dashboard.chart" . }}
@@ -20,6 +20,7 @@ spec:
         {{ $key }}: {{ $value | quote }}
       {{- end }}
     spec:
+      terminationGracePeriodSeconds: 30
       containers:
       - name: cubedash
         env:
@@ -62,7 +63,6 @@ spec:
         resources:
 {{ toYaml .Values.resources | indent 12 }}
         args: [ {{- range .Values.dockerArgs }} {{ . | quote }}, {{ end -}} ]
-        terminationGracePeriodSeconds: 30
         {{- if not (empty .Values.additionalSettings) }}
         volumeMounts:
         - name: config-volume

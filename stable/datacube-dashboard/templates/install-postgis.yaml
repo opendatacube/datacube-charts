@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: "{{ include "datacube-dashboard.fullname" . }}-postgis-install"
+  name: {{ include "datacube-dashboard.fullname" . }}
   labels:
     heritage: {{.Release.Service | quote }}
     release: {{.Release.Name | quote }}
@@ -13,7 +13,7 @@ metadata:
 spec:
   template:
     metadata:
-      name: "{{ include "datacube-dashboard.name" . }}-postgis-install"
+      name: {{ include "datacube-dashboard.name" . }}
       labels:
         heritage: {{.Release.Service | quote }}
         release: {{.Release.Name | quote }}

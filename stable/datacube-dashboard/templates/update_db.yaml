@@ -3,7 +3,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: "{{ include "datacube-dashboard.fullname" . }}-update-db"
+  name: {{ include "datacube-dashboard.fullname" . }}
   labels:
     app.kubernetes.io/name: {{ include "datacube-dashboard.name" . }}
     helm.sh/chart: {{ include "datacube-dashboard.chart" . }}

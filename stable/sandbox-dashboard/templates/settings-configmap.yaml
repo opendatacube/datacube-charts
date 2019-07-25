@@ -1,0 +1,14 @@
+{{- if not (empty .Values.additionalSettings) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "datacube-dashboard.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "datacube-dashboard.name" . }}
+    helm.sh/chart: {{ include "datacube-dashboard.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+data:
+  settings.env.py: {{ .Values.additionalSettings | quote }}
+{{- end }}
+

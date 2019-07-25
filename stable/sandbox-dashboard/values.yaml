@@ -1,0 +1,100 @@
+# Default values for datacube-wms.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+replicaCount: 5
+image:
+  registry: docker.io
+  repository: opendatacube/dashboard
+  tag: "2.1.0"  # Tag version any later than 2.1.0 is broken
+  pullPolicy: Always
+
+datacube:
+  configPath: /opt/odc/datacube.conf
+database:
+  database: sandbox
+  host: db-dea-sandbox-default.cos5zfpkso9m.ap-southeast-2.rds.amazonaws.com
+  port: 5432
+  adminSecret: dea-sandbox  # For setting up postgis extensions
+  existingSecret: sandbox-datacube  # For accessing sandbox database
+
+resources:
+  limits:
+    cpu: "300m"
+    memory: 1024Mi
+dockerArgs: [ "gunicorn", "-b", "0.0.0.0:8080", "-w", "4", "--timeout", "60", "cubedash:app" ]
+
+annotations:
+  iam.amazonaws.com/role: user.dea-sandbox
+additionalEnvironmentVars: { }
+update:
+  enabled: true  # To generate summary cache, run cubedash-gen --all command
+  historyLimit: 1
+  cron: "0 */4 * * *"  ## Run every 4th hour
+  suspend: false
+  dockerArgs: [ "cubedash-gen", "--all", "||", "true"]
+
+service:
+  type: NodePort
+  port: 80
+
+setup:
+  dockerArgs: [ "/bin/bash", "-c", "PGPASSWORD=$ADMIN_PASSWORD psql -h $DB_HOSTNAME -p 5432 -U $ADMIN_USERNAME -d $DB_DATABASE -c 'CREATE EXTENSION IF NOT EXISTS postgis'" ]
+  image:
+    registry: docker.io
+    repository: postgres
+    tag: latest
+    pullPolicy: IfNotPresent
+
+ingress:
+  enabled: true
+  path: "/ls5_fc_albers"
+  hosts:
+    - "explorer.sandbox.dea.ga.gov.au"
+  annotations:
+    kubernetes.io/ingress.class: alb
+
+    # set ALB parameters
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/healthcheck-path: "/ls5_fc_albers"
+    alb.ingress.kubernetes.io/success-codes: "200"
+    alb.ingress.kubernetes.io/connection-idle-timeout: "180"
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: "30"
+    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: "15"
+    alb.ingress.kubernetes.io/certificate-arn:  arn:aws:acm:ap-southeast-2:060378307146:certificate/afbbbf15-63ac-4ab4-bc0d-049bb577abab
+
+global:
+  externalDatabase:
+    database: sandbox
+  clusterSecret: sandbox-cubedash
+
+containerPort: 8080 # Internal port on which pod is running and serving cubedash app
+
+## Define a TCP liveness probe
+## For a liveness probe, giving up means the pod will be restarted.
+livenessProbe:
+  exec:
+    command:
+      - "ls"
+  initialDelaySeconds: 30
+  periodSeconds: 30 # how long to wait between checks
+  successThreshold: 1 # how many successes to hit before accepting
+  failureThreshold: 2 # how many failures to accept before failing
+  timeoutSeconds: 10 # how long to wait for a response
+
+## Define readiness probe
+## For a readiness probe, giving up means not routing traffic to the pod, but the pod is not restarted.
+readinessProbe:
+  exec:
+    command:
+      - "ls"
+  initialDelaySeconds: 30
+  periodSeconds: 30 # how long to wait between checks
+  successThreshold: 1 # how many successes to hit before accepting
+  failureThreshold: 2 # how many failures to accept before failing
+  timeoutSeconds: 10 # how long to wait for a response
+additionalSettings: |
+  CUBEDASH_THEME='dea'
+  CUBEDASH_DEFAULT_PRODUCTS = ('ls5_fc_albers',)
+  CUBEDASH_PROVENANCE_DISPLAY_LIMIT = 30

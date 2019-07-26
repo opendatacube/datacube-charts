@@ -5,14 +5,13 @@ replicaCount: 1
 image:
   registry: docker.io
   repository: opendatacube/dashboard
-  tag: latest
+  tag: "2.1.0"  # Tag version any later than 2.1.0 is broken
   pullPolicy: Always
 
 datacube:
   configPath: /opt/odc/datacube.conf
 database:
-  create: true
-  database: ows-test-db
+  database: postgres
   host: db-dev-eks-datacube-default.cxhoeczwhtar.ap-southeast-2.rds.amazonaws.com
   port: 5432
   adminSecret: dev-eks-datacube
@@ -35,7 +34,7 @@ update:
 
 service:
   type: NodePort
-  port: 8080
+  port: 80
 
 setup:
   dockerArgs: [ "/bin/bash", "-c", "PGPASSWORD=$ADMIN_PASSWORD psql -h $DB_HOSTNAME -p 5432 -U $ADMIN_USERNAME -d $DB_DATABASE -c 'CREATE EXTENSION IF NOT EXISTS postgis'" ]
@@ -45,12 +44,16 @@ setup:
     tag: latest
     pullPolicy: IfNotPresent
 
+containerPort: 8080 # Internal port on which pod is running and serving cubedash app
+
 ingress:
   ## Enable Ingress.
   ##
   enabled: false
   host:
 
+## Define a TCP liveness probe
+## For a liveness probe, giving up means the pod will be restarted.
 livenessProbe:
   httpGet:
     path: "/"
@@ -58,6 +61,8 @@ livenessProbe:
   initialDelaySeconds: 10
   periodSeconds: 10
 
+## Define readiness probe
+## For a readiness probe, giving up means not routing traffic to the pod, but the pod is not restarted.
 readinessProbe:
   httpGet:
     path: "/"
@@ -65,4 +70,7 @@ readinessProbe:
   initialDelaySeconds: 5
   periodSeconds: 10
 
-additionalSettings:
+additionalSettings: |
+  CUBEDASH_THEME='dea'
+  CUBEDASH_DEFAULT_PRODUCTS = ('ls5_fc_albers',)
+  CUBEDASH_PROVENANCE_DISPLAY_LIMIT = 30

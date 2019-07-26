@@ -1,18 +1,25 @@
 {{- $dc := .Values.datacube }}
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "{{ include "datacube-dashboard.fullname" . }}-deployment"
+  name: {{ include "datacube-dashboard.fullname" . }}
   labels:
+    app: {{ .Release.Name }}
     app.kubernetes.io/name: {{ include "datacube-dashboard.name" . }}
     helm.sh/chart: {{ include "datacube-dashboard.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+      app.kubernetes.io/name: {{ include "datacube-dashboard.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
+        app: {{ .Release.Name }}
         app.kubernetes.io/name: {{ include "datacube-dashboard.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
       annotations:
@@ -22,55 +29,55 @@ spec:
     spec:
       terminationGracePeriodSeconds: 30
       containers:
-      - name: cubedash
-        env:
-        - name: DB_HOSTNAME
-          value: {{ .Values.database.host | quote }}
-        - name: DB_PORT
-          value: {{ .Values.database.port | quote }}
-        - name: DB_DATABASE
-          value: {{ .Values.database.database | quote }}
-        - name: DB_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Values.database.existingSecret }}
-              key: postgres-username
-        - name: DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Values.database.existingSecret }}
-              key: postgres-password
-        - name: VIRTUAL_HOST
-          value: localhost,127.0.0.
-        - name: DATACUBE_CONFIG_PATH
-          value: {{ $dc.configPath }}
-        {{- if not (empty .Values.additionalSettings) }}
-        - name: CUBEDASH_SETTINGS
-          value: /etc/cubedash/config/settings.env.py
-        {{- end }}
-        {{- if .Values.additionalEnvironmentVars }}
-        {{- range $arg, $value := .Values.additionalEnvironmentVars }}
-        - name: {{ $arg | quote }}
-          value: {{ $value | quote }}
-        {{- end }}
-        {{- end }}
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        imagePullPolicy: Always
-        ports:
-          - name: http
-            containerPort: 8080
-            protocol: TCP
-        resources:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: Always
+          env:
+          - name: DB_HOSTNAME
+            value: {{ .Values.database.host | quote }}
+          - name: DB_PORT
+            value: {{ .Values.database.port | quote }}
+          - name: DB_DATABASE
+            value: {{ .Values.database.database | quote }}
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.database.existingSecret }}
+                key: postgres-username
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.database.existingSecret }}
+                key: postgres-password
+          - name: VIRTUAL_HOST
+            value: localhost,127.0.0.
+          - name: DATACUBE_CONFIG_PATH
+            value: {{ $dc.configPath }}
+          {{- if not (empty .Values.additionalSettings) }}
+          - name: CUBEDASH_SETTINGS
+            value: /etc/cubedash/config/settings.env.py
+          {{- end }}
+          {{- if .Values.additionalEnvironmentVars }}
+          {{- range $arg, $value := .Values.additionalEnvironmentVars }}
+          - name: {{ $arg | quote }}
+            value: {{ $value | quote }}
+          {{- end }}
+          {{- end }}
+          resources:
 {{ toYaml .Values.resources | indent 12 }}
-        args: [ {{- range .Values.dockerArgs }} {{ . | quote }}, {{ end -}} ]
+          args: [ {{- range .Values.dockerArgs }} {{ . | quote }}, {{ end -}} ]
         {{- if not (empty .Values.additionalSettings) }}
-        volumeMounts:
-        - name: config-volume
-          mountPath: /etc/cubedash/config
+          volumeMounts:
+          - name: config-volume
+            mountPath: /etc/cubedash/config
         {{- end }}
-        livenessProbe:
+          ports:
+            # All http services
+            - name: http
+              containerPort: {{ .Values.containerPort }}
+          livenessProbe:
 {{ toYaml .Values.livenessProbe | indent 12 }}
-        readinessProbe:
+          readinessProbe:
 {{ toYaml .Values.readinessProbe | indent 12 }}
     {{- with .Values.nodeSelector }}
       nodeSelector:

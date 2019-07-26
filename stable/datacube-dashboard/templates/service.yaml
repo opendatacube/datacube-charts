@@ -1,8 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: "{{ include "datacube-dashboard.fullname" . }}-service"
+  name: {{ include "datacube-dashboard.fullname" . }}
   labels:
+    app: {{ .Release.Name }}
     app.kubernetes.io/name: {{ include "datacube-dashboard.name" . }}
     helm.sh/chart: {{ include "datacube-dashboard.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
@@ -11,9 +12,10 @@ spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: http
+      targetPort: {{ .Values.containerPort }}
       protocol: TCP
       name: http
   selector:
+    app: {{ .Release.Name }}
     app.kubernetes.io/name: {{ include "datacube-dashboard.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}

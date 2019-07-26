@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "datacube-dashboard.fullname" . }}
+  name: '{{ include "datacube-dashboard.fullname" . }}-install-psql-extension'
   labels:
     heritage: {{.Release.Service | quote }}
     release: {{.Release.Name | quote }}

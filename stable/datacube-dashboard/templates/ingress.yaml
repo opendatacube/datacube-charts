@@ -1,11 +1,13 @@
 {{- if .Values.ingress.enabled -}}
 {{- $fullName := include "datacube-dashboard.fullname" . -}}
 {{- $ingressPath := .Values.ingress.path -}}
+{{- $servicePort := .Values.service.port -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ $fullName }}
   labels:
+    app: {{ .Release.Name }}
     app.kubernetes.io/name: {{ include "datacube-dashboard.name" . }}
     helm.sh/chart: {{ include "datacube-dashboard.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
@@ -33,7 +35,7 @@ spec:
           - path: {{ $ingressPath }}
             backend:
               serviceName: {{ $fullName }}
-              servicePort: http
+              servicePort: {{ $servicePort }}
   {{- end }}
   {{- if and .Values.global.domain .Values.ingress.prefixes }}
   {{- $domain := .Values.global.domain }}
@@ -44,7 +46,7 @@ spec:
           - path: {{ $ingressPath }}
             backend:
               serviceName: {{ $fullName }}
-              servicePort: http
+              servicePort: {{ $servicePort }}
   {{- end }}
   {{- end }}
 {{- end }}

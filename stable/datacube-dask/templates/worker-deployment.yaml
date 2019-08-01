@@ -29,7 +29,9 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
           {{- if .Values.worker.command }}
-           {{- range .Values.worker.command }} {{ . | quote }}, {{ end -}}
+          {{- range .Values.worker.command }}
+          - {{ . | quote }}
+          {{- end }}
           {{- else }}
           - docker-entrypoint.sh
           {{- end}}

@@ -29,10 +29,11 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: [ {{- range .Values.worker.command }} {{ . | quote }}, {{ end -}}  ]
           args:
-          {{- if not .Values.worker.schedulerAddress }}
-          - {{ include "datacube-dask.fullname" . }}:{{ .Values.scheduler.port }}
-          {{- else }}
+          - dask-worker
+          {{- if .Values.worker.schedulerAddress }}
           - {{ .Values.worker.schedulerAddress }}
+          {{- else }}
+          - {{ include "datacube-dask.fullname" . }}.{{ .Release.Namespace }}:{{ .Values.scheduler.port }}
           {{- end }}
           {{- range .Values.worker.args }}
           - {{ . | quote }}

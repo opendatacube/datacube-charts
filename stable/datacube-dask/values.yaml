@@ -48,8 +48,9 @@ worker:
   minReplicas: 1
   maxReplicas: 10
   command:
-  - dask-worker
+  - docker-entrypoint.sh
   args:
+  # dask-worker is run in the template
   - --nthreads
   - '2'
   - --no-bokeh

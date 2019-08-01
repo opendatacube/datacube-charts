@@ -27,7 +27,12 @@ spec:
         - name: {{ template "datacube-dask.name" . }}-worker
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: [ {{- range .Values.worker.command }} {{ . | quote }}, {{ end -}}  ]
+          command:
+          {{- if .Values.worker.command }}
+           {{- range .Values.worker.command }} {{ . | quote }}, {{ end -}}
+          {{- else }}
+          - docker-entrypoint.sh
+          {{- end}}
           args:
           - dask-worker
           {{- if .Values.worker.schedulerAddress }}

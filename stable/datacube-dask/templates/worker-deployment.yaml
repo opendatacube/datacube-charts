@@ -13,12 +13,12 @@ spec:
   replicas: {{ .Values.worker.minReplicas }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "datacube-dask.name" . }}
+      app.kubernetes.io/name: {{ include "datacube-dask.name" . }}-worker
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "datacube-dask.name" . }}
+        app.kubernetes.io/name: {{ include "datacube-dask.name" . }}-worker
         app.kubernetes.io/instance: {{ .Release.Name }}
       annotations:
 {{ toYaml .Values.worker.annotations | indent 8 }}

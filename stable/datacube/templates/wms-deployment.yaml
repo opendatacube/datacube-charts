@@ -80,6 +80,23 @@ spec:
         - name: PROFILER
           value: {{ 1 | quote }}
 {{- end }}
+{{- if .Values.wms.awsCredentialsSecret }}
+        - name: AWS_DEFAULT_REGION
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.wms.awsCredentialsSecret }}
+              key: AWS_DEFAULT_REGION
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.wms.awsCredentialsSecret }}
+              key: AWS_ACCESS_KEY_ID
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.wms.awsCredentialsSecret }}
+              key: AWS_SECRET_ACCESS_KEY
+{{- end }}
 {{- if .Values.wms.additionalEnvironmentVars }}
 {{- range $arg, $value := .Values.wms.additionalEnvironmentVars }}
         - name: {{ $arg | quote }}

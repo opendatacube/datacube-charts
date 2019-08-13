@@ -1,12 +1,9 @@
 dist: trusty
-sudo: required
-services:
-  - docker
+sudo: false
 
 language: python
 python:
-  # We don't use the travis python, but we will use it for the build matrix
-  - "3.7"
+  - "3.6"
 git:
   depth: 2
 
@@ -32,33 +29,12 @@ before_script:
   - git remote set-branches --add origin gh-pages
   - git fetch
   - git checkout origin/gh-pages -- charts/
-  if [ "$TRAVIS_BRANCH" == "build-k8s-dev-env" ]; then
-    # Start the Clair database and Clair locally or while running your job
-    docker run -d --name clair_db arminc/clair-db:latest
-    docker run -p 6060:6060 --link clair_db:postgres -d --name clair arminc/clair-local-scan:v2.0.8_fe9b059d930314b54c78f75afe265955faf4fdc1
-  fi
 
 script:
   # Generate chart tarballs and index file
   - bash deploy-charts.sh $REPO stable
 
-after_success:
-  if [ "$TRAVIS_BRANCH" == "build-k8s-dev-env" ]; then
-    export DEV_TAG=$(git describe --tags | awk -F'[-.]' '{if ($4!="" && $5!="") print $1"."$2"."$3+1"-unstable."$4"."$5; else print $1"."$2"."$3;}')
-    docker build -t opendatacube/k8s_dev_env:$DEV_TAG -t opendatacube/k8s_dev_env:latest .
-    # ens4 is specific to Travis Xenial should be changed if moving to another OS / CI provider
-    "wget https://github.com/arminc/clair-scanner/releases/download/v8/clair-scanner_linux_amd64 && chmod +x clair-scanner_linux_amd64 && ./clair-scanner_linux_amd64 --threshold='High' --report='clair-scan.json' --ip $(ifconfig ens4 | grep 'inet addr' | cut -d: -f2 | awk '{print $1}') --reportAll=false opendatacube/k8s_dev_env:latest"
-  fi
-
-before_deploy:
-  if [ "$TRAVIS_BRANCH" == "build-k8s-dev-env" ]; then
-    # Now that your Docker image is built and contains application code, upload it into a public registry.
-    echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-    docker push opendatacube/k8s_dev_env:$DEV_TAG
-    docker push opendatacube/k8s_dev_env:latest
-  fi
-
-# Deploy to github pages
+  # Deploy to github pages
 deploy:
   provider: pages
   skip-cleanup: true
@@ -66,4 +42,3 @@ deploy:
   keep-history: true
   on:
     branch: master
-

@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "datacube-dev-env.fullname" . }}
+  labels:
+    app: {{ .Release.Name }}
+    app.kubernetes.io/name: {{ include "datacube-dev-env.name" . }}
+    helm.sh/chart: {{ include "datacube-dev-env.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.containerPort }}
+      protocol: TCP
+      name: http
+  selector:
+    app: {{ .Release.Name }}
+    app.kubernetes.io/name: {{ include "datacube-dev-env.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}

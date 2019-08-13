@@ -1,0 +1,128 @@
+{{- $dc := .Values.datacube }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "datacube-dev-env.fullname" . }}
+  labels:
+    app: {{ .Release.Name }}
+    app.kubernetes.io/name: {{ include "datacube-dev-env.name" . }}
+    helm.sh/chart: {{ include "datacube-dev-env.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+      app.kubernetes.io/name: {{ include "datacube-dev-env.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+        app.kubernetes.io/name: {{ include "datacube-dev-env.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+      annotations:
+      {{- range $key, $value := .Values.annotations }}
+        {{ $key }}: {{ $value | quote }}
+      {{- end }}
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+        # the nginx container, it mounts the shared volume to provide assets directly via http response
+        - image: {{ .Values.nginx.image }}
+          imagePullPolicy: {{ .Values.nginx.imagePullPolicy }}
+          name: nginx
+          ports:
+            - containerPort: 80
+          {{ if ne .Values.environment "dev" }}
+          volumeMounts:
+            - mountPath: /var/www/symfony/public
+              name: sf-public
+          {{ end }}
+
+          # the php container
+        - image: {{ .Values.php.image }}
+          imagePullPolicy: {{ .Values.php.imagePullPolicy }}
+          name: php
+          env:
+            - name: APP_ENV
+              value: {{ .Values.php.symfony.appEnv }}
+            - name: PHP_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          {{ if ne .Values.environment "dev" }}
+          volumeMounts:
+            - mountPath: /var/www/symfony/public
+              name: sf-public
+          {{ end }}
+
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: Always
+          env:
+          - name: DB_HOSTNAME
+            value: {{ .Values.database.host | quote }}
+          - name: DB_PORT
+            value: {{ .Values.database.port | quote }}
+          - name: DB_DATABASE
+            value: {{ .Values.database.database | quote }}
+          - name: REF_DATABASE
+            value: {{ .Values.database.ref_database | quote }}
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.database.existingSecret }}
+                key: postgres-username
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.database.existingSecret }}
+                key: postgres-password
+          - name: VIRTUAL_HOST
+            value: localhost,127.0.0.
+          - name: DATACUBE_CONFIG_PATH
+            value: {{ $dc.configPath }}
+          {{- if .Values.additionalEnvironmentVars }}
+          {{- range $arg, $value := .Values.additionalEnvironmentVars }}
+          - name: {{ $arg | quote }}
+            value: {{ $value | quote }}
+          {{- end }}
+          {{- end }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+          args: [ {{- range .Values.dockerArgs }} {{ . | quote }}, {{ end -}} ]
+        # Render if the environment value is not dev
+        {{ if ne .Values.environment "dev" }}
+          volumeMounts:
+          - name: config-volume
+            mountPath: /etc/dev_env/config
+        {{- end }}
+          ports:
+            # All http services
+            - name: http
+              containerPort: {{ .Values.containerPort }}
+          livenessProbe:
+{{ toYaml .Values.livenessProbe | indent 12 }}
+          readinessProbe:
+{{ toYaml .Values.readinessProbe | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- if not (empty .Values.additionalSettings) }}
+      volumes:
+      - name: config-volume
+        configMap:
+          name: {{ include "datacube-dev-env.fullname" . }}
+    {{- end }}
+status: {}

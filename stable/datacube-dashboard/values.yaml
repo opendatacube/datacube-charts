@@ -95,26 +95,3 @@ ingress:
     - ""
   annotations:
     kubernetes.io/ingress.class: alb
-
-## Define readiness probe
-## For a readiness probe, giving up means not routing traffic to the pod, but the pod is not restarted.
-readinessProbe:
-  httpGet:
-    path: "/aster_false_colour"
-    port: 8080
-  initialDelaySeconds: 60
-  periodSeconds: 60 # how long to wait between checks
-  successThreshold: 1 # how many successes to hit before accepting
-  failureThreshold: 3 # how many failures to accept before failing
-  timeoutSeconds: 20 # how long to wait for a response
-## Define a TCP liveness probe
-## For a liveness probe, giving up means the pod will be restarted.
-livenessProbe:
-  httpGet:
-    path: "/aster_false_colour"
-    port: 8080
-  initialDelaySeconds: 60
-  periodSeconds: 60 # how long to wait between checks
-  successThreshold: 1 # how many successes to hit before accepting
-  failureThreshold: 3 # how many failures to accept before failing
-  timeoutSeconds: 20 # how long to wait for a response

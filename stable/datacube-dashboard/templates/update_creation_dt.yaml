@@ -1,19 +1,19 @@
-{{- if .Values.update.enabled }}
+{{- if .Values.update_creation_dt.enabled }}
 {{- $dc := .Values.datacube }}
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: '{{ include "datacube-dashboard.fullname" . }}-update-index'
+  name: '{{ include "datacube-dashboard.fullname" . }}-update-dt'
   labels:
     app.kubernetes.io/name: {{ include "datacube-dashboard.name" . }}
     helm.sh/chart: {{ include "datacube-dashboard.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
-  schedule: {{ .Values.update.cron | quote }}
-  successfulJobsHistoryLimit: {{ .Values.update.historyLimit}}
-  failedJobsHistoryLimit: {{ .Values.update.historyLimit }}
-  suspend: {{ .Values.update.suspend }}
+  schedule: {{ .Values.update_creation_dt.cron | quote }}
+  successfulJobsHistoryLimit: {{ .Values.update_creation_dt.historyLimit}}
+  failedJobsHistoryLimit: {{ .Values.update_creation_dt.historyLimit }}
+  suspend: {{ .Values.update_creation_dt.suspend }}
   jobTemplate:
     spec:
       template:
@@ -28,10 +28,10 @@ spec:
           {{- end }}
         spec:
           containers:
-          - name: cubedash-updater
+          - name: cubedash-update-creation-dt
             image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
             imagePullPolicy: {{ .Values.image.pullPolicy }}
-            args: [ {{- range .Values.update.dockerArgs }} {{ . | quote }}, {{ end -}} ]
+            args: [ {{- range .Values.update_creation_dt.dockerArgs }} {{ . | quote }}, {{ end -}} ]
             env:
             - name: DB_HOSTNAME
               value: {{ .Values.database.host | quote }}
@@ -50,7 +50,7 @@ spec:
                   name: {{ .Values.database.existingSecret }}
                   key: postgres-password
             {{- if .Values.additionalEnvironmentVars }}
-            {{- range $arg, $value := .Values.update.additionalEnvironmentVars }}
+            {{- range $arg, $value := .Values.update_creation_dt.additionalEnvironmentVars }}
             - name: {{ $arg | quote }}
               value: {{ $value | quote }}
             {{- end }}

@@ -29,35 +29,6 @@ spec:
     spec:
       terminationGracePeriodSeconds: 30
       containers:
-        # the nginx container, it mounts the shared volume to provide assets directly via http response
-        - image: {{ .Values.nginx.image }}
-          imagePullPolicy: {{ .Values.nginx.imagePullPolicy }}
-          name: nginx
-          ports:
-            - containerPort: 80
-          {{ if ne .Values.environment "dev" }}
-          volumeMounts:
-            - mountPath: /var/www/symfony/public
-              name: sf-public
-          {{ end }}
-
-          # the php container
-        - image: {{ .Values.php.image }}
-          imagePullPolicy: {{ .Values.php.imagePullPolicy }}
-          name: php
-          env:
-            - name: APP_ENV
-              value: {{ .Values.php.symfony.appEnv }}
-            - name: PHP_POD_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-          {{ if ne .Values.environment "dev" }}
-          volumeMounts:
-            - mountPath: /var/www/symfony/public
-              name: sf-public
-          {{ end }}
-
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: Always

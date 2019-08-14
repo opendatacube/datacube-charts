@@ -29,8 +29,7 @@ resources:
     cpu: "300m"
     memory: 1024Mi
 
-# Make chunks of 1GB psql dump file and restore the dump file to new database
-dockerArgs: [ "/bin/bash", "-c", "PGPASSWORD=$ADMIN_PASSWORD psql -h $DB_HOSTNAME -p 5432 -U $ADMIN_USERNAME -d $DB_DATABASE -c 'pg_dump $REF_DATABASE | split -b 1G - pgdump_file | cat pgdump_file* | psql $DB_DATABASE'" ]
+dockerArgs: [ "/bin/bash", "-c", "tail -f /dev/null" ]
 
 annotations:
   iam.amazonaws.com/role: dev-eks-datacube-wms
@@ -48,7 +47,11 @@ createdb:
     pullPolicy: Always
 
 setup:
-  dockerArgs: [ "/bin/bash", "-c", "PGPASSWORD=$ADMIN_PASSWORD psql -h $DB_HOSTNAME -p 5432 -U $ADMIN_USERNAME -d $DB_DATABASE -c 'CREATE EXTENSION IF NOT EXISTS postgis'" ]
+  dockerArgs:
+    - "/bin/bash"
+    - "-c"
+    - "echo 'CREATE EXTENSION IF NOT EXISTS postgis; \n grant agdc_admin to $ADMIN_USERNAME;' |
+       PGPASSWORD=$ADMIN_PASSWORD psql -h $DB_HOSTNAME -p 5432 -U $ADMIN_USERNAME -d $DB_DATABASE"
   image:
     registry: docker.io
     repository: postgres

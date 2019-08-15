@@ -28,8 +28,8 @@ spec:
         spec:
           containers:
           - name: cubedash-update-creation-dt
-            image: "{{ .Values.updateDbImage.repository }}:{{ .Values.updateDbImage.tag }}"
-            imagePullPolicy: {{ .Values.updateDbImage.pullPolicy }}
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            imagePullPolicy: {{ .Values.image.pullPolicy }}
             args: [ {{- range .Values.updateCreationDt.dockerArgs }} {{ . | quote }}, {{ end -}} ]
             env:
             - name: DB_HOSTNAME

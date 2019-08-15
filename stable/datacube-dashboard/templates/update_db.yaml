@@ -1,5 +1,4 @@
 {{- if .Values.update.enabled }}
-{{- $dc := .Values.datacube }}
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:

@@ -64,7 +64,7 @@ update:
   dockerArgs: [ "cubedash-gen", "--all", "||", "true"]
 dockerArgs: [ "gunicorn", "-b", "0.0.0.0:8080", "-w", "4", "--timeout", "60", "cubedash:app" ]
 
-update_creation_dt:
+updateCreationDt:
   enabled: false
   historyLimit: 1
   cron: "0 13 * * *"  ## Run daily at 11 pm AEST

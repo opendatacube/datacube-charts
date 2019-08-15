@@ -1,5 +1,4 @@
-{{- if .Values.update_creation_dt.enabled }}
-{{- $dc := .Values.datacube }}
+{{- if .Values.updateCreationDt.enabled }}
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
@@ -10,10 +9,10 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
-  schedule: {{ .Values.update_creation_dt.cron | quote }}
-  successfulJobsHistoryLimit: {{ .Values.update_creation_dt.historyLimit}}
-  failedJobsHistoryLimit: {{ .Values.update_creation_dt.historyLimit }}
-  suspend: {{ .Values.update_creation_dt.suspend }}
+  schedule: {{ .Values.updateCreationDt.cron | quote }}
+  successfulJobsHistoryLimit: {{ .Values.updateCreationDt.historyLimit}}
+  failedJobsHistoryLimit: {{ .Values.updateCreationDt.historyLimit }}
+  suspend: {{ .Values.updateCreationDt.suspend }}
   jobTemplate:
     spec:
       template:
@@ -31,7 +30,7 @@ spec:
           - name: cubedash-update-creation-dt
             image: "{{ .Values.updateDbImage.repository }}:{{ .Values.updateDbImage.tag }}"
             imagePullPolicy: {{ .Values.updateDbImage.pullPolicy }}
-            args: [ {{- range .Values.update_creation_dt.dockerArgs }} {{ . | quote }}, {{ end -}} ]
+            args: [ {{- range .Values.updateCreationDt.dockerArgs }} {{ . | quote }}, {{ end -}} ]
             env:
             - name: DB_HOSTNAME
               value: {{ .Values.database.host | quote }}
@@ -50,7 +49,7 @@ spec:
                   name: {{ .Values.database.existingSecret }}
                   key: postgres-password
             {{- if .Values.additionalEnvironmentVars }}
-            {{- range $arg, $value := .Values.update_creation_dt.additionalEnvironmentVars }}
+            {{- range $arg, $value := .Values.updateCreationDt.additionalEnvironmentVars }}
             - name: {{ $arg | quote }}
               value: {{ $value | quote }}
             {{- end }}

@@ -1,4 +1,5 @@
 {{- if .Values.update.enabled }}
+{{- $dc := .Values.datacube }}
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
@@ -27,7 +28,7 @@ spec:
           {{- end }}
         spec:
           containers:
-          - name: cubedash-update-index
+          - name: cubedash-updater
             image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
             imagePullPolicy: {{ .Values.image.pullPolicy }}
             args: [ {{- range .Values.update.dockerArgs }} {{ . | quote }}, {{ end -}} ]

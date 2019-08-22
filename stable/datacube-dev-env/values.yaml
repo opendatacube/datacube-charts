@@ -13,7 +13,7 @@ datacube:
   configPath: /opt/odc/datacube.conf
 
 database:
-  create: true
+  create: false
   database: testdb
   ref_database: ows
   host: database.local

@@ -13,19 +13,6 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-  securityContext:
-    sysctls:
-      # If this flag is set to 1 then all System V shared memory segments will be marked for destruction as soon as
-      # the number of attached processes falls to zero
-      - name: kernel.shm_rmid_forced
-        value: "0"
-      # comment out ipv6 localhost
-      - name: net.ipv6.conf.all.disable_ipv6
-        value: "1"
-      - name: net.ipv6.conf.default.disable_ipv6
-        value: "1"
-      - name: net.ipv6.conf.lo.disable_ipv6
-        value: "1"
 {{- if not .Values.wms.autoscaling }}
   replicas: {{ .Values.minReplicas }}
 {{- end }}
@@ -77,12 +64,12 @@ spec:
         - name: DB_USERNAME
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.database.existingSecret }}
+              name: {{ template "datacube.secretName" . }}
               key: postgres-username
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.database.existingSecret }}
+              name: {{ template "datacube.secretName" . }}
               key: postgres-password
         - name: VIRTUAL_HOST
           value: localhost,127.0.0.

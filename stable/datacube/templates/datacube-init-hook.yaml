@@ -19,6 +19,9 @@ spec:
         release: {{.Release.Name | quote }}
         chart: "{{.Chart.Name}}-{{.Chart.Version}}"
     spec:
+      dnsConfig:
+        options:
+          - name: single-request-reopen
       initContainers:
       - name: wait-for
         image: alpine:latest

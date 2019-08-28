@@ -1,0 +1,51 @@
+# Default values for datacube-wms.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+replicaCount: 1
+environment: dev
+image:
+  registry: docker.io
+  repository: opendatacube/k8s-dev
+  tag: "latest"
+  pullPolicy: Always
+
+datacube:
+  configPath: /opt/odc/datacube.conf
+
+database:
+  create: false
+  database: testdb
+  host: database.local
+  port: 5432
+  adminSecret: dev-eks-datacube
+  existingSecret: dev-eks-datacube
+
+clusterInfo:
+  envName: dev
+
+resources:
+  limits:
+    cpu: "300m"
+    memory: 1024Mi
+
+dockerArgs: [ "/bin/bash", "-c", "tail -f /dev/null" ]
+
+annotations:
+  iam.amazonaws.com/role: dev-eks-datacube-wms
+
+service:
+  type: NodePort
+  port: 80
+
+createdb:
+  dockerArgs: [ "/bin/sh", "-c", "/code/setup/create-db.sh" ]
+  image:
+    registry: docker.io
+    repository: opendatacube/wms
+    tag: latest
+    pullPolicy: Always
+
+containerPort: 8080 # Internal port on which pod is running
+
+additionalSettings: {}
+additionalEnvironmentVars: { }

@@ -29,6 +29,11 @@ spec:
       annotations:
 {{ toYaml .Values.wms.annotations | indent 8 }}
     spec:
+      # Turning single-request-reopen option on would fix issue where in two requests from the same port are
+      # not handled correctly it will close the socket and open a new one before sending the second request.
+      dnsConfig:
+        options:
+        - name: single-request-reopen
       initContainers:
 {{- if .Values.wmsConfig.image }}
       - name: wms-config

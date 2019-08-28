@@ -21,6 +21,9 @@ spec:
         release: {{.Release.Name | quote }}
         chart: "{{.Chart.Name}}-{{.Chart.Version}}"
     spec:
+      dnsConfig:
+        options:
+          - name: single-request-reopen
       containers:
       - name: create-db
         image: "{{ $image.repository }}:{{ $image.tag }}"

@@ -39,8 +39,6 @@ spec:
             value: {{ .Values.database.port | quote }}
           - name: DB_DATABASE
             value: {{ .Values.database.database | quote }}
-          - name: REF_DATABASE
-            value: {{ .Values.database.ref_database | quote }}
           - name: DB_USERNAME
             valueFrom:
               secretKeyRef:

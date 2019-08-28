@@ -15,7 +15,6 @@ datacube:
 database:
   create: false
   database: testdb
-  ref_database: ows
   host: database.local
   port: 5432
   adminSecret: dev-eks-datacube
@@ -46,43 +45,7 @@ createdb:
     tag: latest
     pullPolicy: Always
 
-setup:
-  dockerArgs:
-    - "/bin/bash"
-    - "-c"
-    - "echo 'CREATE EXTENSION IF NOT EXISTS postgis; \n grant agdc_admin to $ADMIN_USERNAME;' |
-       PGPASSWORD=$ADMIN_PASSWORD psql -h $DB_HOSTNAME -p 5432 -U $ADMIN_USERNAME -d $DB_DATABASE"
-  image:
-    registry: docker.io
-    repository: postgres
-    tag: latest
-    pullPolicy: Always
-
 containerPort: 8080 # Internal port on which pod is running
-
-ingress:
-  ## Enable Ingress.
-  ##
-  enabled: false
-  host:
-
-## Define a TCP liveness probe
-## For a liveness probe, giving up means the pod will be restarted.
-livenessProbe:
-  exec:
-    command:
-      - "ls"
-  initialDelaySeconds: 10
-  periodSeconds: 10
-
-## Define readiness probe
-## For a readiness probe, giving up means not routing traffic to the pod, but the pod is not restarted.
-readinessProbe:
-  exec:
-    command:
-      - "ls"
-  initialDelaySeconds: 5
-  periodSeconds: 10
 
 additionalSettings: {}
 additionalEnvironmentVars: { }

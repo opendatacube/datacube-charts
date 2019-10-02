@@ -38,6 +38,16 @@ spec:
               value: {{ .Values.database.port | quote }}
             - name: DB_DATABASE
               value: {{ .Values.database.database | quote }}
+            - name: ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.database.adminSecret }}
+                  key: postgres-username
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.database.adminSecret }}
+                  key: postgres-password
             - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -48,6 +58,23 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.database.existingSecret }}
                   key: postgres-password
+            {{- if .Values.awsCredentialsSecret }}
+            - name: AWS_DEFAULT_REGION
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.awsCredentialsSecret }}
+                  key: AWS_DEFAULT_REGION
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.awsCredentialsSecret }}
+                  key: AWS_ACCESS_KEY_ID
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.awsCredentialsSecret }}
+                  key: AWS_SECRET_ACCESS_KEY
+            {{- end }}
             {{- if .Values.additionalEnvironmentVars }}
             {{- range $arg, $value := .Values.updateCreationDt.additionalEnvironmentVars }}
             - name: {{ $arg | quote }}

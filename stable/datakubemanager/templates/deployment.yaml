@@ -1,0 +1,61 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ include "datakubemanager.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "datakubemanager.name" . }}
+    helm.sh/chart: {{ include "datakubemanager.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "datakubemanager.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "datakubemanager.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- with .Values.annotations }}
+      annotations:
+{{ toYaml . | indent 8 }}
+      {{- end }}    
+    spec:
+      # Turning single-request-reopen option on would fix issue where in two requests from the same port are
+      # not handled correctly it will close the socket and open a new one before sending the second request.
+      dnsConfig:
+        options:
+          - name: single-request-reopen
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: [ {{- range .Values.dockerArgs }} {{ . | quote }}, {{ end -}} ]
+          ports:
+            - name: http
+              containerPort: {{ .Values.containerPort }}
+              protocol: TCP
+          {{- with .Values.livenessProbe }}
+          livenessProbe:
+{{ toYaml . | indent 12 }}
+          {{- end }}
+          {{- with .Values.readinessProbe }}
+          readinessProbe:
+{{ toYaml . | indent 12 }}
+          {{- end }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

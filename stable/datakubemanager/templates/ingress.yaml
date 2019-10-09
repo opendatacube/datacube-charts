@@ -6,8 +6,8 @@ kind: Ingress
 metadata:
   name: {{ $fullName }}
   labels:
-    app.kubernetes.io/name: {{ include "Datakubemanager.name" . }}
-    helm.sh/chart: {{ include "Datakubemanager.chart" . }}
+    app.kubernetes.io/name: {{ include "datakubemanager.name" . }}
+    helm.sh/chart: {{ include "datakubemanager.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- with .Values.ingress.annotations }}

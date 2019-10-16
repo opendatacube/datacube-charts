@@ -33,6 +33,12 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args: [ {{- range .Values.dockerArgs }} {{ . | quote }}, {{ end -}} ]
+          env:
+          - name: WINDSWEEPER_ADDRESS
+            value: https://restcube.dev.dea.ga.gov.au
+          {{- with .Values.environment }}
+{{ toYaml . | indent 10 }}
+          {{- end }}            
           ports:
             - name: http
               containerPort: {{ .Values.containerPort }}

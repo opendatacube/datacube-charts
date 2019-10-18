@@ -23,6 +23,9 @@ service:
     type: LoadBalancer
     port: 80
 
+cognito:
+  existingSecret: restcubecognito
+
 ingress:
   enabled: false
   annotations: {}

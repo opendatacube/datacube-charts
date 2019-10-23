@@ -2,7 +2,6 @@
 {{- $fullName := include "datacube-dashboard.fullname" . -}}
 {{- $ingressPath := .Values.ingress.path -}}
 {{- $ingressRedirect := .Values.ingress.redirect -}}
-{{- $redirectActionName := .Values.ingress.action -}}
 {{- $servicePort := .Values.service.port -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -20,8 +19,9 @@ metadata:
 {{- end }}
 spec:
   rules:
-  {{- if $ingressRedirect -}}
-  {{- range .Values.ingress.hosts }}
+    {{- if $ingressRedirect -}}
+    {{- $redirectActionName := .Values.ingress.action -}}
+    {{- range .Values.ingress.hosts }}
     - host: {{ . | quote }}
       http:
         paths:
@@ -33,9 +33,9 @@ spec:
             backend:
               serviceName: {{ $fullName }}
               servicePort: {{ $servicePort }}
-  {{- end }}
-  {{- else }}
-  {{- range .Values.ingress.hosts }}
+    {{- end }}
+    {{- else }}
+    {{- range .Values.ingress.hosts }}
     - host: {{ . | quote }}
       http:
         paths:
@@ -43,11 +43,11 @@ spec:
             backend:
               serviceName: {{ $fullName }}
               servicePort: {{ $servicePort }}
-  {{- end }}
-  {{- end }}
-  {{- if and .Values.global.domain .Values.ingress.prefixes }}
-  {{- $domain := .Values.global.domain }}
-  {{- range .Values.ingress.prefixes }}
+    {{- end }}
+    {{- end }}
+    {{- if and .Values.global.domain .Values.ingress.prefixes }}
+    {{- $domain := .Values.global.domain }}
+    {{- range .Values.ingress.prefixes }}
     - host: "{{ . }}.{{ $domain }}"
       http:
         paths:
@@ -55,6 +55,6 @@ spec:
             backend:
               serviceName: {{ $fullName }}
               servicePort: {{ $servicePort }}
-  {{- end }}
-  {{- end }}
+    {{- end }}
+    {{- end }}
 {{- end }}

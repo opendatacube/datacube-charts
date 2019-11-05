@@ -138,6 +138,10 @@ spec:
           name: wms-config-volume
 {{- end }}
       restartPolicy: Always
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
       volumes:
 {{- if $prometheus.enabled }}
       - name: prometheus-volume

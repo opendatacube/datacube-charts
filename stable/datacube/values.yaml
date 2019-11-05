@@ -72,6 +72,8 @@ profiling:
 service:
   type: NodePort
 
+affinity: {}
+
 ingress:
   ## Enable Ingress.
   ##

@@ -66,6 +66,16 @@ spec:
               secretKeyRef:
                 name: {{ .Values.database.existingSecret }}
                 key: postgres-password
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.aws.existingSecret }}
+                key: aws_access_key_id
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Value.aws.existingSecret }}
+                key: aws_secret_access_key
           - name: VIRTUAL_HOST
             value: localhost,127.0.0.
           - name: DATACUBE_CONFIG_PATH

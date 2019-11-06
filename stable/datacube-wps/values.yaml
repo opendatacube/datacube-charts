@@ -14,6 +14,9 @@ database:
   port: 5432
   existingSecret: datacube
 
+aws:
+  existingSecret: ows-wps-aws
+
 ##
 ## Datacube WMS configuration
 ##

@@ -52,7 +52,7 @@ spec:
                 key: postgres-password
           - name: VIRTUAL_HOST
             value: localhost,127.0.0.
-                    volumeMounts:
+          volumeMounts:
           - name: kubectl-binary
             mountPath: /usr/local/bin/kubectl
             readOnly: true

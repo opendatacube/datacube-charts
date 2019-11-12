@@ -52,6 +52,13 @@ spec:
                 key: postgres-password
           - name: VIRTUAL_HOST
             value: localhost,127.0.0.
+          volumeMounts:
+          - name: kubectl-binary
+            mountPath: /usr/local/bin/kubectl
+            readOnly: true
+          - name: kubectl-config
+            mountPath: /root/.kube/config
+            readOnly: true
           {{- with .Values.environment }}
 {{ toYaml . | indent 10 }}
           {{- end }}
@@ -69,6 +76,13 @@ spec:
           {{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
+      volumes:
+      - name: kubectl-binary
+        hostPath:
+          path: /usr/local/bin/kubectl
+      - name: kubectl-config
+        hostPath:
+          path: /root/.kube/config
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}

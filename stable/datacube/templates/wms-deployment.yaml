@@ -43,9 +43,9 @@ spec:
         volumeMounts:
         - mountPath: {{ .Values.wmsConfig.path }}
           name: wms-config-volume
-          {{- if .Values.wmsConfig.subpath }}
+{{- if .Values.wmsConfig.subpath }}
           subPath: {{ .Values.wmsConfig.subpath }}
-          {{- end }}
+{{- end }}
 {{- end }}
       containers:
       - name: wms

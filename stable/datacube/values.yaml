@@ -9,17 +9,10 @@ datacube:
 clusterInfo:
   envName: dev
 database:
-  adminSecret:
   existingSecret:
   database: datacube
   host: localhost
   port: 5432
-  create: false
-  creation:
-    dockerArgs:
-      - "/bin/sh"
-      - "-c"
-      - "/code/setup/create-db.sh"
 image:
   repository: opendatacube/wms
   tag: latest

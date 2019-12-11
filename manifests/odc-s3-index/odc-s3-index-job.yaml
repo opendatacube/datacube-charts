@@ -1,0 +1,69 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: odc-s3-index-job
+spec:
+  template:
+    metadata:
+      name: odc-s3-index-job
+    spec:
+      dnsConfig:
+        options:
+          - name: single-request-reopen
+      containers:
+      - name: index
+        image: opendatacube/datacube-index:odc
+        args: 
+        - bin/bash -c
+        # configure datacube schema if it isn't done already
+        - datacube system init 
+        # list files in the s3 bucket, then index them
+        - echo 'Scanning s3 files, If it gets stuck here check your aws credentials are passed correctly'
+        - s3-find "s3://$BUCKET/$PREFIX" | s3-to-tar | dc-index-from-tar --ignore-lineage 
+        imagePullPolicy: IfNotPresent
+        env:
+        # should be a raw file url that of your datacube product
+        - name: PRODUCT_FILE
+          valueFrom:
+            secretKeyRef:
+              name: odc-s3-index-config
+              key: PRODUCT_FILE
+        # the bucket you're indexing from
+        - name: BUCKET
+          valueFrom:
+            secretKeyRef:
+              name: odc-s3-index-config
+              key: BUCKET
+        # a prefix filter to 
+        - name: PREFIX
+          valueFrom:
+            secretKeyRef:
+              name: odc-s3-index-config
+              key: PREFIX
+        # database connection string
+        - name: DATACUBE_DB_URL
+          valueFrom:
+            secretKeyRef:
+              name: odc-s3-index-config
+              key: DATACUBE_DB_URL
+        # AWS access keys
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: odc-s3-index-config
+              key: AWS_ACCESS_KEY_ID
+              optional: true
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: odc-s3-index-config
+              key: AWS_SECRET_ACCESS_KEY
+              optional: true
+        - name: AWS_DEFAULT_REGION
+          valueFrom:
+            secretKeyRef:
+              name: odc-s3-index-config
+              key: AWS_DEFAULT_REGION
+              optional: true
+      restartPolicy: OnFailure
+  backoffLimit: 2

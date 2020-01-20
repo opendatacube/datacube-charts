@@ -49,6 +49,14 @@ wmsConfig:
   image: { }
 
 ##
+## Pyspy Monitoring
+##
+pyspy:
+  enabled: true
+  image: { }
+
+
+##
 ## Prometheus Monitoring
 ##
 prometheus:

@@ -57,6 +57,10 @@ spec:
         volumeMounts:
         - mountPath: {{ .Values.pyspy.path }}
           name: pyspy-volume
+      SecurityContext:
+        capabilities:
+          add:
+          - SYS_PTRACE
 {{- end }}
       - name: wms
         env:
@@ -155,6 +159,12 @@ spec:
           name: wms-config-volume
 {{- end }}
       restartPolicy: Always
+{{- if $pyspy.enabled }}
+      SecurityContext:
+        capabilities:
+          add:
+          - SYS_PTRACE
+{{- end }}
     {{- with .Values.affinity }}
       affinity:
 {{ toYaml . | indent 8 }}

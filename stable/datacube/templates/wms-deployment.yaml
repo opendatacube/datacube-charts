@@ -5,6 +5,7 @@ kind: Deployment
 {{- $image := .Values.image }}
 {{- $prometheus := .Values.prometheus }}
 {{- $profiling := .Values.profiling }}
+{{- $pyspy := .Values.pyspy }}
 metadata:
   name: "{{ template "datacube.fullname" . }}-{{ .Values.clusterInfo.envName }}"
   labels:
@@ -48,6 +49,15 @@ spec:
 {{- end }}
 {{- end }}
       containers:
+{{- if $pyspy.enabled }}
+      - name: pyspy
+        image: "{{ $.Values.pyspy.image.repository }}:{{ $.Values.pyspy.image.tag }}"
+        imagePullPolicy: {{ $.Values.pyspy.image.pullPolicy }}
+        args: {}
+        volumeMounts:
+        - mountPath: {{ .Values.pyspy.path }}
+          name: pyspy-volume
+{{- end }}
       - name: wms
         env:
 {{- if .Values.wmsConfig.url }}
@@ -136,11 +146,21 @@ spec:
         - mountPath: {{ $profiling.path }}
           name: profiling-volume
 {{- end }}
+{{- if $pyspy.enabled }}
+        - mountPath: {{ $pyspy.path }}
+          name: pyspy-volume
+{{- end }}
 {{- if or .Values.wmsConfig.configMap .Values.wmsConfig.image }}
         - mountPath: {{ .Values.wmsConfig.path }}
           name: wms-config-volume
 {{- end }}
       restartPolicy: Always
+{{- if $pyspy.enabled }}
+      SecurityContext:
+        capabilities:
+          add:
+          - SYS_PTRACE
+{{- end }}
     {{- with .Values.affinity }}
       affinity:
 {{ toYaml . | indent 8 }}

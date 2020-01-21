@@ -9,17 +9,10 @@ datacube:
 clusterInfo:
   envName: dev
 database:
-  adminSecret:
   existingSecret:
   database: datacube
   host: localhost
   port: 5432
-  create: false
-  creation:
-    dockerArgs:
-      - "/bin/sh"
-      - "-c"
-      - "/code/setup/create-db.sh"
 image:
   repository: opendatacube/wms
   tag: latest
@@ -56,6 +49,18 @@ wmsConfig:
   image: { }
 
 ##
+## Pyspy Monitoring
+##
+pyspy:
+  enabled: true
+  path: "/opt/pyspy"
+  image:
+    repository: geoscienceaustralia/pyspy
+    tag: 0.1.0
+    pullPolicy: IfNotPresent
+
+
+##
 ## Prometheus Monitoring
 ##
 prometheus:
@@ -73,6 +78,8 @@ service:
   type: NodePort
 
 affinity: {}
+
+SecurityContext: {}
 
 ingress:
   ## Enable Ingress.

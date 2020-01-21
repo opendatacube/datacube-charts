@@ -57,10 +57,6 @@ spec:
         volumeMounts:
         - mountPath: {{ .Values.pyspy.path }}
           name: pyspy-volume
-      SecurityContext:
-        capabilities:
-          add:
-          - SYS_PTRACE
 {{- end }}
       - name: wms
         env:

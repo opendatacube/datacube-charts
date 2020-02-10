@@ -37,6 +37,8 @@ spec:
           env:
           - name: AWS_DEFAULT_REGION
             value: {{ .Values.aws_region }}
+          - name: SQS_QUEUE_NAME
+            value: {{ .Values.sqs_queue_name }}
           - name: WMS_CONFIG_URL
             value: {{ $dc.wmsConfigURL | quote }}
           - name: DB_HOSTNAME

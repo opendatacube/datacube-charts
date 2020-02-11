@@ -29,6 +29,7 @@ wps:
       memory: 2048Mi
   annotations: { }
   additionalEnvironmentVars: { }
+  dockerArgs: [ "gunicorn", "-b", "0.0.0.0:8000", "-w", "4", "--keep-alive", "5", "--timeout", "121", "wps:app" ]
   livenessProbe:
     exec:
       command:

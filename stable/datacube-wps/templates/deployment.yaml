@@ -90,6 +90,9 @@ spec:
           {{- end }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          dockerArgs: [ "gunicorn", "-b", "0.0.0.0:8000", "-w", "4", "--keep-alive", "5", "--timeout", "121", "wps:app" ]
+          externalPort: 80
+          internalPort: 8000
           ports:
             - name: http
               containerPort: 8000

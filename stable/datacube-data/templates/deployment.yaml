@@ -59,6 +59,12 @@ spec:
                 key: postgres-password
           - name: DATACUBE_CONFIG_PATH
             value: {{ $dc.configPath }}
+{{- if .Values.additionalEnvironmentVars }}
+{{- range $arg, $value := .Values.additionalEnvironmentVars }}
+          - name: {{ $arg | quote }}
+            value: {{ $value | quote }}
+{{- end }}
+{{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- with .Values.nodeSelector }}

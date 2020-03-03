@@ -29,6 +29,20 @@ spec:
       dnsConfig:
         options:
           - name: single-request-reopen
+      # Copy over WMS config from container image during init
+      initContainers:
+{{- if .Values.wmsConfig.image }}
+      - name: wms-config
+        image: "{{ $.Values.wmsConfig.image.repository }}:{{ $.Values.wmsConfig.image.tag }}"
+        imagePullPolicy: {{ $.Values.wmsConfig.image.pullPolicy }}
+        args: [ "cp", "-f", "{{ .Values.wmsConfig.image.src }}", "{{ .Values.wmsConfig.path }}/{{ .Values.wmsConfig.filename }}" ]
+        volumeMounts:
+        - mountPath: {{ .Values.wmsConfig.path }}
+          name: wms-config-volume
+{{- if .Values.wmsConfig.subpath }}
+          subPath: {{ .Values.wmsConfig.subpath }}
+{{- end }}
+{{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -39,8 +53,15 @@ spec:
             value: {{ .Values.aws_region }}
           - name: SQS_QUEUE_NAME
             value: {{ .Values.sqs_queue_name }}
+          # Merge config URL for download or local file mounted via volume  
+{{- if .Values.wmsConfig.url }}
           - name: WMS_CONFIG_URL
-            value: {{ $dc.wmsConfigURL | quote }}
+            value: {{ .Values.wmsConfig.url | quote }}
+{{- end }}
+{{- if or .Values.wmsConfig.configMap .Values.wmsConfig.image }}
+          - value: "{{ .Values.wmsConfig.path }}/{{ .Values.wmsConfig.filename }}"
+            name: WMS_CONFIG_PATH
+{{- end }}
           - name: DB_HOSTNAME
             value: {{ .Values.database.host | quote }}
           - name: DB_PORT
@@ -65,6 +86,12 @@ spec:
             value: {{ $value | quote }}
 {{- end }}
 {{- end }}
+          # Mount the config volume
+          volumeMounts:
+{{- if or .Values.wmsConfig.configMap .Values.wmsConfig.image }}
+            - mountPath: {{ .Values.wmsConfig.path }}
+              name: wms-config-volume
+{{- end }}           
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- with .Values.nodeSelector }}
@@ -75,7 +102,18 @@ spec:
       affinity:
 {{ toYaml . | indent 8 }}
     {{- end }}
+      # Define the config volume
+      volumes:
+{{- if or .Values.wmsConfig.configMap .Values.wmsConfig.image }}
+      - name: wms-config-volume
+{{- if .Values.wmsConfig.configMap }}
+        configMap:
+          name: {{ .Values.wmsConfig.configMap }}
+{{- else if .Values.wmsConfig.image }}
+        emptyDir: {}      
     {{- with .Values.tolerations }}
+{{- end }}
+{{- end }}
       tolerations:
 {{ toYaml . | indent 8 }}
     {{- end }}

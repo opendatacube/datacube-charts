@@ -1526,24 +1526,6 @@ entries:
   datacube-wps:
   - apiVersion: v1
     appVersion: alpha
-    created: 2020-03-04T02:39:30.027238069Z
-    description: A Helm chart for Datacube WPS on Kubernetes
-    digest: 20dba2f30713a1b85631e8b155ede987429d4f64cc440be32f1a6798583236a6
-    name: datacube-wps
-    urls:
-    - https://opendatacube.github.io/datacube-charts/charts/datacube-wps-0.7.8.tgz
-    version: 0.7.8
-  - apiVersion: v1
-    appVersion: alpha
-    created: 2020-03-04T02:39:30.027001975Z
-    description: A Helm chart for Datacube WPS on Kubernetes
-    digest: 707c51c8d6b03b65e56d4cba1bd2fe368de7542dde66c750ef180eee6b2f268e
-    name: datacube-wps
-    urls:
-    - https://opendatacube.github.io/datacube-charts/charts/datacube-wps-0.7.7.tgz
-    version: 0.7.7
-  - apiVersion: v1
-    appVersion: alpha
     created: 2020-03-04T02:39:30.026763862Z
     description: A Helm chart for Datacube WPS on Kubernetes
     digest: 50829642e1cbbbaa4ff49a9833a64a01d4eff63dc999ab4b0951f7b46c503398

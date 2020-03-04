@@ -46,3 +46,7 @@ affinity: {}
 
 global:
   externalDatabase: {}
+
+# Image to pull WMS Config from
+wmsConfig:
+  image: { }

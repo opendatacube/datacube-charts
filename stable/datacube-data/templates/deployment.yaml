@@ -111,9 +111,9 @@ spec:
           name: {{ .Values.wmsConfig.configMap }}
 {{- else if .Values.wmsConfig.image }}
         emptyDir: {}      
+{{- end }}
+{{- end }}
     {{- with .Values.tolerations }}
-{{- end }}
-{{- end }}
       tolerations:
 {{ toYaml . | indent 8 }}
     {{- end }}

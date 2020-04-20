@@ -1,6 +1,5 @@
 apiVersion: apps/v1beta2
 kind: Deployment
-{{ $dc := .Values.datacube }}
 metadata:
   name: {{ include "datacube-wps.fullname" . }}
   labels:
@@ -78,8 +77,6 @@ spec:
           #       key: aws_secret_access_key
           - name: VIRTUAL_HOST
             value: localhost,127.0.0.
-          - name: DATACUBE_CONFIG_PATH
-            value: {{ $dc.configPath }}
           - name: WPS_BASEURL
             value: {{ tpl .Values.wps.baseurl .  | quote }}
           {{- if .Values.wps.additionalEnvironmentVars }}

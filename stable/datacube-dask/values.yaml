@@ -2,8 +2,6 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-datacube:
-  configPath: /opt/odc/datacube.conf
 database:
   database: datacube
   host: localhost

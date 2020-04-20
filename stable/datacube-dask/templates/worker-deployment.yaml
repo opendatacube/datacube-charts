@@ -1,5 +1,4 @@
 {{- if not .Values.adaptive.enabled }}
-{{- $dc := .Values.datacube }}
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
@@ -66,9 +65,7 @@ spec:
             valueFrom:
               secretKeyRef:
                 name: {{ .Values.database.existingSecret }}
-                key: postgres-password
-          - name: DATACUBE_CONFIG_PATH
-            value: {{ $dc.configPath }}          
+                key: postgres-password        
 {{- if .Values.worker.env }}
 {{- range $arg, $value := .Values.worker.env }}
           - name: {{ $arg | quote }}

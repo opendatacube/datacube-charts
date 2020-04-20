@@ -1,7 +1,6 @@
 {{- if .Values.wms.enabled }}
 apiVersion: extensions/v1beta1
 kind: Deployment
-{{- $dc := .Values.datacube }}
 {{- $image := .Values.image }}
 {{- $prometheus := .Values.prometheus }}
 {{- $profiling := .Values.profiling }}
@@ -76,8 +75,6 @@ spec:
               key: postgres-password
         - name: VIRTUAL_HOST
           value: localhost,127.0.0.
-        - name: DATACUBE_CONFIG_PATH
-          value: {{ $dc.configPath }}
 {{- if $prometheus.enabled }}
         - name: prometheus_multiproc_dir
           value: {{ $prometheus.path | quote }}

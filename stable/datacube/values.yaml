@@ -4,8 +4,6 @@
 minReplicas: 1
 maxReplicas: 2
 
-datacube:
-  configPath: /opt/odc/datacube.conf
 clusterInfo:
   envName: dev
 database:

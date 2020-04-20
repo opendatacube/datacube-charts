@@ -7,8 +7,6 @@ image:
   tag: "latest"
   pullPolicy: Always
 
-datacube:
-  configPath: /opt/odc/datacube.conf
 
 database:
   database: ows

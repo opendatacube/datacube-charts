@@ -87,9 +87,10 @@ spec:
           {{- end }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          args: [ {{- range .Values.wps.dockerArgs }} {{ . | quote }}, {{ end -}} ]
           ports:
-          - containerPort: 8000
+            - name: http
+              containerPort: 8000
+              protocol: TCP
           {{- with .Values.wps.livenessProbe }}
           livenessProbe:
 {{ toYaml . | indent 12 }}

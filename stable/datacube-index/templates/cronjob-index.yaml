@@ -17,7 +17,6 @@ spec:
   successfulJobsHistoryLimit: {{ .Values.cron.historyLimit}}
   failedJobsHistoryLimit: {{ .Values.cron.historyLimit }}
   suspend: {{ .Values.cron.suspend }}
-  backoffLimit: 1
   jobTemplate:
     spec:
       template:

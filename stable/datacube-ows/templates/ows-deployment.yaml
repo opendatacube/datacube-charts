@@ -1,0 +1,163 @@
+{{- if .Values.ows.enabled }}
+apiVersion: extensions/v1beta1
+kind: Deployment
+{{- $image := .Values.image }}
+{{- $prometheus := .Values.prometheus }}
+{{- $profiling := .Values.profiling }}
+metadata:
+  name: "{{ template "datacube-ows.fullname" . }}-{{ .Values.clusterInfo.envName }}"
+  labels:
+    app: {{ template "datacube-ows.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+{{- if not .Values.ows.autoscaling }}
+  replicas: {{ .Values.minReplicas }}
+{{- end }}
+  strategy:
+    rollingUpdate:
+      maxSurge: {{ .Values.ows.maxSurge | quote }}
+      maxUnavailable: {{ .Values.ows.maxUnavailable | quote }}
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{ template "datacube-ows.name" . }}
+        release: {{ .Release.Name }}
+      annotations:
+{{ toYaml .Values.ows.annotations | indent 8 }}
+    spec:
+      # Turning single-request-reopen option on would fix issue where in two requests from the same port are
+      # not handled correctly it will close the socket and open a new one before sending the second request.
+      dnsConfig:
+        options:
+        - name: single-request-reopen
+      initContainers:
+{{- if .Values.owsConfig.image }}
+      - name: ows-config
+        image: "{{ $.Values.owsConfig.image.repository }}:{{ $.Values.owsConfig.image.tag }}"
+        imagePullPolicy: {{ $.Values.owsConfig.image.pullPolicy }}
+        args: [ "cp", "-f", "{{ .Values.owsConfig.image.src }}", "{{ .Values.owsConfig.path }}/{{ .Values.owsConfig.filename }}" ]
+        volumeMounts:
+        - mountPath: {{ .Values.owsConfig.path }}
+          name: ows-config-volume
+{{- if .Values.owsConfig.subpath }}
+          subPath: {{ .Values.owsConfig.subpath }}
+{{- end }}
+{{- end }}
+      containers:
+      - name: ows
+        env:
+{{- if .Values.owsConfig.url }}
+        - name: OWS_CONFIG_URL
+          value: {{ .Values.owsConfig.url | quote }}
+{{- end }}
+{{- if or .Values.owsConfig.configMap .Values.owsConfig.image }}
+        - value: "{{ .Values.owsConfig.path }}/{{ .Values.owsConfig.filename }}"
+          name: OWS_CONFIG_PATH
+{{- end }}
+        - name: DB_HOSTNAME
+          value: {{ .Values.database.host | quote }}
+        - name: DB_PORT
+          value: {{ .Values.database.port | quote }}
+        - name: DB_DATABASE
+          value: {{ .Values.database.database | quote }}
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "datacube-ows.secretName" . }}
+              key: postgres-username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "datacube-ows.secretName" . }}
+              key: postgres-password
+        - name: VIRTUAL_HOST
+          value: localhost,127.0.0.
+{{- if $prometheus.enabled }}
+        - name: prometheus_multiproc_dir
+          value: {{ $prometheus.path | quote }}
+{{- end }}
+{{- if $profiling.enabled }}
+        - name: PROFILER_FILE_PATH
+          value: {{ $profiling.path }}
+        - name: PROFILER
+          value: {{ 1 | quote }}
+{{- end }}
+{{- if .Values.ows.awsCredentialsSecret }}
+        - name: AWS_DEFAULT_REGION
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.ows.awsCredentialsSecret }}
+              key: AWS_DEFAULT_REGION
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.ows.awsCredentialsSecret }}
+              key: AWS_ACCESS_KEY_ID
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.ows.awsCredentialsSecret }}
+              key: AWS_SECRET_ACCESS_KEY
+{{- end }}
+{{- if .Values.ows.additionalEnvironmentVars }}
+{{- range $arg, $value := .Values.ows.additionalEnvironmentVars }}
+        - name: {{ $arg | quote }}
+          value: {{ $value | quote }}
+{{- end }}
+{{- end }}
+        image: "{{ $image.repository }}:{{ $image.tag }}"
+        imagePullPolicy: {{ $image.pullPolicy }}
+        ports:
+        - containerPort: 8000
+        resources:
+{{ toYaml .Values.ows.resources | indent 10 }}
+        {{- with .Values.ows.livenessProbe }}
+        livenessProbe:
+{{ toYaml . | indent 10 }}
+        {{- end }}
+        {{- with .Values.ows.readinessProbe }}
+        readinessProbe:
+{{ toYaml . | indent 10 }}
+        {{- end }}
+        args: [ {{- range .Values.ows.dockerArgs }} {{ . | quote }}, {{ end -}} ]
+        volumeMounts:
+{{- if $prometheus.enabled }}
+        - mountPath: {{ $prometheus.path }}
+          name: prometheus-volume
+{{- end }}
+{{- if $profiling.enabled }}
+        - mountPath: {{ $profiling.path }}
+          name: profiling-volume
+{{- end }}
+{{- if or .Values.owsConfig.configMap .Values.owsConfig.image }}
+        - mountPath: {{ .Values.owsConfig.path }}
+          name: ows-config-volume
+{{- end }}
+      restartPolicy: Always
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+      volumes:
+{{- if $prometheus.enabled }}
+      - name: prometheus-volume
+        emptyDir: {}
+{{- end }}
+{{- if $profiling.enabled }}
+      - name: profiling-volume
+        emptyDir: {}
+{{- end }}
+{{- if or .Values.owsConfig.configMap .Values.owsConfig.image }}
+      - name: ows-config-volume
+{{- if .Values.owsConfig.configMap }}
+        configMap:
+          name: {{ .Values.owsConfig.configMap }}
+{{- else if .Values.owsConfig.image }}
+        emptyDir: {}
+{{- end }}
+{{- end }}
+status: {}
+{{- end }}

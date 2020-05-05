@@ -1,0 +1,72 @@
+# Default values for datacube-wms.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+minReplicas: 1
+maxReplicas: 2
+
+clusterInfo:
+  envName: dev
+database:
+  existingSecret:
+  database: datacube
+  host: localhost
+  port: 5432
+image:
+  repository: opendatacube/ows
+  tag: latest
+  pullPolicy: Always
+
+##
+## Datacube OWS configuration
+##
+ows:
+  enabled: true
+  maxSurge: 25%
+  maxUnavailable: 25%
+  externalPort: 80
+  internalPort: 8000
+  resources:
+    limits:
+      cpu: "1"
+      memory: 2048Mi
+  targetCpu: 10
+  dockerArgs: [ "gunicorn", "-b", "0.0.0.0:8000", "-w", "4", "--keep-alive", "50", "--timeout", "120", "datacube_wms.wsgi" ]
+  autoscaling: True
+  annotations:
+    iam.amazonaws.com/role: kubernetes-wms
+  livenessProbe:
+    exec:
+      command:
+      - "/bin/sh"
+      - "-c"
+      - "curl --silent 'http://localhost:8000/?service=WMS&request=GetCapabilities&version=1.3.0' | grep -q -F '<Layer queryable=\"1\">'"
+    initialDelaySeconds: 30
+    periodSeconds: 30
+  readinessProbe: {}
+owsConfig:
+  image: { }
+
+##
+## Prometheus Monitoring
+##
+prometheus:
+  enabled: false
+  path: "/opt/prometheus/"
+
+##
+## cProfiling, only enable for debugging and profiling purposes
+##
+profiling:
+  enabled: true
+  path: "/opt/profiling/"
+
+service:
+  type: NodePort
+
+affinity: {}
+
+ingress:
+  ## Enable Ingress.
+  ##
+  enabled: false
+  host:

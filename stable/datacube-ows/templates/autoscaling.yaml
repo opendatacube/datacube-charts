@@ -1,0 +1,25 @@
+{{- if .Values.ows.enabled }}
+{{- if .Values.ows.autoscaling }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ template "datacube-ows.fullname" . }}
+  labels:
+    app: {{ template "datacube-ows.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: "{{ template "datacube-ows.fullname" . }}-{{ .Values.clusterInfo.envName }}"
+  minReplicas: {{ .Values.minReplicas }}
+  maxReplicas: {{ .Values.maxReplicas }}
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ .Values.ows.targetCpu }}
+{{- end }}
+{{- end }}

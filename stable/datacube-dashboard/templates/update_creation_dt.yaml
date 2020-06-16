@@ -1,0 +1,85 @@
+{{- if .Values.updateCreationDt.enabled }}
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: '{{ include "datacube-dashboard.fullname" . }}-update-dt'
+  labels:
+    app.kubernetes.io/name: {{ include "datacube-dashboard.name" . }}
+    helm.sh/chart: {{ include "datacube-dashboard.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  schedule: {{ .Values.updateCreationDt.cron | quote }}
+  successfulJobsHistoryLimit: {{ .Values.updateCreationDt.historyLimit}}
+  failedJobsHistoryLimit: {{ .Values.updateCreationDt.historyLimit }}
+  suspend: {{ .Values.updateCreationDt.suspend }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          name: {{ include "datacube-dashboard.name" . }}
+          labels:
+            app.kubernetes.io/name: {{ include "datacube-dashboard.name" . }}
+            app.kubernetes.io/instance: {{ .Release.Name }}
+          annotations:
+          {{- range $key, $value := .Values.annotations }}
+            {{ $key }}: {{ $value | quote }}
+          {{- end }}
+        spec:
+          containers:
+          - name: cubedash-update-creation-dt
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            imagePullPolicy: {{ .Values.image.pullPolicy }}
+            args: [ {{- range .Values.updateCreationDt.dockerArgs }} {{ . | quote }}, {{ end -}} ]
+            env:
+            - name: DB_HOSTNAME
+              value: {{ .Values.database.host | quote }}
+            - name: DB_PORT
+              value: {{ .Values.database.port | quote }}
+            - name: DB_DATABASE
+              value: {{ .Values.database.database | quote }}
+            - name: ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.database.adminSecret }}
+                  key: postgres-username
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.database.adminSecret }}
+                  key: postgres-password
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.database.existingSecret }}
+                  key: postgres-username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.database.existingSecret }}
+                  key: postgres-password
+            {{- if .Values.awsCredentialsSecret }}
+            - name: AWS_DEFAULT_REGION
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.awsCredentialsSecret }}
+                  key: AWS_DEFAULT_REGION
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.awsCredentialsSecret }}
+                  key: AWS_ACCESS_KEY_ID
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.awsCredentialsSecret }}
+                  key: AWS_SECRET_ACCESS_KEY
+            {{- end }}
+            {{- if .Values.additionalEnvironmentVars }}
+            {{- range $arg, $value := .Values.updateCreationDt.additionalEnvironmentVars }}
+            - name: {{ $arg | quote }}
+              value: {{ $value | quote }}
+            {{- end }}
+            {{- end }}
+          restartPolicy: Never
+{{- end }}

@@ -1,4 +1,4 @@
-# Datacube WMS
+# Datacube OWS
 
 [Datacube](https://www.opendatacube.org/) Web Map Service
 
@@ -9,7 +9,7 @@ This example works on docker for mac, with a pre-indexed postgres database hoste
 ```yaml
 image:
   registry: docker.io
-  repository: opendatacube/wms
+  repository: opendatacube/ows
   tag: "0.7.16"
   pullPolicy: Always
 domain: localhost
@@ -23,7 +23,7 @@ clusterInfo:
 
 environment:
   # Database Settings for datacube
-  DB_HOSTNAME: export 
+  DB_HOSTNAME: export
   DB_DATABASE: ows
   DB_PASSWORD: password
   DB_PORT: 5432
@@ -61,27 +61,27 @@ wms:
     limits:
       memory: 2560Mi
   additionalEnvironmentVars:
-    AWS_ACCESS_KEY_ID:  
-    AWS_SECRET_ACCESS_KEY: 
+    AWS_ACCESS_KEY_ID:
+    AWS_SECRET_ACCESS_KEY:
     AWS_DEFAULT_REGION: ap-southeast-2
 ```
 
 Adjust these variables for your environment
 
 ```console
-$ helm install ./datacube-wms --values config.yaml
+$ helm install ./datacube-ows --values config.yaml
 ```
 
 ## Introduction
 
-This chart bootstraps a [Datacube WMS](https://github.com/opendatacube/datacube-wms) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Datacube OWS](https://github.com/opendatacube/datacube-ows) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Installing the Chart
 
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install --name my-release -f config.yaml stable/datacube-wms 
+$ helm install --name my-release -f config.yaml stable/datacube-ows
 ```
 
 The command deploys WMS on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.

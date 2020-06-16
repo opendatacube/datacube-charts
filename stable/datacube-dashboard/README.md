@@ -1,4 +1,11 @@
-# Datacube Explorer / Dashboard
+# Datacube Explorer / Dashboard [ DEPRECATED ]
+
+---
+**NOTE**
+
+This Helm chart has been renamed to datacube-explorer
+
+---
 
 This helm chart will deploy a Datacube Explorer deployment, service, and optionally ingress. It will also install postGIS on the target database so it can be used with the Explorer software.
 

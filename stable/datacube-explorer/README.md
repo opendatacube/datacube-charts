@@ -1,9 +1,9 @@
-# Datacube Explorer / Dashboard
+# Datacube Explorer
 
 This helm chart will deploy a Datacube Explorer deployment, service, and optionally ingress. It will also install postGIS on the target database so it can be used with the Explorer software.
 
 ## ODC Database configuration
-Connecting to your ODC Database is done using the `database` block. A kubernetes secret containing the `postgres-username` and `postgres-password` for your database is required. Since postGIS will be installed a secret containing the `postgres-username` and `postgres-password` for a user with administrative privileges is also required. This is an example block for connecting to a psql database named 'odc' on `localhost:5432`:
+Connecting to your ODC Database is done using the `database` block. A kubernetes secret containing the `postgres-username` and `postgres-password` for your database is required. Since PostGIS will be installed a secret containing the `postgres-username` and `postgres-password` for a user with administrative privileges is also required. This is an example block for connecting to a psql database named 'odc' on `localhost:5432`:
 ```YAML
 database:
   database: odc

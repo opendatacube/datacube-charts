@@ -3,7 +3,7 @@
 replicaCount: 1
 image:
   registry: docker.io
-  repository: opendatacube/dashboard
+  repository: opendatacube/explorer
   tag: "latest"
   pullPolicy: Always
 

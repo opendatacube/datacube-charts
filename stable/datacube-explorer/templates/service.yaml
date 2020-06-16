@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "datacube-dashboard.fullname" . }}
+  name: {{ include "datacube-explorer.fullname" . }}
   labels:
     app: {{ .Release.Name }}
-    app.kubernetes.io/name: {{ include "datacube-dashboard.name" . }}
-    helm.sh/chart: {{ include "datacube-dashboard.chart" . }}
+    app.kubernetes.io/name: {{ include "datacube-explorer.name" . }}
+    helm.sh/chart: {{ include "datacube-explorer.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
   annotations:
@@ -19,5 +19,5 @@ spec:
       name: http
   selector:
     app: {{ .Release.Name }}
-    app.kubernetes.io/name: {{ include "datacube-dashboard.name" . }}
+    app.kubernetes.io/name: {{ include "datacube-explorer.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}

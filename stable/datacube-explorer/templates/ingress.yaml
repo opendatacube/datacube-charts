@@ -1,5 +1,5 @@
 {{- if .Values.ingress.enabled -}}
-{{- $fullName := include "datacube-dashboard.fullname" . -}}
+{{- $fullName := include "datacube-explorer.fullname" . -}}
 {{- $ingressPath := .Values.ingress.path -}}
 {{- $ingressRedirect := .Values.ingress.redirect -}}
 {{- $servicePort := .Values.service.port -}}
@@ -9,8 +9,8 @@ metadata:
   name: {{ $fullName }}
   labels:
     app: {{ .Release.Name }}
-    app.kubernetes.io/name: {{ include "datacube-dashboard.name" . }}
-    helm.sh/chart: {{ include "datacube-dashboard.chart" . }}
+    app.kubernetes.io/name: {{ include "datacube-explorer.name" . }}
+    helm.sh/chart: {{ include "datacube-explorer.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- with .Values.ingress.annotations }}

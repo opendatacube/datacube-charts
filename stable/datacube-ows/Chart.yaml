@@ -13,6 +13,6 @@ home: https://www.opendatacube.org/documentation
 sources:
 - https://github.com/opendatacube/datacube-core
 - https://github.com/opendatacube/datacube-ows
-# maintainers:
-# - name:
-#   email:
+maintainers:
+- name: Pin Jin
+  email: pin.jin@ga.gov.au

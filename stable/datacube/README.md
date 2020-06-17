@@ -1,4 +1,4 @@
-# Datacube WMS [Depreciated, replaced by Datacube OWS]
+# Datacube WMS [Deprecated, replaced by Datacube OWS]
 
 [Datacube](https://www.opendatacube.org/) Web Map Service
 

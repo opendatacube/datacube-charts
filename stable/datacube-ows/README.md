@@ -35,9 +35,9 @@ service:
 minReplicas: 1
 maxReplicas: 2
 
-wms:
+ows:
   config:
-    url: https://raw.githubusercontent.com/GeoscienceAustralia/dea-config/master/dev/services/wms/ows/wms_cfg.py
+    url: https://raw.githubusercontent.com/GeoscienceAustralia/dea-config/master/dev/services/wms/ows/ows_cfg.py
   dockerArgs:
     - "gunicorn"
     - "-b"
@@ -50,7 +50,7 @@ wms:
     - "30"
     - "--pid"
     - "gunicorn.pid"
-    - "datacube_wms.wsgi"
+    - "datacube_ows.wsgi"
   enabled: true
   externalPort: 3000
   internalPort: 8000
@@ -61,9 +61,10 @@ wms:
     limits:
       memory: 2560Mi
   additionalEnvironmentVars:
-    AWS_ACCESS_KEY_ID:
-    AWS_SECRET_ACCESS_KEY:
+    AWS_NO_SIGN_REQUEST: "YES"
     AWS_DEFAULT_REGION: ap-southeast-2
+    WMS_CONFIG_PATH: /env/config/ows_cfg.py
+    DATACUBE_OWS_CFG: "config.ows_cfg.ows_cfg"
 ```
 
 Adjust these variables for your environment
@@ -84,7 +85,7 @@ To install the chart with the release name `my-release`:
 $ helm install --name my-release -f config.yaml stable/datacube-ows
 ```
 
-The command deploys WMS on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+The command deploys OWS on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 

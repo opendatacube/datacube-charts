@@ -20,19 +20,6 @@ global:
     database: ows
   clusterSecret: ows
 
-setup:
-  dockerArgs:
-    - "/bin/bash"
-    - "-c"
-    - "echo 'CREATE EXTENSION IF NOT EXISTS postgis;' |
-      PGPASSWORD=$ADMIN_PASSWORD psql -h $DB_HOSTNAME -p 5432 -U $ADMIN_USERNAME -d $DB_DATABASE"
-
-  image:
-    registry: docker.io
-    repository: postgres
-    tag: latest
-    pullPolicy: IfNotPresent
-
 resources:
   limits:
     cpu: "300m"

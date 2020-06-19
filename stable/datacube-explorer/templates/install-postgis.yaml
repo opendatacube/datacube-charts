@@ -1,0 +1,55 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: '{{ include "datacube-explorer.fullname" . }}-install-psql-extension'
+  labels:
+    heritage: {{.Release.Service | quote }}
+    release: {{.Release.Name | quote }}
+    chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+  annotations:
+    "helm.sh/hook": "pre-install"
+    "helm.sh/hook-weight": "-4"
+    "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded,hook-failed"
+spec:
+  template:
+    metadata:
+      name: {{ include "datacube-explorer.name" . }}
+      labels:
+        heritage: {{.Release.Service | quote }}
+        release: {{.Release.Name | quote }}
+        chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: install-postgis-extension
+        image: "{{ .Values.setup.image.repository }}:{{ .Values.setup.image.tag }}"
+        args: [ {{- range .Values.setup.dockerArgs }} {{ . | quote }}, {{ end -}} ]
+        imagePullPolicy: {{ .Values.setup.image.pullPolicy }}
+        env:
+        - name: DB_HOSTNAME
+          value: {{ .Values.database.host | quote }}
+        - name: DB_PORT
+          value: {{ .Values.database.port | quote }}
+        - name: DB_DATABASE
+          value: {{ .Values.database.database | quote }}
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.database.existingSecret }}
+              key: postgres-username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.database.existingSecret }}
+              key: postgres-password
+        - name: ADMIN_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.database.adminSecret }}
+              key: postgres-username
+        - name: ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.database.adminSecret }}
+              key: postgres-password
+      restartPolicy: Never

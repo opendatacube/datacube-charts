@@ -14,3 +14,8 @@ database:
 
 ## WPS Baseurl
 The WPS framework requires a 'baseurl' to be set by the operator which is the full path (including protocol) to the WPS (e.g. https://ows.dev.dea.ga.gov.au/wps/). This must be configured in the helm chart as `wps.baseurl` in addition to any ingress configuration done.
+
+## Configuration file
+https://github.com/opendatacube/datacube-wps/blob/master/docker/wps-entrypoint.sh
+`$WPS_CONFIG_PATH` to mount external defined define `pywps.cfg`
+`$DATACUBE_WPS_CONFIG_PATH` to mount external defined `datcube-wps-config.yaml`

@@ -2,4 +2,15 @@ apiVersion: v1
 appVersion: "1.0"
 description: A Helm chart for Datacube Explorer
 name: datacube-explorer
-version: 0.5.11
+version: 0.5.12
+keywords:
+- datacube
+- http
+- web
+- application
+- python
+- stac
+home: https://www.opendatacube.org/documentation
+maintainers:
+ - name: Tisham Dhar
+   email: tisham.dhar@ga.gov.au

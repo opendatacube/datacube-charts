@@ -1,4 +1,4 @@
-# Datacube WMS
+# Datacube WMS [Deprecated, replaced by Datacube OWS]
 
 [Datacube](https://www.opendatacube.org/) Web Map Service
 
@@ -23,7 +23,7 @@ clusterInfo:
 
 environment:
   # Database Settings for datacube
-  DB_HOSTNAME: export 
+  DB_HOSTNAME: export
   DB_DATABASE: ows
   DB_PASSWORD: password
   DB_PORT: 5432
@@ -61,8 +61,8 @@ wms:
     limits:
       memory: 2560Mi
   additionalEnvironmentVars:
-    AWS_ACCESS_KEY_ID:  
-    AWS_SECRET_ACCESS_KEY: 
+    AWS_ACCESS_KEY_ID:
+    AWS_SECRET_ACCESS_KEY:
     AWS_DEFAULT_REGION: ap-southeast-2
 ```
 
@@ -81,7 +81,7 @@ This chart bootstraps a [Datacube WMS](https://github.com/opendatacube/datacube-
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install --name my-release -f config.yaml stable/datacube-wms 
+$ helm install --name my-release -f config.yaml stable/datacube-wms
 ```
 
 The command deploys WMS on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.

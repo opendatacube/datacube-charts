@@ -33,7 +33,7 @@ spec:
       - name: wps-config
         image: "{{ $.Values.wpsConfig.image.repository }}:{{ $.Values.wpsConfig.image.tag }}"
         imagePullPolicy: {{ $.Values.wpsConfig.image.pullPolicy }}
-        args: [ "cp", "-f", "{{ .Values.wpsConfig.image.src }}", "{{ .Values.wpsConfig.path }}/{{ .Values.wpsConfig.filename }}" ]
+        args: [ "cp", "-R", "{{ .Values.wpsConfig.image.src }}", "{{ .Values.wpsConfig.path }}"]
         volumeMounts:
         - mountPath: {{ .Values.wpsConfig.path }}
           name: wps-config-volume
@@ -46,8 +46,10 @@ spec:
             value: {{ .Values.wpsConfig.url | quote }}
           {{- end }}
           {{- if or .Values.wpsConfig.configMap .Values.wpsConfig.image }}
-          - value: "{{ .Values.wpsConfig.path }}/{{ .Values.wpsConfig.filename }}"
+          - value: "{{ .Values.wpsConfig.path }}/pywps.cfg"
             name: WPS_CONFIG_PATH
+          - value: "{{ .Values.wpsConfig.path }}/datacube-wps-config.yaml"
+            name: DATACUBE_WPS_CONFIG_PATH
           {{- end }}
           - name: DB_HOSTNAME
             value: {{ .Values.database.host | quote }}

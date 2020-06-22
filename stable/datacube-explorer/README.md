@@ -2,6 +2,14 @@
 
 This helm chart will deploy a Datacube Explorer deployment, service, and optionally ingress. It will also install postGIS on the target database so it can be used with the Explorer software.
 
+---
+**NOTE**
+
+This Helm chart is being heavily modified and CronJobs as part of the helm chart such **update-db** deprecated due to immutability on CronJobs causing
+issues with release upgrade.
+
+---
+
 ## ODC Database configuration
 Connecting to your ODC Database is done using the `database` block. A kubernetes secret containing the `postgres-username` and `postgres-password` for your database is required. Since PostGIS will be installed a secret containing the `postgres-username` and `postgres-password` for a user with administrative privileges is also required. This is an example block for connecting to a psql database named 'odc' on `localhost:5432`:
 ```YAML
@@ -23,4 +31,4 @@ additionalSettings: |
 ```
 
 ## Updating CubeDash Datasets
-The `update_db.yaml` template is provided to create a cronjob which can update the cubedash database at regular intervals. It should generally call `cubedash-gen --all` which will update the cubedash database for all the datasets in the current datacube database.
+The `update_creation_dt.yaml` template is provided to create a cronjob which can update the cubedash database at regular intervals. It should generally call `cubedash-gen --all` which will update the cubedash database for all the datasets in the current datacube database.

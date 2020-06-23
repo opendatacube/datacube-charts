@@ -35,18 +35,6 @@ service:
   port: 80
 containerPort: 8080 # Internal port on which pod is running and serving cubedash app
 
-updateDbImage:
-  registry: docker.io
-  repository: opendatacube/wms
-  tag: "latest"
-  pullPolicy: Always
-
-update:
-  enabled: false
-  historyLimit: 1
-  cron: "0 10 * * *"  ## Run daily at 8pm AEST
-  suspend: false
-  dockerArgs: [ "cubedash-gen", "--all", "||", "true"]
 dockerArgs: [ "gunicorn", "-b", "0.0.0.0:8080", "-w", "4", "--timeout", "60", "cubedash:app" ]
 
 updateCreationDt:
@@ -54,7 +42,12 @@ updateCreationDt:
   historyLimit: 1
   cron: "0 13 * * *"  ## Run daily at 11 pm AEST
   suspend: false
-  dockerArgs: [ "/bin/bash", "-c", "tail -f /dev/null" ]
+  dockerArgs: 
+      - "cubedash-gen"
+      - "--no-init-database"
+      - "--refresh-stats"
+      - "--force-refresh"
+      - "--all"
 
 additionalSettings: {}
 

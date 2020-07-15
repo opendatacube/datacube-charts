@@ -15,6 +15,9 @@ spec:
 {{- if not .Values.ows.autoscaling }}
   replicas: {{ .Values.minReplicas }}
 {{- end }}
+  selector:
+    matchLabels:
+      app: {{ template "datacube-ows.name" . }}
   strategy:
     rollingUpdate:
       maxSurge: {{ .Values.ows.maxSurge | quote }}

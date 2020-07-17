@@ -4,7 +4,7 @@
 # https://github.com/helm/helm/issues/3684#issuecomment-427932707
 {{- $dot := . }}
 {{- $servicePort := .Values.ows.externalPort }}
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ template "datacube-ows.fullname" . }}

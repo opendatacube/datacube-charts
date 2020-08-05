@@ -11,19 +11,16 @@ database:
   database: datacube
   host: localhost
   port: 5432
-image:
-  repository: opendatacube/ows
-  tag: latest
-  pullPolicy: Always
-pyspyImage:
-  repository: mytardis/k8s-pyspy
-  tag: latest
-  pullPolicy: Always
+
 
 ##
 ## Datacube OWS configuration
 ##
 ows:
+  image:
+    repository: opendatacube/ows
+    tag: latest
+    pullPolicy: Always
   enabled: true
   maxSurge: 25%
   maxUnavailable: 25%

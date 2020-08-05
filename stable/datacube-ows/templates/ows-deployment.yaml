@@ -2,6 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 {{- $image := .Values.image }}
+{{- $pyspyImage := .Values.pyspyImage }}
 {{- $prometheus := .Values.prometheus }}
 {{- $profiling := .Values.profiling }}
 metadata:
@@ -138,6 +139,15 @@ spec:
 {{- if or .Values.owsConfig.configMap .Values.owsConfig.image }}
         - mountPath: {{ .Values.owsConfig.path }}
           name: ows-config-volume
+{{- end }}
+{{- if .Values.pyspy.image }}
+        securityContext:
+          capabilities:
+            add:
+            - SYS_PTRACE
+      - name: pyspy
+        image: "{{ $pyspyImage.repository }}:{{ $pyspyImage.tag }}"
+        imagePullPolicy: {{ $pyspyImage.pullPolicy }}
 {{- end }}
       restartPolicy: Always
     {{- with .Values.affinity }}

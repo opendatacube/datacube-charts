@@ -15,6 +15,10 @@ image:
   repository: opendatacube/ows
   tag: latest
   pullPolicy: Always
+pyspyImage:
+  repository: mytardis/k8s-pyspy
+  tag: latest
+  pullPolicy: Always
 
 ##
 ## Datacube OWS configuration
@@ -46,6 +50,8 @@ ows:
 owsConfig:
   image: { }
 
+pyspy:
+  image: {}
 ##
 ## Prometheus Monitoring
 ##

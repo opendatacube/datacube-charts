@@ -11,15 +11,16 @@ database:
   database: datacube
   host: localhost
   port: 5432
-image:
-  repository: opendatacube/ows
-  tag: latest
-  pullPolicy: Always
+
 
 ##
 ## Datacube OWS configuration
 ##
 ows:
+  image:
+    repository: opendatacube/ows
+    tag: latest
+    pullPolicy: Always
   enabled: true
   maxSurge: 25%
   maxUnavailable: 25%
@@ -46,6 +47,8 @@ ows:
 owsConfig:
   image: { }
 
+pyspy:
+  image: {}
 ##
 ## Prometheus Monitoring
 ##

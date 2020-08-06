@@ -30,6 +30,10 @@ spec:
       annotations:
 {{ toYaml .Values.ows.annotations | indent 8 }}
     spec:
+{{- if .Values.pyspy.image }}
+      # When process namespace sharing is enabled, processes in a container are visible to all other containers in that pod.
+      shareProcessNamespace: true
+{{- end }}
       # Turning single-request-reopen option on would fix issue where in two requests from the same port are
       # not handled correctly it will close the socket and open a new one before sending the second request.
       dnsConfig:

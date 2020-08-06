@@ -1,7 +1,6 @@
 {{- if .Values.ows.enabled }}
 apiVersion: apps/v1
 kind: Deployment
-{{- $image := .Values.image }}
 {{- $prometheus := .Values.prometheus }}
 {{- $profiling := .Values.profiling }}
 metadata:
@@ -111,8 +110,8 @@ spec:
           value: {{ $value | quote }}
 {{- end }}
 {{- end }}
-        image: "{{ $image.repository }}:{{ $image.tag }}"
-        imagePullPolicy: {{ $image.pullPolicy }}
+        image: "{{ .Values.ows.image.repository }}:{{ .Values.ows.image.tag }}"
+        imagePullPolicy: {{ .Values.ows.image.pullPolicy }}
         ports:
         - containerPort: 8000
         resources:
@@ -138,6 +137,15 @@ spec:
 {{- if or .Values.owsConfig.configMap .Values.owsConfig.image }}
         - mountPath: {{ .Values.owsConfig.path }}
           name: ows-config-volume
+{{- end }}
+{{- if .Values.pyspy.image }}
+        securityContext:
+          capabilities:
+            add:
+            - SYS_PTRACE
+      - name: pyspy
+        image: "{{ $.Values.pyspy.image.repository }}:{{ $.Values.pyspy.image.tag }}"
+        imagePullPolicy: {{ $.Values.pyspy.image.pullPolicy }}
 {{- end }}
       restartPolicy: Always
     {{- with .Values.affinity }}

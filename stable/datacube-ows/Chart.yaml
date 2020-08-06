@@ -1,7 +1,7 @@
 apiVersion: v1
 description: Datacube Web Map Service
 name: datacube-ows
-version: 0.18.8
+version: 0.18.9
 keywords:
 - datacube
 - http

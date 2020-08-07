@@ -150,6 +150,10 @@ spec:
       - name: pyspy
         image: "{{ $.Values.pyspy.image.repository }}:{{ $.Values.pyspy.image.tag }}"
         imagePullPolicy: {{ $.Values.pyspy.image.pullPolicy }}
+        securityContext:
+          capabilities:
+            add:
+            - SYS_PTRACE
 {{- end }}
       restartPolicy: Always
     {{- with .Values.affinity }}

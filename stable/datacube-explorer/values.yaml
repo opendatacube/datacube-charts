@@ -42,7 +42,7 @@ updateCreationDt:
   historyLimit: 1
   cron: "0 13 * * *"  ## Run daily at 11 pm AEST
   suspend: false
-  dockerArgs: 
+  dockerArgs:
       - "cubedash-gen"
       - "--no-init-database"
       - "--refresh-stats"
@@ -58,3 +58,6 @@ ingress:
     - ""
   annotations:
     kubernetes.io/ingress.class: alb
+
+pyspy:
+  image: {}

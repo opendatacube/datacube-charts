@@ -26,6 +26,10 @@ spec:
         {{ $key }}: {{ $value | quote }}
       {{- end }}
     spec:
+{{- if .Values.pyspy.image }}
+      # When process namespace sharing is enabled, processes in a container are visible to all other containers in that pod.
+      shareProcessNamespace: true
+{{- end }}
       # Turning single-request-reopen option on would fix issue where in two requests from the same port are
       # not handled correctly it will close the socket and open a new one before sending the second request.
       dnsConfig:
@@ -81,6 +85,15 @@ spec:
 {{ toYaml .Values.livenessProbe | indent 12 }}
           readinessProbe:
 {{ toYaml .Values.readinessProbe | indent 12 }}
+{{- if .Values.pyspy.image }}
+      - name: pyspy
+        image: "{{ $.Values.pyspy.image.repository }}:{{ $.Values.pyspy.image.tag }}"
+        imagePullPolicy: {{ $.Values.pyspy.image.pullPolicy }}
+        securityContext:
+          capabilities:
+            add:
+            - SYS_PTRACE
+{{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}

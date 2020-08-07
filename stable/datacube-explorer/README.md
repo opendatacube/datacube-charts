@@ -32,3 +32,28 @@ additionalSettings: |
 
 ## Updating CubeDash Datasets
 The `update_creation_dt.yaml` template is provided to create a cronjob which can update the cubedash database at regular intervals. It should generally call `cubedash-gen --all` which will update the cubedash database for all the datasets in the current datacube database.
+
+## Using pyspy
+To run py-spy as a sidecar available from chart version `0.5.17`
+
+```YAML
+    pyspy:
+      image:
+        registry: docker.io
+        repository: mytardis/k8s-pyspy
+        tag: "latest"
+        pullPolicy: IfNotPresent
+```
+
+### Running ad-hoc py-spy record
+After `py-spy` and `explorer` are deployment as containers in a kubernete pod,
+
+```console
+$ kubectl exec -it PODNAME -n NAMESPACE -c pyspy -- py-spy record --pid PIDNUMBER -f speedscope -o FILENAME --subprocesses
+```
+
+copy profile file from pod to local
+
+```console
+$ kubectl cp PODNAME:/FILENAME -c pyspy -n NAMESPACE ~/FILENAME
+```

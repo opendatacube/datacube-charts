@@ -101,6 +101,31 @@ database:
   existingSecret: odc-secret
 ```
 
+### Using pyspy
+To run py-spy as a sidecar available from chart version `0.18.10`
+
+```YAML
+    pyspy:
+      image:
+        registry: docker.io
+        repository: mytardis/k8s-pyspy
+        tag: "latest"
+        pullPolicy: IfNotPresent
+```
+
+#### Running ad-hoc py-spy record
+After `py-spy` and `ows` are deployment as containers in a kubernete pod,
+
+```console
+$ kubectl exec -it PODNAME -n NAMESPACE -c pyspy -- py-spy record --pid PIDNUMBER -f speedscope -o FILENAME --subprocesses
+```
+
+copy profile file from pod to local
+
+```console
+$ kubectl cp PODNAME:/FILENAME -c pyspy -n NAMESPACE ~/FILENAME
+```
+
 ## Uninstalling the Chart
 
 To uninstall/delete the `my-release` deployment:

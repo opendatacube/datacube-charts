@@ -35,14 +35,7 @@ ows:
   autoscaling: True
   annotations:
     iam.amazonaws.com/role: kubernetes-wms
-  livenessProbe:
-    exec:
-      command:
-      - "/bin/sh"
-      - "-c"
-      - "curl --silent 'http://localhost:8000/?service=WMS&request=GetCapabilities&version=1.3.0' | grep -q -F '<Layer queryable=\"1\">'"
-    initialDelaySeconds: 30
-    periodSeconds: 30
+  livenessProbe: {}
   readinessProbe: {}
 owsConfig:
   image: { }

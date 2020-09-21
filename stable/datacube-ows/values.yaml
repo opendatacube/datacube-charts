@@ -37,6 +37,7 @@ ows:
     iam.amazonaws.com/role: kubernetes-wms
   livenessProbe: {}
   readinessProbe: {}
+  startupProbe: {}
 owsConfig:
   image: { }
 

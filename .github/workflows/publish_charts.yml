@@ -28,8 +28,9 @@ jobs:
       run: |
         helm lint stable/*
 
-    - name: Pack charts into a tarball
-      run: echo "Packing"
+    - name: Package charts into a tarball
+      run: |
+        bash deploy-charts.sh $REPO stable
 
-    - name: Publish via commit to gh-pages
+    - name: Publish charts to gh-pages
       run: echo "Publishing"

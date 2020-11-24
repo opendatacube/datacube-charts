@@ -35,4 +35,7 @@ jobs:
         bash deploy-charts.sh $REPO stable
 
     - name: Publish charts to gh-pages
-      run: echo "Publishing"
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: gh-pages

@@ -34,6 +34,8 @@ jobs:
         git checkout origin/gh-pages -- charts/
         bash deploy-charts.sh $REPO stable
 
+    - run: git status
+
     - name: Publish charts to gh-pages
       uses: JamesIves/github-pages-deploy-action@3.7.1
       with:

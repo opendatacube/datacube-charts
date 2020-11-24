@@ -30,7 +30,8 @@ jobs:
 
     - name: Package charts into a tarball
       run: |
-        git clone https://github.com/opendatacube/datacube-charts.git
+        git remote set-branches --add origin gh-pages
+        git fetch
         git checkout origin/gh-pages -- charts/
         bash deploy-charts.sh $REPO stable
 

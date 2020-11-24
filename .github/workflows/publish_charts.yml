@@ -1,0 +1,36 @@
+name: Publish charts
+
+on:
+  push:
+    branches:    
+      - master
+
+env:
+  HELM_URL : https://storage.googleapis.com/kubernetes-helm
+  HELM_TGZ : helm-v2.11.0-linux-amd64.tar.gz
+  REPO : "https://opendatacube.github.io/datacube-charts/charts/"
+
+jobs:
+  publish:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    
+    - name: Install Helm
+      run: |
+        wget -q ${HELM_URL}/${HELM_TGZ}
+        tar xzfv ${HELM_TGZ}
+        PATH=`pwd`/linux-amd64/:$PATH
+        helm init --client-only
+
+    - name: Lint Charts
+      run: |
+        helm lint stable/*
+
+    - name: Pack charts into a tarball
+      run: echo "Packing"
+
+    - name: Publish via commit to gh-pages
+      run: echo "Publishing"

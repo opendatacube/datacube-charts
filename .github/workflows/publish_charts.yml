@@ -31,10 +31,10 @@ jobs:
     - name: Package charts into a tarball
       run: |
         git remote set-branches --add origin gh-pages
-        git fetch
         git checkout origin/gh-pages -- charts/
         bash deploy-charts.sh $REPO stable
-
+    - run: git pull
+    - run: git status
     - name: Publish charts to gh-pages
       uses: ad-m/github-push-action@master
       with:

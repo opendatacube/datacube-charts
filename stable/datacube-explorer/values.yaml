@@ -51,6 +51,8 @@ updateCreationDt:
 
 additionalSettings: {}
 
+affinity: {}
+
 ingress:
   enabled: false
   path: "/*"

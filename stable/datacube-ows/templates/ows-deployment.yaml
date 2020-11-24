@@ -128,6 +128,10 @@ spec:
         readinessProbe:
 {{ toYaml . | indent 10 }}
         {{- end }}
+{{- with .Values.ows.startupProbe }}
+        startupProbe:
+{{ toYaml . | indent 10 }}
+        {{- end }}
         args: [ {{- range .Values.ows.dockerArgs }} {{ . | quote }}, {{ end -}} ]
         volumeMounts:
 {{- if $prometheus.enabled }}

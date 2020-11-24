@@ -4,6 +4,7 @@ on:
   push:
     branches:    
       - master
+      - feat/gha-publish
 
 env:
   REPO : "https://opendatacube.github.io/datacube-charts/charts/"

@@ -25,11 +25,10 @@ jobs:
       run: |
         helm lint stable/*
 
-    # - name: Package charts into a tarball
-    #   run: |
-    #     git remote set-branches --add origin gh-pages
-    #     git checkout origin/gh-pages -- charts/
-    #     bash deploy-charts.sh $REPO stable
+    - name: Package charts into a tarball
+      run: |
+        git remote set-branches --add origin gh-pages-test
+        git checkout origin/gh-pages-test -- charts/
 
     - name: deploy
       uses: J12934/helm-gh-pages-action@master

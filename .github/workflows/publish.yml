@@ -31,18 +31,16 @@ jobs:
         git checkout origin/gh-pages -- charts/
         bash deploy-charts.sh $REPO stable
 
-    - name: Publish charts tarball to gh-pages
+    - name: Publish charts to gh-pages
       uses: JamesIves/github-pages-deploy-action@3.7.1
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         BRANCH: gh-pages-test
-        FOLDER: charts
-        TARGET_FOLDER: charts
         CLEAN: false
 
-    - name: Release chart (index.yml)
-      uses: J12934/helm-gh-pages-action@master
-      with:
-        access-token: ${{ secrets.ACCESS_TOKEN }}
-        deploy-branch: gh-pages-test
-        charts-folder: stable
+#    - name: Release chart (index.yml)
+#      uses: J12934/helm-gh-pages-action@master
+#      with:
+#        access-token: ${{ secrets.ACCESS_TOKEN }}
+#        deploy-branch: gh-pages-test
+#        charts-folder: stable

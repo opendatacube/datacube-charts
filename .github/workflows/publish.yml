@@ -31,12 +31,9 @@ jobs:
         git checkout origin/gh-pages -- charts/
         bash deploy-charts.sh $REPO stable
 
-    - run: ls -lhrt charts
-
-    - name: Deploy
-      uses: peaceiris/actions-gh-pages@v3
+    - name: deploy
+      uses: J12934/helm-gh-pages-action@master
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./charts
-        destination_dir: ./charts
-        keep_files: true
+        access-token: ${{ secrets.GITHUB_TOKEN }}
+        deploy-branch: gh-pages-test
+        charts-folder: charts

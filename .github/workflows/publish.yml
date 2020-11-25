@@ -2,8 +2,8 @@ name: Publish charts
 
 on:
   push:
-    branches:    
-      - master
+    branches:
+      - update-readme
 
 env:
   REPO : "https://opendatacube.github.io/datacube-charts/charts/"
@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    
+
     - name: Install Helm
       run: |
         curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
@@ -31,11 +31,21 @@ jobs:
         git checkout origin/gh-pages -- charts/
         bash deploy-charts.sh $REPO stable
 
-    - name: Publish charts to gh-pages
-      uses: JamesIves/github-pages-deploy-action@3.7.1
+    # - name: Publish charts to gh-pages
+    #   uses: JamesIves/github-pages-deploy-action@3.7.1
+    #   continue-on-error: true
+    #   id: publish_id
+    #   with:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #     BRANCH: gh-pages
+    #     FOLDER: charts
+    #     TARGET_FOLDER: charts
+    #     CLEAN: false
+
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
       with:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        BRANCH: gh-pages
-        FOLDER: charts
-        TARGET_FOLDER: charts
-        CLEAN: false
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./charts
+        destination_dir: ./charts
+        keep_files: true

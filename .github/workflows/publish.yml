@@ -30,9 +30,18 @@ jobs:
         git remote set-branches --add origin gh-pages-test
         git checkout origin/gh-pages-test -- charts/
 
-    - name: deploy
-      uses: J12934/helm-gh-pages-action@master
+    # - name: deploy
+    #   uses: J12934/helm-gh-pages-action@master
+    #   with:
+    #     access-token: ${{ secrets.ACCESS_TOKEN }}
+    #     deploy-branch: gh-pages-test
+    #     charts-folder: charts
+
+    - name: Publish Helm charts
+      uses: stefanprodan/helm-gh-pages@master
       with:
-        access-token: ${{ secrets.ACCESS_TOKEN }}
-        deploy-branch: gh-pages-test
-        charts-folder: charts
+        token: ${{ secrets.ACCESS_TOKEN }}
+        charts_dir: charts
+        branch: gh-pages-test
+        target_dir: charts
+        charts_url: "${{ env.REPO }}"

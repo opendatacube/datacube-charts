@@ -42,7 +42,7 @@ spec:
       initContainers:
 {{- if .Values.owsConfig.image }}
       - name: ows-config
-        image: "{{ $.Values.owsConfig.image.repository }}:{{ $.Values.owsConfig.image.tag }}"
+        image: "{{ $.Values.owsConfig.image.registry }}/{{ $.Values.owsConfig.image.repository }}:{{ $.Values.owsConfig.image.tag }}"
         imagePullPolicy: {{ $.Values.owsConfig.image.pullPolicy }}
         args: [ "cp", "-f", "{{ .Values.owsConfig.image.src }}", "{{ .Values.owsConfig.path }}/{{ .Values.owsConfig.filename }}" ]
         volumeMounts:
@@ -114,7 +114,7 @@ spec:
           value: {{ $value | quote }}
 {{- end }}
 {{- end }}
-        image: "{{ .Values.ows.image.repository }}:{{ .Values.ows.image.tag }}"
+        image: "{{ .Values.ows.image.registry }}/{{ .Values.ows.image.repository }}:{{ .Values.ows.image.tag }}"
         imagePullPolicy: {{ .Values.ows.image.pullPolicy }}
         ports:
         - containerPort: 8000

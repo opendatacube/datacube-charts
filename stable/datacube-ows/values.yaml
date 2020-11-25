@@ -18,6 +18,7 @@ database:
 ##
 ows:
   image:
+    registry: docker.io
     repository: opendatacube/ows
     tag: latest
     pullPolicy: Always
@@ -39,7 +40,11 @@ ows:
   readinessProbe: {}
   startupProbe: {}
 owsConfig:
-  image: { }
+  image:
+    registry: docker.io
+    repository: geoscienceaustralia/dea-datakube-config
+    tag: latest
+    pullPolicy: Always
 
 pyspy:
   image: {}

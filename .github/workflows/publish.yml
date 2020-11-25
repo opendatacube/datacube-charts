@@ -13,9 +13,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: deploy
-      uses: J12934/helm-gh-pages-action@master
-      with:
-        access-token: ${{ secrets.ACCESS_TOKEN }}
-        deploy-branch: gh-pages-test
-        charts-folder: stable
+#    - name: deploy
+#      uses: J12934/helm-gh-pages-action@master
+#      with:
+#        access-token: ${{ secrets.ACCESS_TOKEN }}
+#        deploy-branch: gh-pages-test
+#        charts-folder: stable
+
+    - name: Run chart-releaser
+      uses: helm/chart-releaser-action@master
+      env:
+        CR_TOKEN: '${{ secrets.ACCESS_TOKEN }}'
+        charts_dir: stable
+        charts_repo_url: '${{ env.REPO }}'

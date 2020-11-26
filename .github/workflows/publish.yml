@@ -27,6 +27,13 @@ jobs:
 
     - run: ls -la charts
 
+    - name: Publish charts to GitHub Pages
+      uses: tsunematsu21/actions-publish-gh-pages@v1.0.1
+      with:
+        dir: charts
+        branch: gh-pages-test
+        token: ${{ secrets.ACCESS_TOKEN }}
+
 #    - name: Publish charts tarball to gh-pages-test
 #      uses: JamesIves/github-pages-deploy-action@3.7.1
 #      with:

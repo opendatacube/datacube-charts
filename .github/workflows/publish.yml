@@ -6,7 +6,7 @@ on:
       - update-readme
 
 env:
-  REPO : "https://opendatacube.github.io/datacube-charts/charts/"
+  REPO : "https://opendatacube.github.io/datacube-charts"
 
 jobs:
   publish:

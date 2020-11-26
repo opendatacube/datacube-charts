@@ -1,8 +1,0 @@
-{{- if not .Values.ows.enabled }}
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ template "datacube-ows.fullname" . }}-dummy
-data:
-  dummydata: donotuse
-{{- end }}

@@ -44,5 +44,4 @@ cp -nv *.tgz charts/ 2>/dev/null || :
 rm *.tgz
 
 # rebuild index
-rm -rf charts/index.yaml
 helm repo index charts --url $repo

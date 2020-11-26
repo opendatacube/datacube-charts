@@ -6,7 +6,7 @@ on:
       - update-readme
 
 env:
-  REPO : "https://opendatacube.github.io/datacube-charts"
+  REPO : "https://opendatacube.github.io/datacube-charts/charts"
 
 jobs:
   publish:
@@ -25,19 +25,16 @@ jobs:
         git checkout origin/gh-pages-test -- charts/
         bash deploy-charts.sh $REPO stable
 
-    # - name: Publish charts tarball to gh-pages
-    #   uses: JamesIves/github-pages-deploy-action@3.7.1
-    #   with:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #     BRANCH: gh-pages-test
-    #     CLEAN: false
+    - run: ls -la charts
 
-    - name: Run chart-releaser
-      uses: helm/chart-releaser-action@v1.1.0
-      env:
-        CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-        charts_repo_url: ${{ env.REPO }}
-        charts_dir: charts
+#    - name: Publish charts tarball to gh-pages-test
+#      uses: JamesIves/github-pages-deploy-action@3.7.1
+#      with:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        BRANCH: gh-pages-test
+#        FOLDER: charts
+#        TARGET_FOLDER: charts
+#        CLEAN: false
 
 
     # - name: Release chart (index.yml)

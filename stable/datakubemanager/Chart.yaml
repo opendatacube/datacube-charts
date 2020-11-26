@@ -1,5 +1,0 @@
-apiVersion: v1
-appVersion: 0.1
-description: A Helm chart for Deploying Datakubemanager
-name: datakubemanager
-version: 0.2.3

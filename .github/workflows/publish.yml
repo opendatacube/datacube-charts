@@ -2,8 +2,10 @@ name: Publish charts
 
 on:
   push:
+    paths:
+      - "stable/**"
     branches:
-      - master
+      - "master"
 
 env:
   REPO : "https://opendatacube.github.io/datacube-charts/charts"
@@ -21,8 +23,8 @@ jobs:
 
     - name: Package charts into a tarball
       run: |
-        git remote set-branches --add origin gh-pages-test
-        git checkout origin/gh-pages-test -- charts/
+        git remote set-branches --add origin gh-pages
+        git checkout origin/gh-pages -- charts/
         bash deploy-charts.sh $REPO stable
 
     - name: Publish charts to GitHub Pages

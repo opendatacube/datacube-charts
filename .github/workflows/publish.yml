@@ -2,40 +2,35 @@ name: Publish charts
 
 on:
   push:
-    branches:    
+    branches:
       - master
 
 env:
-  REPO : "https://opendatacube.github.io/datacube-charts/charts/"
+  REPO : "https://opendatacube.github.io/datacube-charts/charts"
 
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    
-    - name: Install Helm
-      run: |
-        curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
-        chmod 700 get_helm.sh
-        ./get_helm.sh
-        helm version
 
-    - name: Lint Charts
-      run: |
-        helm lint stable/*
+    - name: Install Helm
+      uses: azure/setup-helm@v1
+      with:
+        version: v3.4.0
 
     - name: Package charts into a tarball
       run: |
-        git remote set-branches --add origin gh-pages
-        git checkout origin/gh-pages -- charts/
+        git remote set-branches --add origin gh-pages-test
+        git checkout origin/gh-pages-test -- charts/
         bash deploy-charts.sh $REPO stable
 
-    - name: Publish charts to gh-pages
-      uses: JamesIves/github-pages-deploy-action@3.7.1
+    - name: Publish charts to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
       with:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        BRANCH: gh-pages
-        FOLDER: charts
-        TARGET_FOLDER: charts
-        CLEAN: false
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./charts
+        publish_branch: gh-pages
+        destination_dir: ./charts
+        keep_files: true
+        commit_message: "deployed charts for"

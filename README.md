@@ -1,6 +1,7 @@
 # Datacube Helm Charts
 
-[![Build Status](https://travis-ci.org/opendatacube/datacube-charts.svg?branch=master)](https://travis-ci.org/opendatacube/datacube-charts)
+![Linting](https://github.com/opendatacube/datacube-charts/workflows/Linting/badge.svg)
+![Publish charts](https://github.com/opendatacube/datacube-charts/workflows/Publish%20charts/badge.svg)
 
 This repository hosts the Opendatacube Helm charts
 

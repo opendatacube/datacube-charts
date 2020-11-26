@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - fix-gha-publish
 
 env:
   REPO : "https://opendatacube.github.io/datacube-charts/charts"
@@ -26,28 +25,12 @@ jobs:
         git checkout origin/gh-pages-test -- charts/
         bash deploy-charts.sh $REPO stable
 
-    - run: ls -la charts
-
     - name: Publish charts to GitHub Pages
-      uses: tsunematsu21/actions-publish-gh-pages@v1.0.1
+      uses: peaceiris/actions-gh-pages@v3
       with:
-        dir: charts
-        branch: gh-pages-test
-        token: ${{ secrets.ACCESS_TOKEN }}
-
-#    - name: Publish charts tarball to gh-pages-test
-#      uses: JamesIves/github-pages-deploy-action@3.7.1
-#      with:
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        BRANCH: gh-pages-test
-#        FOLDER: charts
-#        TARGET_FOLDER: charts
-#        CLEAN: false
-
-
-    # - name: Release chart (index.yml)
-    #   uses: J12934/helm-gh-pages-action@master
-    #   with:
-    #     access-token: ${{ secrets.ACCESS_TOKEN }}
-    #     deploy-branch: gh-pages-test
-    #     charts-folder: stable
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./charts
+        publish_branch: gh-pages
+        destination_dir: ./charts
+        keep_files: true
+        commit_message: "deployed charts for"

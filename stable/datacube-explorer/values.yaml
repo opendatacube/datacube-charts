@@ -1,24 +1,18 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 replicaCount: 1
+
 image:
   registry: docker.io
   repository: opendatacube/explorer
   tag: "latest"
   pullPolicy: Always
 
-
 database:
-  database: ows
-  host: database.local
+  database: datacube
+  host: localhost
   port: 5432
-  adminSecret: dev-eks-datacube
-  existingSecret: ows
-
-global:
-  externalDatabase:
-    database: ows
-  clusterSecret: ows
+  existingSecret:
 
 resources:
   limits:
@@ -43,11 +37,11 @@ updateCreationDt:
   cron: "0 13 * * *"  ## Run daily at 11 pm AEST
   suspend: false
   dockerArgs: 
-      - "cubedash-gen"
-      - "--no-init-database"
-      - "--refresh-stats"
-      - "--force-refresh"
-      - "--all"
+  - "cubedash-gen"
+  - "--no-init-database"
+  - "--refresh-stats"
+  - "--force-refresh"
+  - "--all"
 
 additionalSettings: {}
 

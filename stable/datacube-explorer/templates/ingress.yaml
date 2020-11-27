@@ -1,60 +1,39 @@
-{{- if .Values.ingress.enabled -}}
-{{- $fullName := include "datacube-explorer.fullname" . -}}
-{{- $ingressPath := .Values.ingress.path -}}
-{{- $ingressRedirect := .Values.ingress.redirect -}}
-{{- $servicePort := .Values.service.port -}}
+{{- if .Values.ingress.enabled }}
+# Workaround for using template in range
+# https://github.com/helm/helm/issues/3684#issuecomment-427932707
+{{- $dot := . }}
+{{- $servicePort := .Values.ows.externalPort }}
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
-metadata:
-  name: {{ $fullName }}
+  name: {{ include "datacube-explorer.fullname" . }}
   labels:
     app: {{ .Release.Name }}
     app.kubernetes.io/name: {{ include "datacube-explorer.name" . }}
     helm.sh/chart: {{ include "datacube-explorer.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- with .Values.ingress.annotations }}
   annotations:
-{{ toYaml . | indent 4 }}
-{{- end }}
+    {{ toYaml .Values.ingress.annotations | indent 4 }}
 spec:
   rules:
-    {{- if $ingressRedirect -}}
-    {{- $redirectActionName := .Values.ingress.action -}}
-    {{- range .Values.ingress.hosts }}
-    - host: {{ . | quote }}
+    {{- range $hostPrefix := .Values.ingress.hostPrefix }}
+    - host: "{{ $hostPrefix }}.{{ .Values.ingress.domain }}"
       http:
         paths:
-          - path: /*
-            backend:
-              serviceName: {{ $redirectActionName }}
-              servicePort: use-annotation
-          - path: {{ $ingressPath }}
-            backend:
-              serviceName: {{ $fullName }}
+          - backend:
+              serviceName: {{ template "datacube-explorer.fullname" $dot }}
               servicePort: {{ $servicePort }}
-    {{- end }}
-    {{- else }}
-    {{- range .Values.ingress.hosts }}
-    - host: {{ . | quote }}
+    {{- end -}}
+    {{- range $host := .Values.ingress.hosts }}
+    - host: {{ $host }}
       http:
         paths:
-          - path: {{ $ingressPath }}
-            backend:
-              serviceName: {{ $fullName }}
+          - backend:
+              serviceName: {{ template "datacube-explorer.fullname" $dot }}
               servicePort: {{ $servicePort }}
-    {{- end }}
-    {{- end }}
-    {{- if and .Values.global.domain .Values.ingress.prefixes }}
-    {{- $domain := .Values.global.domain }}
-    {{- range .Values.ingress.prefixes }}
-    - host: "{{ . }}.{{ $domain }}"
-      http:
-        paths:
-          - path: {{ $ingressPath }}
-            backend:
-              serviceName: {{ $fullName }}
-              servicePort: {{ $servicePort }}
-    {{- end }}
-    {{- end }}
+    {{- end -}}
+  {{- if .Values.ingress.tls }}
+  tls:
+    {{ toYaml .Values.ingress.tls | indent 4 }}
+  {{- end }}
 {{- end }}

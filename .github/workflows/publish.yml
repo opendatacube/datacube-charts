@@ -14,7 +14,9 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
 
     - name: Install Helm
       uses: azure/setup-helm@v1
@@ -35,4 +37,20 @@ jobs:
         publish_branch: gh-pages
         destination_dir: ./charts
         keep_files: true
+        enable_jekyll: true
         commit_message: "deployed charts for"
+
+    - name: Checkout the gh-pages branch
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        ref: gh-pages
+
+    - name: update latest _data/versions file from charts
+      run: |
+        cp ./charts/index.yaml _data/versions.yaml
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git add _data/versions.yaml
+        git commit -m "updated versions file"
+        git push

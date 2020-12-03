@@ -1,5 +1,5 @@
 {{- if .Values.ingress.enabled }}
-{{- $fullname := include "datacube-explorer.fullname" . -}}
+{{- $fullname := include "datacube-explorer.fullname" . }}
 {{- $servicePort := .Values.service.port }}
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
@@ -14,22 +14,22 @@ kind: Ingress
 {{ toYaml .Values.ingress.annotations | indent 4 }}
 spec:
   rules:
-    {{- range $hostPrefix := .Values.ingress.hostPrefix }}
+{{- range $hostPrefix := .Values.ingress.hostPrefix }}
     - host: "{{ $hostPrefix }}.{{ .Values.ingress.domain }}"
       http:
         paths:
           - backend:
               serviceName: {{ $fullname }}
               servicePort: {{ $servicePort }}
-    {{- end -}}
-    {{- range $host := .Values.ingress.hosts }}
+{{- end -}}
+{{- range $host := .Values.ingress.hosts }}
     - host: {{ $host }}
       http:
         paths:
           - backend:
               serviceName: {{ $fullname }}
               servicePort: {{ $servicePort }}
-    {{- end -}}
+{{- end -}}
 {{- if .Values.ingress.tls }}
   tls:
 {{ toYaml .Values.ingress.tls | indent 4 }}

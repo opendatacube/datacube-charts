@@ -45,16 +45,4 @@ spec:
               servicePort: {{ $servicePort }}
     {{- end }}
     {{- end }}
-    {{- if and .Values.global.domain .Values.ingress.prefixes }}
-    {{- $domain := .Values.global.domain }}
-    {{- range .Values.ingress.prefixes }}
-    - host: "{{ . }}.{{ $domain }}"
-      http:
-        paths:
-          - path: {{ $ingressPath }}
-            backend:
-              serviceName: {{ $fullName }}
-              servicePort: {{ $servicePort }}
-    {{- end }}
-    {{- end }}
 {{- end }}

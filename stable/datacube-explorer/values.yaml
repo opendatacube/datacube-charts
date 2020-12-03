@@ -12,15 +12,14 @@ database:
   database: datacube
   host: localhost
   port: 5432
-  existingSecret:
+  existingSecret: ""
 
 resources:
   limits:
     cpu: "300m"
     memory: 1024Mi
 
-annotations:
-  iam.amazonaws.com/role: dev-eks-datacube-wms
+annotations: {}
 
 additionalEnvironmentVars: {}
 
@@ -29,7 +28,10 @@ service:
   port: 80
 containerPort: 8080 # Internal port on which pod is running and serving cubedash app
 
-dockerArgs: [ "gunicorn", "-b", "0.0.0.0:8080", "-w", "4", "--timeout", "60", "cubedash:app" ]
+dockerArgs: ["gunicorn", "-b", "0.0.0.0:8080", "-w", "3", "--threads=2", "-k",
+   "gthread", "-t", "60", "--pid", "gunicorn.pid", "--worker-tmp-dir", "/dev/shm",
+   "--preload", "--config", "python:cubedash.gunicorn_config", "cubedash:app",
+   "||", "true"]
 
 updateCreationDt:
   enabled: false

@@ -28,7 +28,7 @@ spec:
         spec:
           containers:
           - name: explorer-update-creation-dt
-            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
             imagePullPolicy: {{ .Values.image.pullPolicy }}
             args: [ {{- range .Values.updateCreationDt.dockerArgs }} {{ . | quote }}, {{ end -}} ]
             env:

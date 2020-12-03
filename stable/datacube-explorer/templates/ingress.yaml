@@ -1,37 +1,60 @@
-{{- if .Values.ingress.enabled }}
-{{- $fullname := include "datacube-explorer.fullname" . }}
-{{- $servicePort := .Values.service.port }}
+{{- if .Values.ingress.enabled -}}
+{{- $fullName := include "datacube-explorer.fullname" . -}}
+{{- $ingressPath := .Values.ingress.path -}}
+{{- $ingressRedirect := .Values.ingress.redirect -}}
+{{- $servicePort := .Values.service.port -}}
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
-  name: {{ $fullname }}
+metadata:
+  name: {{ $fullName }}
   labels:
     app: {{ .Release.Name }}
     app.kubernetes.io/name: {{ include "datacube-explorer.name" . }}
     helm.sh/chart: {{ include "datacube-explorer.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-  annotations:
-{{ toYaml .Values.ingress.annotations | indent 4 }}
+{{- with .Values.ingress.annotations }}
+annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
 spec:
   rules:
-{{- range $hostPrefix := .Values.ingress.hostPrefix }}
-    - host: "{{ $hostPrefix }}.{{ .Values.ingress.domain }}"
+    {{- if $ingressRedirect -}}
+    {{- $redirectActionName := .Values.ingress.action -}}
+    {{- range .Values.ingress.hosts }}
+    - host: {{ . | quote }}
       http:
         paths:
-          - backend:
-              serviceName: {{ $fullname }}
+          - path: /*
+            backend:
+              serviceName: {{ $redirectActionName }}
+              servicePort: use-annotation
+          - path: {{ $ingressPath }}
+            backend:
+              serviceName: {{ $fullName }}
               servicePort: {{ $servicePort }}
-{{- end -}}
-{{- range $host := .Values.ingress.hosts }}
-    - host: {{ $host }}
+    {{- end }}
+    {{- else }}
+    {{- range .Values.ingress.hosts }}
+    - host: {{ . | quote }}
       http:
         paths:
-          - backend:
-              serviceName: {{ $fullname }}
+          - path: {{ $ingressPath }}
+            backend:
+              serviceName: {{ $fullName }}
               servicePort: {{ $servicePort }}
-{{- end -}}
-{{- if .Values.ingress.tls }}
-  tls:
-{{ toYaml .Values.ingress.tls | indent 4 }}
-{{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if and .Values.global.domain .Values.ingress.prefixes }}
+    {{- $domain := .Values.global.domain }}
+    {{- range .Values.ingress.prefixes }}
+    - host: "{{ . }}.{{ $domain }}"
+      http:
+        paths:
+          - path: {{ $ingressPath }}
+            backend:
+              serviceName: {{ $fullName }}
+              servicePort: {{ $servicePort }}
+    {{- end }}
+    {{- end }}
 {{- end }}

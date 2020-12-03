@@ -1,8 +1,9 @@
 {{- if .Values.ingress.enabled }}
+{{- $fullname := include "datacube-explorer.fullname" . -}}
 {{- $servicePort := .Values.service.port }}
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
-  name: {{ include "datacube-explorer.fullname" . }}
+  name: {{ $fullname }}
   labels:
     app: {{ .Release.Name }}
     app.kubernetes.io/name: {{ include "datacube-explorer.name" . }}
@@ -18,7 +19,7 @@ spec:
       http:
         paths:
           - backend:
-              serviceName: {{ template "datacube-explorer.fullname" . }}
+              serviceName: {{ $fullname }}
               servicePort: {{ $servicePort }}
     {{- end -}}
     {{- range $host := .Values.ingress.hosts }}
@@ -26,7 +27,7 @@ spec:
       http:
         paths:
           - backend:
-              serviceName: {{ template "datacube-explorer.fullname" . }}
+              serviceName: {{ $fullname }}
               servicePort: {{ $servicePort }}
     {{- end -}}
 {{- if .Values.ingress.tls }}

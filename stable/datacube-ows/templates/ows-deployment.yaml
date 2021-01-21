@@ -44,7 +44,12 @@ spec:
       - name: ows-config
         image: "{{ $.Values.owsConfig.image.registry }}/{{ $.Values.owsConfig.image.repository }}:{{ $.Values.owsConfig.image.tag }}"
         imagePullPolicy: {{ $.Values.owsConfig.image.pullPolicy }}
+        {{- if .Values.owsConfig.image.src }}
         args: [ "cp", "-f", "{{ .Values.owsConfig.image.src }}", "{{ .Values.owsConfig.path }}/{{ .Values.owsConfig.filename }}" ]
+        {{- end }}
+        {{- if .Values.owsConfig.image.cfg_folder }}
+        args: [ "cp", "-rf", "{{ .Values.owsConfig.image.cfg_folder }}", "{{ .Values.owsConfig.path }}" ]
+        {{- end }}
         volumeMounts:
         - mountPath: {{ .Values.owsConfig.path }}
           name: ows-config-volume

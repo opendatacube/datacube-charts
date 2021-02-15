@@ -1,6 +1,7 @@
 # Default values for datacube-wms.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+
 replicaCount: 1
 image:
   registry: docker.io
@@ -12,21 +13,32 @@ database:
   database: datacube
   host: localhost
   port: 5432
-  existingSecret: datacube
+  # existingSecret: datacube
+  existingSecret: ows-reader
 
 aws:
   existingSecret: ows-wps-aws
 
+clusterInfo:
+  envName: dev
+
 ##
-## Datacube WMS configuration
+## Datacube WPS configuration
 ##
 wps:
-  baseurl: ""
   enabled: true
+  baseurl: ""
   resources:
     limits:
-      cpu: "2"
+      cpu: "1"
       memory: 2048Mi
+  targetCpu: 10
+  autoscaling:
+    enabled: True
+    minimum_replica_count: 1
+    maximum_replica_count: 2
+    cpu:
+      target_utilization_percentage: 70
   annotations: { }
   additionalEnvironmentVars: { }
   livenessProbe:
@@ -40,7 +52,9 @@ wps:
   readinessProbe: {}
 wpsConfig:
   image: { }
-    
+
+affinity: {}
+
 ingress:
   enabled: false
   prefixes: [ ]
@@ -49,3 +63,6 @@ ingress:
 service:
   type: NodePort
   port: 8000
+
+
+fullnameOverride: ""

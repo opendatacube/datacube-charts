@@ -6,11 +6,15 @@ kind: Ingress
 metadata:
   name: {{ $fullName }}
   labels:
+    app: {{ template "datacube-wps.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
     app.kubernetes.io/name: {{ include "datacube-wps.name" . }}
-    helm.sh/chart: {{ include "datacube-wps.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- with .Values.ingress.annotations }}
+#     helm.sh/chart: {{ include "datacube-wps.chart" . }}
+#     app.kubernetes.io/instance: {{ .Release.Name }}
+#     app.kubernetes.io/managed-by: {{ .Release.Service }}
+# {{- with .Values.ingress.annotations }}
   annotations:
 {{ toYaml . | indent 4 }}
 {{- end }}

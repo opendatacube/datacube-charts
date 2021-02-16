@@ -1,102 +1,102 @@
-{{- if .Values.wps.enabled }}
-{{- if .Values.hpa }}
-apiVersion: autoscaling/v2beta1
-kind: HorizontalPodAutoscaler
-metadata:
-  name: {{ template "datacube-wps.fullname" . }}
-  labels:
-    app: {{ template "datacube-wps.name" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: "{{ template "datacube-wps.fullname" . }}"
-  minReplicas: {{ .Values.hpa.minimum_replica_count }}
-  maxReplicas: {{ .Values.hpa.maximum_replica_count }}
-  metrics:
-  # beta 2
-  # - type: Resource
-  #   resource:
-  #     name: cpu
-  #     target:
-  #       type: Utilization
-  #       averageUtilization: 50
-  # - type: Pods
-  #   pods:
-  #     metric:
-  #       name: packets-per-second
-  #     target:
-  #       type: AverageValue
-  #       averageValue: 1k
-  # - type: Object
-  #   object:
-  #     metric:
-  #       name: requests-per-second
-  #     describedObject:
-  #       apiVersion: networking.k8s.io/v1beta1
-  #       kind: Ingress
-  #       name: mike-wps-datacube-wps
-  #     target:
-  #       type: Value
-  #       value: 10k
-  # beta1
-  - type: Pods
-    pods:
-      metricName: http_requests_per_second
-      targetAverageValue: 10
-  # - type: Object
-  #   object:
-  #     metricName: kong_http_status_per_second
-  #     target:
-  #       apiVersion: v1
-  #       kind: Service
-  #       name: {{ template "datacube-wps.fullname" . }}
-  #     targetValue: 1
-  # - type: Pods
-  #   pods:
-  #     metricName: http_requests
-  #     targetAverageValue: 500m
-  # - type: Resource
-  #   resource:
-  #     name: cpu
-  #     target:
-  #       type: Utilization
-  #       averageUtilization: {{ .Values.hpa.cpu.target_utilization_percentage }}
-  # - type: Resource
-  #   resource:
-  #     name: memory
-  #     target:
-  #       type: Utilization
-  #       averageUtilization: 75
+# {{- if .Values.wps.enabled }}
+# {{- if .Values.hpa }}
+# apiVersion: autoscaling/v2beta1
+# kind: HorizontalPodAutoscaler
+# metadata:
+#   name: {{ template "datacube-wps.fullname" . }}
+#   labels:
+#     app: {{ template "datacube-wps.name" . }}
+#     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+#     release: {{ .Release.Name }}
+#     heritage: {{ .Release.Service }}
+# spec:
+#   scaleTargetRef:
+#     apiVersion: apps/v1
+#     kind: Deployment
+#     name: "{{ template "datacube-wps.fullname" . }}"
+#   minReplicas: {{ .Values.hpa.minimum_replica_count }}
+#   maxReplicas: {{ .Values.hpa.maximum_replica_count }}
+#   metrics:
+#   # beta 2
+#   # - type: Resource
+#   #   resource:
+#   #     name: cpu
+#   #     target:
+#   #       type: Utilization
+#   #       averageUtilization: 50
+#   # - type: Pods
+#   #   pods:
+#   #     metric:
+#   #       name: packets-per-second
+#   #     target:
+#   #       type: AverageValue
+#   #       averageValue: 1k
+#   # - type: Object
+#   #   object:
+#   #     metric:
+#   #       name: requests-per-second
+#   #     describedObject:
+#   #       apiVersion: networking.k8s.io/v1beta1
+#   #       kind: Ingress
+#   #       name: mike-wps-datacube-wps
+#   #     target:
+#   #       type: Value
+#   #       value: 10k
+#   # beta1
+#   - type: Pods
+#     pods:
+#       metricName: http_requests_per_second
+#       targetAverageValue: 10
+#   # - type: Object
+#   #   object:
+#   #     metricName: kong_http_status_per_second
+#   #     target:
+#   #       apiVersion: v1
+#   #       kind: Service
+#   #       name: {{ template "datacube-wps.fullname" . }}
+#   #     targetValue: 1
+#   # - type: Pods
+#   #   pods:
+#   #     metricName: http_requests
+#   #     targetAverageValue: 500m
+#   # - type: Resource
+#   #   resource:
+#   #     name: cpu
+#   #     target:
+#   #       type: Utilization
+#   #       averageUtilization: {{ .Values.hpa.cpu.target_utilization_percentage }}
+#   # - type: Resource
+#   #   resource:
+#   #     name: memory
+#   #     target:
+#   #       type: Utilization
+#   #       averageUtilization: 75
 
-  # - type: Pods
-  #   pods:
-  #     metricName: http_requests_per_second
-  #     targetAverageValue: 10
+#   # - type: Pods
+#   #   pods:
+#   #     metricName: http_requests_per_second
+#   #     targetAverageValue: 10
 
-  # - type: Pods
-  #   pods:
-  #     metricName: http_requests_per_second
-  #     targetAverageValue: 10
-  # - type: Object
-  #   object:
-  #     metricName: requests-per-second
-  #     target:
-  #       apiVersion: extensions/v1beta1
-  #       kind: Ingress
-  #       name: mike-wps-datacube-wps
-  #     targetValue: 2k
-  # metrics:
-  #   - type: External
-  #     external:
-  #       metric:
-  #         name: queue_messages_ready
-  #         selector: "queue=worker_tasks"
-  #       target:
-  #         type: AverageValue
-  #         averageValue: 30
-{{- end }}
-{{- end }}
+#   # - type: Pods
+#   #   pods:
+#   #     metricName: http_requests_per_second
+#   #     targetAverageValue: 10
+#   # - type: Object
+#   #   object:
+#   #     metricName: requests-per-second
+#   #     target:
+#   #       apiVersion: extensions/v1beta1
+#   #       kind: Ingress
+#   #       name: mike-wps-datacube-wps
+#   #     targetValue: 2k
+#   # metrics:
+#   #   - type: External
+#   #     external:
+#   #       metric:
+#   #         name: queue_messages_ready
+#   #         selector: "queue=worker_tasks"
+#   #       target:
+#   #         type: AverageValue
+#   #         averageValue: 30
+# {{- end }}
+# {{- end }}

@@ -41,8 +41,8 @@ wps:
 #      annotations:
 #        iam.amazonaws.com/role: ${role_name}
   additionalEnvironmentVars:
-    APPLICATION_ROOT: /wps
-    SCRIPT_NAME: /wps
+    APPLICATION_ROOT: /
+    SCRIPT_NAME: /
     prometheus_multiproc_dir: "/dev/shm"
     # SENTRY_PROJECT: "2396014"
     # SENTRY_KEY: "fd4798d6f0bd47598b990a0b036d2cf6"

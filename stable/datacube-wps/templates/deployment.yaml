@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: {{ include "datacube-wps.fullname" . }}
   labels:
+    app: {{ include "datacube-wps.name" . }}
     app.kubernetes.io/name: {{ include "datacube-wps.name" . }}
     helm.sh/chart: {{ include "datacube-wps.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
@@ -11,11 +12,13 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
+      app: {{ include "datacube-wps.name" . }}
       app.kubernetes.io/name: {{ include "datacube-wps.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
+        app: {{ include "datacube-wps.name" . }}
         app.kubernetes.io/name: {{ include "datacube-wps.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
       annotations:

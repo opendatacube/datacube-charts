@@ -40,7 +40,10 @@ wps:
   readinessProbe: {}
 wpsConfig:
   image: { }
-    
+
+hpa:
+  enabled: false
+
 ingress:
   enabled: false
   prefixes: [ ]

@@ -1,0 +1,22 @@
+{{- if .Values.hpa.enabled }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ template "datacube-wps.fullname" . }}
+  labels:
+    app: {{ template "datacube-wps.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: "{{ template "datacube-wps.fullname" . }}"
+  minReplicas: {{ .Values.hpa.minimum_replica_count }}
+  maxReplicas: {{ .Values.hpa.maximum_replica_count }}
+{{- if .Values.hpa.metrics }}
+  metrics:
+{{ toYaml .Values.hpa.metrics | indent 2 }}
+{{- end }}
+{{- end }}

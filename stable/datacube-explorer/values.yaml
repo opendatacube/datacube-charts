@@ -36,6 +36,7 @@ dockerArgs: ["gunicorn", "-b", "0.0.0.0:8080", "-w", "3", "--threads=2", "-k",
 updateCreationDt:
   enabled: false
   historyLimit: 1
+  concurrencyPolicy: Allow  # concurrent executions of a job
   cron: "0 13 * * *"  ## Run daily at 11 pm AEST
   suspend: false
   backoffLimit: 0  # Number of retries

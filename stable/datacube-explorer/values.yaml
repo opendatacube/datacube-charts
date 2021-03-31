@@ -38,7 +38,8 @@ updateCreationDt:
   historyLimit: 1
   cron: "0 13 * * *"  ## Run daily at 11 pm AEST
   suspend: false
-  dockerArgs: 
+  backoffLimit: 0  # Number of retries
+  dockerArgs:
   - "cubedash-gen"
   - "--no-init-database"
   - "--refresh-stats"

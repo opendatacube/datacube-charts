@@ -10,11 +10,13 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   schedule: {{ .Values.updateCreationDt.cron | quote }}
-  successfulJobsHistoryLimit: {{ .Values.updateCreationDt.historyLimit}}
+  successfulJobsHistoryLimit: {{ .Values.updateCreationDt.historyLimit }}
+  concurrencyPolicy: {{ .Values.updateCreationDt.concurrencyPolicy }}
   failedJobsHistoryLimit: {{ .Values.updateCreationDt.historyLimit }}
   suspend: {{ .Values.updateCreationDt.suspend }}
   jobTemplate:
     spec:
+      backoffLimit: {{ .Values.updateCreationDt.backoffLimit }}
       template:
         metadata:
           name: {{ include "datacube-explorer.name" . }}

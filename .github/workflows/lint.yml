@@ -1,4 +1,4 @@
-name: Linting
+name: Lint and Test Charts
 
 on:
   push:
@@ -6,17 +6,42 @@ on:
       - '**'
 
 jobs:
-  lint-check:
+  lint-test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: Checkout
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Install Helm
         uses: azure/setup-helm@v1
         with:
-          version: v3.4.0
+          version: v3.5.3
+
+      - name: Install chart-testing
+        uses: helm/chart-testing-action@v2.0.1
+        with:
+          version: v3.3.1
 
       - name: Lint Charts
         run: |
           helm lint stable/*
+
+      - name: Run chart-testing (list-changed)
+        id: list-changed
+        run: |
+          changed=$(ct list-changed --config ct-config.yaml)
+          if [[ -n "$changed" ]]; then
+            echo "::set-output name=changed::true"
+          fi
+
+      - name: Run chart-testing (lint)
+        run: ct lint --config ct-config.yaml
+
+      - name: Create kind cluster
+        uses: helm/kind-action@v1.1.0
+        if: steps.list-changed.outputs.changed == 'true'
+
+      - name: Run chart-testing (install)
+        run: ct install --config ct-config.yaml

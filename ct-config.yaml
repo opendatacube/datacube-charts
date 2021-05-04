@@ -1,0 +1,16 @@
+remote: origin
+target-branch: master
+chart-dirs:
+  - stable/datacube-dask
+  - stable/datacube-data
+  - stable/datacube-dev-env
+  - stable/datacube-explorer
+  - stable/datacube-index
+  - stable/datacube-ows
+  - stable/datacube-processing
+  - stable/datacube-wps
+  - stable/datakubemanager
+  - stable/restcube
+chart-repos:
+  - stable=https://charts.helm.sh/stable
+helm-extra-args: --timeout=900s

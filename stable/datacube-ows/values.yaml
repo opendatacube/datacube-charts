@@ -67,6 +67,8 @@ service:
 
 affinity: {}
 
+tolerations: {}
+
 ingress:
   ## Enable Ingress.
   ##

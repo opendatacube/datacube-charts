@@ -10,7 +10,7 @@ on:
       - '**'
 
 jobs:
-  lint-test:
+  lint-chart:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

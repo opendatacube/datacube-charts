@@ -64,3 +64,14 @@ install-chart:
       with:
         command: install
         config: .github/ct.yaml
+
+lint-chart:
+  runs-on: ubuntu-latest
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Run chart-testing (lint)
+      uses: helm/chart-testing-action@master
+      with:
+        command: lint
+        config: .github/ct.yaml

@@ -1,19 +1,51 @@
-# Datakubemanager
+datakubemanager
+===============
+A Helm chart for Deploying Datakubemanager
 
-## Requirements
-* Deployed Restcube
+Current chart version is `0.2.4`
 
-## Datakubemanager
-The Datakubemanager deployment is managed by `deployment.yaml`
 
-## Ingress
-### Internal
-If desired, an internal ingress can be used as well (`service-internal.yaml`). For AWS this could be a load balancer which can only be accessed from within the cluster VPC and could allow AWS Lambdas unauthenticated access for example. The following annotation will enable a load balancer only accessible inside the VPC: `service.beta.kubernetes.io/aws-load-balancer-internal: "0.0.0.0/0"`
 
-### External
-For external facing ingress we recommend using some form of authentication. An example is an AWS ALB using Cognito based auth. For example the following annotations will enable cognito authentication for Azure SSO users with an appropriately configured cognito user pool.
-```
-alb.ingress.kubernetes.io/auth-type: cognito
-alb.ingress.kubernetes.io/auth-on-unauthenticated-request: authenticate
-alb.ingress.kubernetes.io/auth-scope: "email openid aws.cognito.signin.user.admin"
-```
+
+
+## Chart Values
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| affinity | object | `{}` |  |
+| annotations | object | `{}` |  |
+| cognito.existingSecret | string | `"restcubecognito"` |  |
+| containerPort | int | `8080` |  |
+| dockerArgs | list | `[]` |  |
+| environment | object | `{}` |  |
+| fullnameOverride | string | `""` |  |
+| image.pullPolicy | string | `"IfNotPresent"` |  |
+| image.repository | string | `"geoscienceaustralia/datakubemanager"` |  |
+| image.tag | string | `"latest"` |  |
+| ingress.annotations | object | `{}` |  |
+| ingress.enabled | bool | `false` |  |
+| ingress.hosts[0] | string | `"chart-example.local"` |  |
+| ingress.path | string | `"/"` |  |
+| ingress.tls | list | `[]` |  |
+| livenessProbe | object | `{}` |  |
+| nameOverride | string | `""` |  |
+| nodeSelector | object | `{}` |  |
+| readinessProbe | object | `{}` |  |
+| replicaCount | int | `1` |  |
+| resources | object | `{}` |  |
+| service.internal.enabled | bool | `false` |  |
+| service.internal.port | int | `80` |  |
+| service.internal.type | string | `"LoadBalancer"` |  |
+| service.port | int | `80` |  |
+| service.type | string | `"ClusterIP"` |  |
+| tolerations | list | `[]` |  |
+| worker.affinity | object | `{}` |  |
+| worker.annotations | object | `{}` |  |
+| worker.dockerArgs | list | `[]` |  |
+| worker.environment | object | `{}` |  |
+| worker.livenessProbe | object | `{}` |  |
+| worker.nodeSelector | object | `{}` |  |
+| worker.readinessProbe | object | `{}` |  |
+| worker.replicaCount | int | `1` |  |
+| worker.resources | object | `{}` |  |
+| worker.tolerations | list | `[]` |  |

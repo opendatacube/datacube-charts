@@ -1,18 +1,46 @@
-# Kubernetes Development Environment Helm Template
+datacube-dev-env
+================
+A Helm chart for deploying a development environment to kubernetes
 
-This helm chart will deploy a Kubernetes development environment deployment, service, and optionally ingress. It will also install postGIS on the target database and grant `agdc_admin` role to superuser.
-
-## ODC Database configuration
-Connecting to your ODC Database is done using the `database` block. A kubernetes secret containing the `postgres-username` and `postgres-password` for your database is required. Since postGIS will be installed a secret containing the `postgres-username` and `postgres-password` for a user with administrative privileges is also required. This is an example block for connecting to a psql database named 'odc' on `localhost:5432`:
-```YAML
-database:
-  create: true # if we need to create a database
-  database: odc
-  ref_database: ref_odc # Reference database name
-  host: localhost
-  port: 5432
-  existingSecret: odc-secret
-  adminSecret: psql-admin
-```
+Current chart version is `0.1.1`
 
 
+
+
+
+## Chart Values
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| additionalEnvironmentVars | object | `{}` |  |
+| additionalSettings | object | `{}` |  |
+| annotations."iam.amazonaws.com/role" | string | `"dev-eks-datacube-wms"` |  |
+| clusterInfo.envName | string | `"dev"` |  |
+| containerPort | int | `8080` |  |
+| createdb.dockerArgs[0] | string | `"/bin/sh"` |  |
+| createdb.dockerArgs[1] | string | `"-c"` |  |
+| createdb.dockerArgs[2] | string | `"/code/setup/create-db.sh"` |  |
+| createdb.image.pullPolicy | string | `"Always"` |  |
+| createdb.image.registry | string | `"docker.io"` |  |
+| createdb.image.repository | string | `"opendatacube/wms"` |  |
+| createdb.image.tag | string | `"latest"` |  |
+| database.adminSecret | string | `"dev-eks-datacube"` |  |
+| database.create | bool | `false` |  |
+| database.database | string | `"testdb"` |  |
+| database.existingSecret | string | `"dev-eks-datacube"` |  |
+| database.host | string | `"database.local"` |  |
+| database.port | int | `5432` |  |
+| datacube.configPath | string | `"/opt/odc/datacube.conf"` |  |
+| dockerArgs[0] | string | `"/bin/bash"` |  |
+| dockerArgs[1] | string | `"-c"` |  |
+| dockerArgs[2] | string | `"tail -f /dev/null"` |  |
+| environment | string | `"dev"` |  |
+| image.pullPolicy | string | `"Always"` |  |
+| image.registry | string | `"docker.io"` |  |
+| image.repository | string | `"opendatacube/k8s-dev"` |  |
+| image.tag | string | `"latest"` |  |
+| replicaCount | int | `1` |  |
+| resources.limits.cpu | string | `"300m"` |  |
+| resources.limits.memory | string | `"1024Mi"` |  |
+| service.port | int | `80` |  |
+| service.type | string | `"NodePort"` |  |

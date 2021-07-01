@@ -24,16 +24,11 @@ jobs:
     needs:
       - lint-chart
       - lint-docs
-    strategy:
-      matrix:
-        k8s:
-          - v1.18.2
     steps:
       - name: Checkout
         uses: actions/checkout@v1
       - name: Run kubeval
         env:
-          KUBERNETES_VERSION: ${{ matrix.k8s }}
         run: .github/kubeval.sh
 
   install-chart:

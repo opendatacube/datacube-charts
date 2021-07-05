@@ -34,7 +34,7 @@ spec:
       initContainers:
       {{- if .Values.wpsConfig.image }}
       - name: wps-config
-        image: "{{ $.Values.wpsConfig.image.repository }}:{{ $.Values.wpsConfig.image.tag }}"
+        image: "{{ $.Values.wpsConfig.image.registry }}/{{ $.Values.wpsConfig.image.repository }}:{{ $.Values.wpsConfig.image.tag }}"
         imagePullPolicy: {{ $.Values.wpsConfig.image.pullPolicy }}
         args: [ "cp", "-R", "{{ .Values.wpsConfig.image.src }}", "{{ .Values.wpsConfig.path }}"]
         volumeMounts:
@@ -90,7 +90,7 @@ spec:
             value: {{ $value | quote }}
           {{- end }}
           {{- end }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http

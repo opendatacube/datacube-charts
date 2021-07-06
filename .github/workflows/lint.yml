@@ -25,10 +25,11 @@ jobs:
       - lint-chart
       - lint-docs
     steps:
-      - name: Checkout
-        uses: actions/checkout@v1
-      - name: Run kubeval
-        run: .github/kubeval.sh
+    - uses: actions/checkout@master
+    - name: test
+      uses: instrumenta/kubeval-action@master
+      with:
+        files: stable/*/Chart.yaml
 
   install-chart:
     name: install-chart

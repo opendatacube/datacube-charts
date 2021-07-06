@@ -2,4 +2,4 @@ apiVersion: v2
 appVersion: alpha
 description: A Helm chart for Datacube WPS on Kubernetes
 name: datacube-wps
-version: 0.8.7
+version: 0.8.8

@@ -2,7 +2,7 @@ datacube-wps
 ============
 A Helm chart for Datacube WPS on Kubernetes
 
-Current chart version is `0.8.7`
+Current chart version is `0.8.8`
 
 
 

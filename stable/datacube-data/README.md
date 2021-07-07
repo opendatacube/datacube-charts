@@ -1,13 +1,36 @@
-# Datacube Data Orchestration
+datacube-data
+=============
+A Helm chart for running datacube data management
 
-This helm chart will deploy a deployment for Datacube Data Orchestration which can automatically index new data that becomes available on AWS S3.
+Current chart version is `0.2.6`
 
-## ODC Database configuration
-Connecting to your ODC Database is done using the `database` block. A kubernetes secret containing the `postgres-username` and `postgres-password` for your database is required. This is an example block for connecting to a psql database named 'odc' on `localhost:5432`:
-```YAML
-database:
-  database: odc
-  host: localhost
-  port: 5432
-  existingSecret: odc-secret
-```
+
+
+
+
+## Chart Values
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| additionalEnvironmentVars | object | `{}` |  |
+| affinity | object | `{}` |  |
+| annotations."iam.amazonaws.com/role" | string | `"kubernetes-orchestration"` |  |
+| aws_region | string | `"ap-southeast-2"` |  |
+| database.database | string | `"datacube"` |  |
+| database.existingSecret | string | `"datacube"` |  |
+| database.host | string | `"localhost"` |  |
+| database.port | int | `5432` |  |
+| dockerArgs[0] | string | `"python3"` |  |
+| dockerArgs[1] | string | `"orchestrate.py"` |  |
+| fullnameOverride | string | `""` |  |
+| global.externalDatabase | object | `{}` |  |
+| image.pullPolicy | string | `"Always"` |  |
+| image.repository | string | `"geoscienceaustralia/dea-k8s-data"` |  |
+| image.tag | string | `"latest"` |  |
+| nameOverride | string | `""` |  |
+| nodeSelector | object | `{}` |  |
+| replicaCount | int | `1` |  |
+| resources | object | `{}` |  |
+| sqs_queue_name | string | `""` |  |
+| tolerations | list | `[]` |  |
+| wmsConfig.image | object | `{}` |  |

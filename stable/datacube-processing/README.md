@@ -1,53 +1,45 @@
-# Datacube Processing
+datacube-processing
+===================
+A Helm chart for datacube processing
 
-[Datacube](https://www.opendatacube.org/) Processing Pipeline
-
-## About
-
-When new data is loaded into the S3 bucket an item is logged into your SQS Queue, 
-Every few minutes (configurable) a CronJob will check the queue, If it has messages, they will be filtered and processed. A Job will keep running until the queue is empty or it fails. If the SQS Queue has lots of messages eventually the Cron Job will add more Jobs to process them faster. When the Queue is empty all Jobs will complete.
-If a Job fails, it will be returned to the queue after (job.maxJobTime) is passed, so other workers can process it.
-
-
-## Example Config
-
-This example works on docker for mac, with a pre-indexed postgres database hosted on the host machine
-
-```yaml
-
-```
-
-Adjust these variables for your environment
-
-```console
-$ helm install ./datacube-wms --values config.yaml
-```
-
-## Introduction
-
-This chart creates a [Datacube WMS](https://github.com/opendatacube/datacube-wms) processing worker pool on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+Current chart version is `0.1.1`
 
 
 
 
-## Installing the Chart
 
-To install the chart with the release name `my-release`:
+## Chart Values
 
-```console
-$ helm install --name my-release -f config.yaml stable/datacube-wms 
-```
-
-The command deploys WMS on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
-
-> **Tip**: List all releases using `helm list`
-
-## Uninstalling the Chart
-
-To uninstall/delete the `my-release` deployment:
-
-```console
-$ helm delete my-release
-```
-
-The command removes all the Kubernetes components associated with the chart and deletes the release. It will also remove the database as part of the installation.
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| affinity | object | `{}` |  |
+| annotations."iam.amazonaws.com/role" | string | `"kubernetes-pipelines"` |  |
+| cron.concurrencyPolicy | string | `"Allow"` |  |
+| cron.historyLimit | int | `1` |  |
+| cron.schedule | string | `"*/5 * * * *"` |  |
+| cron.suspend | bool | `false` |  |
+| database.database | string | `"ows"` |  |
+| database.existingSecret | string | `"datacube"` |  |
+| database.host | string | `"db-dev-eks-datacube-default.cxhoeczwhtar.ap-southeast-2.rds.amazonaws.com"` |  |
+| database.port | int | `5432` |  |
+| image.imagePullPolicy | string | `"IfNotPresent"` |  |
+| image.repository | string | `"opendatacube/pipelines"` |  |
+| image.tag | string | `"wofs-1.22"` |  |
+| job.filePrefix | string | `"S2_WATER_3577"` |  |
+| job.inputS3Bucket | string | `"dea-public-data"` |  |
+| job.jobsPerWorker | int | `1` |  |
+| job.maxTime | int | `300` |  |
+| job.outputPath | string | `"WOfS/WOFLs/v2.1.6/combined"` |  |
+| job.outputS3Bucket | string | `"dea-public-data-dev"` |  |
+| logLevel | string | `"INFO"` |  |
+| nodeSelector | object | `{}` |  |
+| replicaCount | int | `1` |  |
+| resources.limits.cpu | string | `"1000m"` |  |
+| resources.limits.memory | string | `"16Gi"` |  |
+| resources.requests.cpu | string | `"400m"` |  |
+| resources.requests.memory | string | `"1Gi"` |  |
+| sqs.messagePrefix | string | `"L2/sentinel-2-nrt/S2MSIARD/*/*/ARD-METADATA.yaml"` |  |
+| sqs.pollTimeSec | int | `2` |  |
+| sqs.queue | string | `"wofs"` |  |
+| sqs.region | string | `"ap-southeast-2"` |  |
+| tolerations | list | `[]` |  |

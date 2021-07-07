@@ -1,21 +1,43 @@
-# Datacube WPS
+datacube-wps
+============
+A Helm chart for Datacube WPS on Kubernetes
 
-This helm chart will deploy a deployment, service, and optionally ingress for a Datacube WPS deployment. This WPS can be used to provide processing services for a connected ODC database.
+Current chart version is `0.8.8`
 
-## ODC Database configuration
-Connecting to your ODC Database is done using the `database` block. A kubernetes secret containing the `postgres-username` and `postgres-password` for your database is required. This is an example block for connecting to a psql database named 'odc' on `localhost:5432`:
-```YAML
-database:
-  database: odc
-  host: localhost
-  port: 5432
-  existingSecret: odc-secret
-```
 
-## WPS Baseurl
-The WPS framework requires a 'baseurl' to be set by the operator which is the full path (including protocol) to the WPS (e.g. https://ows.dev.dea.ga.gov.au/wps/). This must be configured in the helm chart as `wps.baseurl` in addition to any ingress configuration done.
 
-## Configuration file
-https://github.com/opendatacube/datacube-wps/blob/master/docker/wps-entrypoint.sh
-`$WPS_CONFIG_PATH` to mount external defined define `pywps.cfg`
-`$DATACUBE_WPS_CONFIG_PATH` to mount external defined `datcube-wps-config.yaml`
+
+
+## Chart Values
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| aws.existingSecret | string | `"ows-wps-aws"` |  |
+| database.database | string | `"datacube"` |  |
+| database.existingSecret | string | `"datacube"` |  |
+| database.host | string | `"localhost"` |  |
+| database.port | int | `5432` |  |
+| hpa.enabled | bool | `false` |  |
+| image.pullPolicy | string | `"Always"` |  |
+| image.registry | string | `"docker.io"` |  |
+| image.repository | string | `"opendatacube/wps"` |  |
+| image.tag | string | `"latest"` |  |
+| ingress.domain | string | `""` |  |
+| ingress.enabled | bool | `false` |  |
+| ingress.prefixes | list | `[]` |  |
+| replicaCount | int | `1` |  |
+| service.port | int | `8000` |  |
+| service.type | string | `"NodePort"` |  |
+| wps.additionalEnvironmentVars | object | `{}` |  |
+| wps.annotations | object | `{}` |  |
+| wps.baseurl | string | `""` |  |
+| wps.enabled | bool | `true` |  |
+| wps.livenessProbe.exec.command[0] | string | `"/bin/sh"` |  |
+| wps.livenessProbe.exec.command[1] | string | `"-c"` |  |
+| wps.livenessProbe.exec.command[2] | string | `"curl --silent 'http://localhost:8000/?service=WPS&request=GetCapabilities&version=1.0.0'"` |  |
+| wps.livenessProbe.initialDelaySeconds | int | `30` |  |
+| wps.livenessProbe.periodSeconds | int | `30` |  |
+| wps.readinessProbe | object | `{}` |  |
+| wps.resources.limits.cpu | string | `"2"` |  |
+| wps.resources.limits.memory | string | `"2048Mi"` |  |
+| wpsConfig.image | object | `{}` |  |

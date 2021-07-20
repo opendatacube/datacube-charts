@@ -31,12 +31,26 @@ spec:
       dnsConfig:
         options:
           - name: single-request-reopen
+      {{- if .Values.serviceAccountName }}
+      serviceAccountName: {{ .Values.serviceAccountName }}
+      {{- end }}
+      {{- with .Values.securityContext }}
+      securityContext:
+{{ toYaml . | indent 8 }}
+      {{- end }}
       initContainers:
       {{- if .Values.wpsConfig.image }}
       - name: wps-config
         image: "{{ $.Values.wpsConfig.image.registry }}/{{ $.Values.wpsConfig.image.repository }}:{{ $.Values.wpsConfig.image.tag }}"
         imagePullPolicy: {{ $.Values.wpsConfig.image.pullPolicy }}
-        args: [ "cp", "-R", "{{ .Values.wpsConfig.image.src }}", "{{ .Values.wpsConfig.path }}"]
+        command: ["/bin/sh", "-c"]
+        args: [ "cp -R {{ .Values.wpsConfig.image.src }} {{ .Values.wpsConfig.path }}"  ]
+        {{- with .Values.wpsConfig.securityContext }}
+        securityContext:
+{{ toYaml . | indent 12 }}
+        {{- end }}
+        resources:
+{{ toYaml .Values.resources | indent 12 }}
         volumeMounts:
         - mountPath: {{ .Values.wpsConfig.path }}
           name: wps-config-volume
@@ -96,6 +110,10 @@ spec:
             - name: http
               containerPort: 8000
               protocol: TCP
+          {{- with .Values.wps.securityContext }}
+          securityContext:
+{{ toYaml . | indent 12 }}
+          {{- end }}
           {{- with .Values.wps.livenessProbe }}
           livenessProbe:
 {{ toYaml . | indent 12 }}

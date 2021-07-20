@@ -2,7 +2,7 @@ datacube-wps
 ============
 A Helm chart for Datacube WPS on Kubernetes
 
-Current chart version is `0.8.8`
+Current chart version is `0.8.9`
 
 
 
@@ -26,8 +26,10 @@ Current chart version is `0.8.8`
 | ingress.enabled | bool | `false` |  |
 | ingress.prefixes | list | `[]` |  |
 | replicaCount | int | `1` |  |
+| securityContext | object | `{}` |  |
 | service.port | int | `8000` |  |
 | service.type | string | `"NodePort"` |  |
+| serviceAccountName | string | `""` |  |
 | wps.additionalEnvironmentVars | object | `{}` |  |
 | wps.annotations | object | `{}` |  |
 | wps.baseurl | string | `""` |  |
@@ -40,4 +42,5 @@ Current chart version is `0.8.8`
 | wps.readinessProbe | object | `{}` |  |
 | wps.resources.limits.cpu | string | `"2"` |  |
 | wps.resources.limits.memory | string | `"2048Mi"` |  |
+| wps.securityContext | object | `{}` |  |
 | wpsConfig.image | object | `{}` |  |

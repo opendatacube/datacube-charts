@@ -42,5 +42,7 @@ Current chart version is `0.8.9`
 | wps.readinessProbe | object | `{}` |  |
 | wps.resources.limits.cpu | string | `"2"` |  |
 | wps.resources.limits.memory | string | `"2048Mi"` |  |
+| wps.resources.requests.cpu | int | `1` |  |
+| wps.resources.requests.memory | string | `"2048Mi"` |  |
 | wps.securityContext | object | `{}` |  |
 | wpsConfig.image | object | `{}` |  |

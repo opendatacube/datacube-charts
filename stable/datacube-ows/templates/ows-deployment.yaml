@@ -17,6 +17,11 @@ spec:
 {{- if .Values.serviceAccount.enabled }}
   serviceAccountName: {{ .Values.serviceAccount.name }}
 {{- end }}
+
+{{- with .Values.securityContext }}
+   securityContext:
+{{ toYaml . | indent 6 }}
+      {{- end }}
   selector:
     matchLabels:
       app: {{ template "datacube-ows.name" . }}
@@ -58,6 +63,10 @@ spec:
           name: ows-config-volume
 {{- if .Values.owsConfig.subpath }}
           subPath: {{ .Values.owsConfig.subpath }}
+        {{- with .Values.owsConfig.securityContext }}
+        securityContext:
+{{ toYaml . | indent 12 }}
+        {{- end }}
 {{- end }}
 {{- end }}
       containers:
@@ -128,6 +137,10 @@ spec:
         - containerPort: 8000
         resources:
 {{ toYaml .Values.ows.resources | indent 10 }}
+          {{- with .Values.ows.securityContext }}
+        securityContext:
+{{ toYaml . | indent 10 }}
+          {{- end }}
         {{- with .Values.ows.livenessProbe }}
         livenessProbe:
 {{ toYaml . | indent 10 }}

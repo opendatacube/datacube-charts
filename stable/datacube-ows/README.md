@@ -47,12 +47,14 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | ows.readinessProbe | object | `{}` |  |
 | ows.resources.limits.cpu | string | `"1"` |  |
 | ows.resources.limits.memory | string | `"2048Mi"` |  |
+| ows.securityContext | object | `{}` |  |
 | ows.startupProbe | object | `{}` |  |
 | ows.targetCpu | int | `10` |  |
 | owsConfig.image.pullPolicy | string | `"Always"` |  |
 | owsConfig.image.registry | string | `"docker.io"` |  |
 | owsConfig.image.repository | string | `"geoscienceaustralia/dea-datakube-config"` |  |
 | owsConfig.image.tag | string | `"latest"` |  |
+| owsConfig.securityContext | object | `{}` |  |
 | profiling.enabled | bool | `true` |  |
 | profiling.path | string | `"/opt/profiling/"` |  |
 | prometheus.enabled | bool | `false` |  |

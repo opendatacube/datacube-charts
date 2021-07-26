@@ -40,12 +40,14 @@ ows:
   livenessProbe: {}
   readinessProbe: {}
   startupProbe: {}
+  securityContext: {}
 owsConfig:
   image:
     registry: docker.io
     repository: geoscienceaustralia/dea-datakube-config
     tag: latest
     pullPolicy: Always
+  securityContext: {}
 
 pyspy:
   image: {}

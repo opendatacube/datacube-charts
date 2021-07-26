@@ -2,7 +2,7 @@ datacube-ows
 ============
 Datacube Web Map Service
 
-Current chart version is `0.18.14`
+Current chart version is `0.18.15`
 
 Source code can be found [here](https://www.opendatacube.org/documentation)
 
@@ -59,4 +59,5 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | prometheus.path | string | `"/opt/prometheus/"` |  |
 | pyspy.image | object | `{}` |  |
 | service.type | string | `"NodePort"` |  |
+| serviceAccount | object | `{}` |  |
 | tolerations | object | `{}` |  |

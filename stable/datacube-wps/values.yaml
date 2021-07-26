@@ -8,6 +8,8 @@ image:
   tag: 'latest'
   pullPolicy: Always
 
+serviceAccountName: ""
+securityContext: {}
 database:
   database: datacube
   host: localhost
@@ -24,11 +26,15 @@ wps:
   baseurl: ""
   enabled: true
   resources:
+    requests:
+      cpu: 1
+      memory: 2048Mi
     limits:
       cpu: "2"
       memory: 2048Mi
   annotations: { }
   additionalEnvironmentVars: { }
+  securityContext: {}
   livenessProbe:
     exec:
       command:

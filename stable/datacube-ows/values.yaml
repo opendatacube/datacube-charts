@@ -3,6 +3,7 @@
 # Declare variables to be passed into your templates.
 minReplicas: 1
 maxReplicas: 2
+serviceAccount: {}
 
 clusterInfo:
   envName: dev

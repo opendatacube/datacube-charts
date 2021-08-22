@@ -14,14 +14,6 @@ spec:
 {{- if not .Values.ows.autoscaling }}
   replicas: {{ .Values.minReplicas }}
 {{- end }}
-{{- if .Values.serviceAccount.enabled }}
-  serviceAccountName: {{ .Values.serviceAccount.name }}
-{{- end }}
-
-{{- with .Values.securityContext }}
-   securityContext:
-{{ toYaml . | indent 6 }}
-      {{- end }}
   selector:
     matchLabels:
       app: {{ template "datacube-ows.name" . }}
@@ -38,6 +30,13 @@ spec:
       annotations:
 {{ toYaml .Values.ows.annotations | indent 8 }}
     spec:
+{{- with .Values.securityContext }}
+      securityContext:
+{{ toYaml . | indent 8 }}
+{{- end }}
+{{- if .Values.serviceAccount.enabled }}
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+{{- end }}
 {{- if .Values.pyspy.image }}
       # When process namespace sharing is enabled, processes in a container are visible to all other containers in that pod.
       shareProcessNamespace: true

@@ -61,5 +61,21 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | prometheus.path | string | `"/opt/prometheus/"` |  |
 | pyspy.image | object | `{}` |  |
 | service.type | string | `"NodePort"` |  |
-| serviceAccount | object | `{}` |  |
+| serviceAccount | object | `{}` | See configuration below |
 | tolerations | object | `{}` |  |
+
+
+## Service Account configuration
+To configure for AWS IAM Roles for Service Accounts you need to specify an annotation for the service account creation (`enabled: True`) or supply an existing service account (`enabled: False`).
+
+In the example below replace the two variables `${...}` with your clusters values.
+
+```
+serviceAccount:
+  enabled: True
+  name: ${service_account_name}
+  annotations:
+    eks.amazonaws.com/role-arn: ${service_account_role_arn}
+securityContext:
+  fsGroup: 65534 # For datacube-ows to read Kubernetes and AWS token files
+```

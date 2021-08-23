@@ -4,6 +4,15 @@
 minReplicas: 1
 maxReplicas: 2
 serviceAccount: {}
+# If using IRSA the service account can be configured by replacing the ${...} variables with your deployments values
+# serviceAccount:
+#   enabled: True
+#   name: ${service_account_name}
+#   annotations:
+#     eks.amazonaws.com/role-arn: ${service_account_role_arn}
+# securityContext:
+#   fsGroup: 65534 # For datacube-ows to read Kubernetes and AWS token files
+
 
 clusterInfo:
   envName: dev

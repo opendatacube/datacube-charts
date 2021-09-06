@@ -52,6 +52,7 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | replicaCount | int | `1` |  |
 | resources.limits.cpu | string | `"300m"` |  |
 | resources.limits.memory | string | `"1024Mi"` |  |
+| serviceAccountName | string | `""` |  |
 | service.port | int | `80` |  |
 | service.type | string | `"NodePort"` |  |
 | updateCreationDt.backoffLimit | int | `0` |  |

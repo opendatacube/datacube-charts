@@ -54,6 +54,7 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | resources.limits.memory | string | `"1024Mi"` |  |
 | service.port | int | `80` |  |
 | service.type | string | `"NodePort"` |  |
+| serviceAccountName | string | `nil` |  |
 | updateCreationDt.backoffLimit | int | `0` |  |
 | updateCreationDt.concurrencyPolicy | string | `"Allow"` |  |
 | updateCreationDt.cron | string | `"0 13 * * *"` |  |

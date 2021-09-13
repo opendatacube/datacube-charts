@@ -3,6 +3,17 @@
 # Declare variables to be passed into your templates.
 minReplicas: 1
 maxReplicas: 2
+# serviceAccount -- See configuration below
+serviceAccount: {}
+# If using IRSA the service account can be configured by replacing the ${...} variables with your deployments values
+# serviceAccount:
+#   enabled: True
+#   name: ${service_account_name}
+#   annotations:
+#     eks.amazonaws.com/role-arn: ${service_account_role_arn}
+# securityContext:
+#   fsGroup: 65534 # For datacube-ows to read Kubernetes and AWS token files
+
 
 clusterInfo:
   envName: dev
@@ -39,12 +50,16 @@ ows:
   livenessProbe: {}
   readinessProbe: {}
   startupProbe: {}
+  # ows.securityContext -- Deployment level security context
+  securityContext: {}
 owsConfig:
   image:
     registry: docker.io
     repository: geoscienceaustralia/dea-datakube-config
     tag: latest
     pullPolicy: Always
+  # owsConfig.securityContext -- Container level security context
+  securityContext: {}
 
 pyspy:
   image: {}

@@ -31,6 +31,9 @@ spec:
       dnsConfig:
         options:
           - name: single-request-reopen
+      {{- if .Values.serviceAccountName }}
+      serviceAccountName: {{ .Values.serviceAccountName }}
+      {{- end }}
       terminationGracePeriodSeconds: 30
       containers:
         - name: {{ .Chart.Name }}

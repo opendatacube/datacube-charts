@@ -2,11 +2,9 @@ datacube-ows
 ============
 Datacube Web Map Service
 
-Current chart version is `0.18.14`
+Current chart version is `0.18.15`
 
 Source code can be found [here](https://www.opendatacube.org/documentation)
-
-
 
 ## Chart Values
 
@@ -47,16 +45,36 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | ows.readinessProbe | object | `{}` |  |
 | ows.resources.limits.cpu | string | `"1"` |  |
 | ows.resources.limits.memory | string | `"2048Mi"` |  |
+| ows.securityContext | object | `{}` | Deployment level security context |
 | ows.startupProbe | object | `{}` |  |
 | ows.targetCpu | int | `10` |  |
 | owsConfig.image.pullPolicy | string | `"Always"` |  |
 | owsConfig.image.registry | string | `"docker.io"` |  |
 | owsConfig.image.repository | string | `"geoscienceaustralia/dea-datakube-config"` |  |
 | owsConfig.image.tag | string | `"latest"` |  |
+| owsConfig.securityContext | object | `{}` | Container level security context |
 | profiling.enabled | bool | `true` |  |
 | profiling.path | string | `"/opt/profiling/"` |  |
 | prometheus.enabled | bool | `false` |  |
 | prometheus.path | string | `"/opt/prometheus/"` |  |
 | pyspy.image | object | `{}` |  |
 | service.type | string | `"NodePort"` |  |
+| serviceAccount | object | `{}` | See configuration below |
 | tolerations | object | `{}` |  |
+
+
+
+## Service Account configuration
+To configure for AWS IAM Roles for Service Accounts you need to specify an annotation for the service account creation (`enabled: True`) or supply an existing service account (`enabled: False`).
+
+In the example below replace the two variables `${...}` with your clusters values.
+
+```
+serviceAccount:
+  enabled: True
+  name: ${service_account_name}
+  annotations:
+    eks.amazonaws.com/role-arn: ${service_account_role_arn}
+securityContext:
+  fsGroup: 65534 # For datacube-ows to read Kubernetes and AWS token files
+```

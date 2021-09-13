@@ -30,6 +30,13 @@ spec:
       annotations:
 {{ toYaml .Values.ows.annotations | indent 8 }}
     spec:
+{{- with .Values.securityContext }}
+      securityContext:
+{{ toYaml . | indent 8 }}
+{{- end }}
+{{- if .Values.serviceAccount.enabled }}
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+{{- end }}
 {{- if .Values.pyspy.image }}
       # When process namespace sharing is enabled, processes in a container are visible to all other containers in that pod.
       shareProcessNamespace: true
@@ -55,6 +62,10 @@ spec:
           name: ows-config-volume
 {{- if .Values.owsConfig.subpath }}
           subPath: {{ .Values.owsConfig.subpath }}
+        {{- with .Values.owsConfig.securityContext }}
+        securityContext:
+{{ toYaml . | indent 12 }}
+        {{- end }}
 {{- end }}
 {{- end }}
       containers:
@@ -125,6 +136,10 @@ spec:
         - containerPort: 8000
         resources:
 {{ toYaml .Values.ows.resources | indent 10 }}
+          {{- with .Values.ows.securityContext }}
+        securityContext:
+{{ toYaml . | indent 10 }}
+          {{- end }}
         {{- with .Values.ows.livenessProbe }}
         livenessProbe:
 {{ toYaml . | indent 10 }}

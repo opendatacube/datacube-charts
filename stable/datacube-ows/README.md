@@ -6,8 +6,6 @@ Current chart version is `0.18.15`
 
 Source code can be found [here](https://www.opendatacube.org/documentation)
 
-
-
 ## Chart Values
 
 | Key | Type | Default | Description |
@@ -61,8 +59,9 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | prometheus.path | string | `"/opt/prometheus/"` |  |
 | pyspy.image | object | `{}` |  |
 | service.type | string | `"NodePort"` |  |
-| serviceAccount | object | `{}` | See configuration below |
+| serviceAccount | object | `{}` |  |
 | tolerations | object | `{}` |  |
+
 
 
 ## Service Account configuration

@@ -3,6 +3,7 @@
 # Declare variables to be passed into your templates.
 minReplicas: 1
 maxReplicas: 2
+# -- See configuration below
 serviceAccount: {}
 # If using IRSA the service account can be configured by replacing the ${...} variables with your deployments values
 # serviceAccount:

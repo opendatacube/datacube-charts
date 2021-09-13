@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 minReplicas: 1
 maxReplicas: 2
-# -- See configuration below
+# serviceAccount -- See configuration below
 serviceAccount: {}
 # If using IRSA the service account can be configured by replacing the ${...} variables with your deployments values
 # serviceAccount:
@@ -50,6 +50,7 @@ ows:
   livenessProbe: {}
   readinessProbe: {}
   startupProbe: {}
+  # ows.securityContext -- Deployment level security context
   securityContext: {}
 owsConfig:
   image:
@@ -57,6 +58,7 @@ owsConfig:
     repository: geoscienceaustralia/dea-datakube-config
     tag: latest
     pullPolicy: Always
+  # owsConfig.securityContext -- Container level security context
   securityContext: {}
 
 pyspy:

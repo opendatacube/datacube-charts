@@ -35,14 +35,7 @@ wps:
   annotations: { }
   additionalEnvironmentVars: { }
   securityContext: {}
-  livenessProbe:
-    exec:
-      command:
-      - "/bin/sh"
-      - "-c"
-      - "curl --silent 'http://localhost:8000/?service=WPS&request=GetCapabilities&version=1.0.0'"
-    initialDelaySeconds: 30
-    periodSeconds: 30
+  livenessProbe: {}
   readinessProbe: {}
 wpsConfig:
   image: { }

@@ -2,4 +2,12 @@ apiVersion: v2
 appVersion: alpha
 description: A Helm chart for Datacube WPS on Kubernetes
 name: datacube-wps
-version: 0.8.9
+version: 0.8.10
+home: https://www.opendatacube.org/documentation
+# icon:
+sources:
+- https://github.com/opendatacube/datacube-core
+- https://github.com/opendatacube/datacube-wps
+maintainers:
+- name: Ben Lewis
+  email: ben.lewis@ga.gov.au

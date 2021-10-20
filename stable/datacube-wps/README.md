@@ -34,11 +34,7 @@ Current chart version is `0.8.9`
 | wps.annotations | object | `{}` |  |
 | wps.baseurl | string | `""` |  |
 | wps.enabled | bool | `true` |  |
-| wps.livenessProbe.exec.command[0] | string | `"/bin/sh"` |  |
-| wps.livenessProbe.exec.command[1] | string | `"-c"` |  |
-| wps.livenessProbe.exec.command[2] | string | `"curl --silent 'http://localhost:8000/?service=WPS&request=GetCapabilities&version=1.0.0'"` |  |
-| wps.livenessProbe.initialDelaySeconds | int | `30` |  |
-| wps.livenessProbe.periodSeconds | int | `30` |  |
+| wps.livenessProbe | object | `{}` |  |
 | wps.readinessProbe | object | `{}` |  |
 | wps.resources.limits.cpu | string | `"2"` |  |
 | wps.resources.limits.memory | string | `"2048Mi"` |  |

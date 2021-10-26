@@ -49,12 +49,15 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | ingress.enabled | bool | `false` |  |
 | ingress.hosts[0] | string | `""` |  |
 | ingress.path | string | `"/*"` |  |
+| livenessProbe | object | `{}` |  |
+| readinessProbe | object | `{}` |  |
 | replicaCount | int | `1` |  |
 | resources.limits.cpu | string | `"300m"` |  |
 | resources.limits.memory | string | `"1024Mi"` |  |
 | service.port | int | `80` |  |
 | service.type | string | `"NodePort"` |  |
 | serviceAccountName | string | `nil` |  |
+| startupProbe | object | `{}` |  |
 | updateCreationDt.backoffLimit | int | `0` |  |
 | updateCreationDt.concurrencyPolicy | string | `"Allow"` |  |
 | updateCreationDt.cron | string | `"0 13 * * *"` |  |

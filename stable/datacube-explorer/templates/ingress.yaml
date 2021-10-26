@@ -3,7 +3,38 @@
 {{- $ingressPath := .Values.ingress.path -}}
 {{- $ingressRedirect := .Values.ingress.redirect -}}
 {{- $servicePort := .Values.service.port -}}
+
+{{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1" }}
 apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ $fullName }}
+  labels:
+    app: {{ .Release.Name }}
+    app.kubernetes.io/name: {{ include "datacube-explorer.name" . }}
+    helm.sh/chart: {{ include "datacube-explorer.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- with .Values.ingress.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+spec:
+  rules:
+    {{- range .Values.ingress.hosts }}
+    - host: {{ . | quote }}
+      http:
+        paths:
+          - path: {{ $ingressPath }}
+            pathType: ImplementationSpecific
+            service:
+              backend:
+                name: {{ $fullName }}
+                port:
+                  number: {{ $servicePort }}
+    {{- end }}
+{{- else if .Capabilities.APIVersions.Has "networking.k8s.io/v1beta1" }}
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: {{ $fullName }}
@@ -25,21 +56,14 @@ spec:
     - host: {{ . | quote }}
       http:
         paths:
-          - path: /
-            pathType: Prefix
+          - path: /*
             backend:
-              service:
-                name: {{ $redirectActionName }}
-                port:
-                  number: use-annotation
+              serviceName: {{ $redirectActionName }}
+              servicePort: use-annotation
           - path: {{ $ingressPath }}
-            pathType: ImplementationSpecific
             backend:
-              service:
-                name: {{ $fullName }}
-                port:
-                  number: {{ $servicePort }}
-
+              serviceName: {{ $fullName }}
+              servicePort: {{ $servicePort }}
     {{- end }}
     {{- else }}
     {{- range .Values.ingress.hosts }}
@@ -47,12 +71,10 @@ spec:
       http:
         paths:
           - path: {{ $ingressPath }}
-            pathType: ImplementationSpecific
-            service:
-              backend:
-                name: {{ $fullName }}
-                port:
-                  number: {{ $servicePort }}
+            backend:
+              serviceName: {{ $fullName }}
+              servicePort: {{ $servicePort }}
     {{- end }}
     {{- end }}
+{{- end }}
 {{- end }}

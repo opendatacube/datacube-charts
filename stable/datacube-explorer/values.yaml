@@ -22,6 +22,10 @@ resources:
 
 annotations: {}
 
+livenessProbe: {}
+readinessProbe: {}
+startupProbe: {}
+
 additionalEnvironmentVars: {}
 
 service:

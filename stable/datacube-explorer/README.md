@@ -2,7 +2,7 @@ datacube-explorer
 =================
 A Helm chart for Datacube Explorer
 
-Current chart version is `0.5.26`
+Current chart version is `0.5.27`
 
 Source code can be found [here](https://www.opendatacube.org/documentation)
 

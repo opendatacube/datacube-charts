@@ -58,9 +58,7 @@ affinity: {}
 
 ingress:
   enabled: false
-  path: "/*"
-  pathType: Prefix
+  path: "/"
   hosts:
     - ""
   annotations:
-    kubernetes.io/ingress.class: alb

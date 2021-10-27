@@ -44,11 +44,10 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | image.registry | string | `"docker.io"` |  |
 | image.repository | string | `"opendatacube/explorer"` |  |
 | image.tag | string | `"latest"` |  |
-| ingress.annotations."kubernetes.io/ingress.class" | string | `"alb"` |  |
+| ingress.annotations | string | `nil` |  |
 | ingress.enabled | bool | `false` |  |
 | ingress.hosts[0] | string | `""` |  |
-| ingress.path | string | `"/*"` |  |
-| ingress.pathType | string | `"Prefix"` |  |
+| ingress.path | string | `"/"` |  |
 | livenessProbe | object | `{}` |  |
 | readinessProbe | object | `{}` |  |
 | replicaCount | int | `1` |  |

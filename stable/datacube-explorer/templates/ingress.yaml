@@ -2,7 +2,7 @@
 {{- $fullName := include "datacube-explorer.fullname" . -}}
 {{- $ingressPath := .Values.ingress.path -}}
 {{- $ingressRedirect := .Values.ingress.redirect -}}
-{{- $ingresspathType := .Values.ingress.redirect -}}
+{{- $ingressPathType := .Values.ingress.pathType -}}
 {{- $servicePort := .Values.service.port -}}
 
 {{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
@@ -27,7 +27,7 @@ spec:
       http:
         paths:
           - path: {{ $ingressPath }}
-            pathType: {{ $ingresspathType }}
+            pathType: Prefix
             backend:
               service:
                 name: {{ $fullName }}

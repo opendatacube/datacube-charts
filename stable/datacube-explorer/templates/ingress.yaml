@@ -52,14 +52,13 @@ metadata:
 spec:
   rules:
     {{- if $ingressRedirect -}}
-    {{- $redirectActionName := .Values.ingress.action -}}
     {{- range .Values.ingress.hosts }}
     - host: {{ . | quote }}
       http:
         paths:
           - path: /*
             backend:
-              serviceName: {{ $redirectActionName }}
+              serviceName: ssl-redirect
               servicePort: use-annotation
           - path: {{ $ingressPath }}
             backend:

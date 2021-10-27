@@ -16,7 +16,6 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | additionalSettings | object | `{}` |  |
 | affinity | object | `{}` |  |
 | annotations | object | `{}` |  |
-| containerPort | int | `8080` |  |
 | database.database | string | `"datacube"` |  |
 | database.existingSecret | string | `""` |  |
 | database.host | string | `"localhost"` |  |
@@ -49,15 +48,17 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | ingress.enabled | bool | `false` |  |
 | ingress.hosts[0] | string | `""` |  |
 | ingress.path | string | `"/*"` |  |
+| ingress.pathType | string | `"Prefix"` |  |
 | livenessProbe | object | `{}` |  |
 | readinessProbe | object | `{}` |  |
 | replicaCount | int | `1` |  |
 | resources.limits.cpu | string | `"300m"` |  |
 | resources.limits.memory | string | `"1024Mi"` |  |
 | service.port | int | `80` |  |
-| service.type | string | `"NodePort"` |  |
+| service.targetPort | int | `8080` |  |
+| service.type | string | `"ClusterIP"` |  |
 | serviceAccountName | string | `nil` |  |
-| startupProbe | object | `{}` |  |
+| startupProbe | string | `nil` |  |
 | updateCreationDt.backoffLimit | int | `0` |  |
 | updateCreationDt.concurrencyPolicy | string | `"Allow"` |  |
 | updateCreationDt.cron | string | `"0 13 * * *"` |  |

@@ -92,3 +92,4 @@ ingress:
     - ""
   path: "/"
   redirect: false
+  annotations: {}

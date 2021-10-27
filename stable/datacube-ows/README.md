@@ -17,7 +17,9 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | database.host | string | `"localhost"` |  |
 | database.port | int | `5432` |  |
 | ingress.enabled | bool | `false` |  |
-| ingress.host | string | `nil` |  |
+| ingress.hosts[0] | string | `""` |  |
+| ingress.path | string | `"/"` |  |
+| ingress.redirect | bool | `false` |  |
 | maxReplicas | int | `2` |  |
 | minReplicas | int | `1` |  |
 | ows.annotations."iam.amazonaws.com/role" | string | `"kubernetes-wms"` |  |

@@ -88,4 +88,7 @@ ingress:
   ## Enable Ingress.
   ##
   enabled: false
-  host:
+  hosts:
+    - ""
+  path: "/"
+  redirect: false

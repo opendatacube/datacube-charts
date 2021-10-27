@@ -2,7 +2,7 @@ datacube-explorer
 =================
 A Helm chart for Datacube Explorer
 
-Current chart version is `0.5.27`
+Current chart version is `0.5.28`
 
 Source code can be found [here](https://www.opendatacube.org/documentation)
 
@@ -45,7 +45,7 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | image.registry | string | `"docker.io"` |  |
 | image.repository | string | `"opendatacube/explorer"` |  |
 | image.tag | string | `"latest"` |  |
-| ingress.annotations | string | `nil` |  |
+| ingress.annotations | object | `{}` |  |
 | ingress.enabled | bool | `false` |  |
 | ingress.hosts[0] | string | `""` |  |
 | ingress.path | string | `"/"` |  |

@@ -62,4 +62,4 @@ ingress:
   path: "/"
   hosts:
     - ""
-  annotations:
+  annotations: {}

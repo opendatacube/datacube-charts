@@ -2,7 +2,7 @@ datacube-ows
 ============
 Datacube Web Map Service
 
-Current chart version is `0.18.15`
+Current chart version is `0.18.16`
 
 Source code can be found [here](https://www.opendatacube.org/documentation)
 
@@ -16,8 +16,11 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | database.existingSecret | string | `nil` |  |
 | database.host | string | `"localhost"` |  |
 | database.port | int | `5432` |  |
+| ingress.annotations | object | `{}` |  |
 | ingress.enabled | bool | `false` |  |
-| ingress.host | string | `nil` |  |
+| ingress.hosts[0] | string | `""` |  |
+| ingress.path | string | `"/"` |  |
+| ingress.redirect | bool | `false` |  |
 | maxReplicas | int | `2` |  |
 | minReplicas | int | `1` |  |
 | ows.annotations."iam.amazonaws.com/role" | string | `"kubernetes-wms"` |  |

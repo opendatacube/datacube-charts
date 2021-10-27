@@ -1,7 +1,7 @@
 apiVersion: v1
 description: A Helm chart for Datacube Explorer
 name: datacube-explorer
-version: 0.5.27
+version: 0.5.28
 keywords:
 - datacube
 - http
@@ -11,5 +11,5 @@ keywords:
 - stac
 home: https://www.opendatacube.org/documentation
 maintainers:
- - name: Tisham Dhar
-   email: tisham.dhar@ga.gov.au
+ - name: DEA Teams
+   email: deacloudteam@ga.gov.au

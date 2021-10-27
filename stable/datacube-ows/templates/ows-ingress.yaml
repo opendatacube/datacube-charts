@@ -2,40 +2,100 @@
 {{- if .Values.ingress.enabled }}
 # Workaround for using template in range
 # https://github.com/helm/helm/issues/3684#issuecomment-427932707
+{{- $fullName := include "datacube-ows.fullname" . -}}
 {{- $dot := . }}
-{{- $servicePort := .Values.ows.externalPort }}
-apiVersion: networking.k8s.io/v1beta1
+{{- $externalPort := .Values.ows.externalPort }}
+{{- $ingressPath := .Values.ingress.path -}}
+{{- $ingressRedirect := .Values.ingress.redirect -}}
+
+{{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ template "datacube-ows.fullname" . }}
+  name: {{ $fullName }}
   labels:
     app: {{ template "datacube-ows.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+
+{{- with .Values.ingress.annotations }}
   annotations:
-{{ toYaml .Values.ingress.annotations | indent 4 }}
+{{ toYaml . | indent 4 }}
+{{- end }}
+
 spec:
   rules:
-{{- range $hostPrefix := .Values.ingress.hostPrefix }}
-    - host: "{{ $hostPrefix }}.{{ .Values.ingress.domain }}"
+    {{- range .Values.ingress.hosts }}
+    - host: {{ . | quote }}
       http:
         paths:
-          - backend:
-              serviceName: {{ template "datacube-ows.fullname" $dot }}
-              servicePort: {{ $servicePort }}
-{{- end -}}
-{{- range $host := .Values.ingress.hosts }}
-    - host: {{ $host }}
-      http:
-        paths:
-          - backend:
-              serviceName: {{ template "datacube-ows.fullname" $dot }}
-              servicePort: {{ $servicePort }}
-{{- end -}}
+          - path: {{ $ingressPath }}
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $fullName }}
+                port:
+                  number: {{ $externalPort }}
+    {{- end }}
+
 {{- if .Values.ingress.tls }}
   tls:
 {{ toYaml .Values.ingress.tls | indent 4 }}
+{{- end }}
+
+{{- else if .Capabilities.APIVersions.Has "networking.k8s.io/v1beta1/Ingress" }}
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: {{ $fullName }}
+  labels:
+    app: {{ template "datacube-ows.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+
+{{- with .Values.ingress.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+
+spec:
+  rules:
+    {{- if $ingressRedirect -}}
+
+    {{- range .Values.ingress.hosts }}
+    - host: {{ . | quote }}
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: ssl-redirect
+              servicePort: use-annotation
+          - path: {{ $ingressPath }}
+            backend:
+              serviceName: {{ $fullName }}
+              servicePort: {{ $externalPort }}
+    {{- end }}
+
+    {{- else }}
+    {{- range .Values.ingress.hosts }}
+    - host: {{ . | quote }}
+      http:
+        paths:
+          - path: {{ $ingressPath }}
+            backend:
+              serviceName: {{ $fullName }}
+              servicePort: {{ $externalPort }}
+    {{- end }}
+
+    {{- end }}
+
+{{- if .Values.ingress.tls }}
+  tls:
+{{ toYaml .Values.ingress.tls | indent 4 }}
+{{- end }}
+
 {{- end }}
 {{- end }}
 {{- end }}

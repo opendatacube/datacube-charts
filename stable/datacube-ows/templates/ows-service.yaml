@@ -8,8 +8,10 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
   name: {{ template "datacube-ows.fullname" . }}
+{{- with .Values.service.annotations }}
   annotations:
-{{ toYaml .Values.service.annotations | indent 4 }}
+{{ toYaml . | indent 4 }}
+{{- end }}
 spec:
   type: {{ .Values.service.type }}
   ports:

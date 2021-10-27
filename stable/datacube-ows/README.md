@@ -1,12 +1,12 @@
-# datacube-ows
-
+datacube-ows
+============
 Datacube Web Map Service
 
 Current chart version is `0.18.16`
 
 Source code can be found [here](https://www.opendatacube.org/documentation)
 
-## Values
+## Chart Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -64,6 +64,8 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | service.type | string | `"NodePort"` |  |
 | serviceAccount | object | `{}` | See configuration below |
 | tolerations | object | `{}` |  |
+
+
 
 ## Service Account configuration
 To configure for AWS IAM Roles for Service Accounts you need to specify an annotation for the service account creation (`enabled: True`) or supply an existing service account (`enabled: False`).

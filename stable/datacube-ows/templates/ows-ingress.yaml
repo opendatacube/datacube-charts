@@ -2,6 +2,7 @@
 {{- if .Values.ingress.enabled }}
 # Workaround for using template in range
 # https://github.com/helm/helm/issues/3684#issuecomment-427932707
+{{- $fullName := include "datacube-ows.fullname" . -}}
 {{- $dot := . }}
 {{- $externalPort := .Values.ows.externalPort }}
 {{- $ingressPath := .Values.ingress.path -}}

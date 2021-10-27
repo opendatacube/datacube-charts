@@ -18,10 +18,12 @@ metadata:
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+
 {{- with .Values.ingress.annotations }}
   annotations:
 {{ toYaml . | indent 4 }}
 {{- end }}
+
 spec:
   rules:
     {{- range .Values.ingress.hosts }}
@@ -36,6 +38,12 @@ spec:
                 port:
                   number: {{ $externalPort }}
     {{- end }}
+
+{{- if .Values.ingress.tls }}
+  tls:
+{{ toYaml .Values.ingress.tls | indent 4 }}
+{{- end }}
+
 {{- else if .Capabilities.APIVersions.Has "networking.k8s.io/v1beta1/Ingress" }}
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
@@ -46,13 +54,16 @@ metadata:
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+
 {{- with .Values.ingress.annotations }}
   annotations:
 {{ toYaml . | indent 4 }}
 {{- end }}
+
 spec:
   rules:
     {{- if $ingressRedirect -}}
+
     {{- range .Values.ingress.hosts }}
     - host: {{ . | quote }}
       http:
@@ -66,6 +77,7 @@ spec:
               serviceName: {{ $fullName }}
               servicePort: {{ $externalPort }}
     {{- end }}
+
     {{- else }}
     {{- range .Values.ingress.hosts }}
     - host: {{ . | quote }}
@@ -76,11 +88,14 @@ spec:
               serviceName: {{ $fullName }}
               servicePort: {{ $externalPort }}
     {{- end }}
+
     {{- end }}
+
 {{- if .Values.ingress.tls }}
   tls:
 {{ toYaml .Values.ingress.tls | indent 4 }}
 {{- end }}
+
 {{- end }}
 {{- end }}
 {{- end }}

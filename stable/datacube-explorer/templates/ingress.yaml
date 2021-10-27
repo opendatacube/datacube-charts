@@ -27,8 +27,8 @@ spec:
         paths:
           - path: {{ $ingressPath }}
             pathType: ImplementationSpecific
-            service:
-              backend:
+            backend:
+              service:
                 name: {{ $fullName }}
                 port:
                   number: {{ $servicePort }}

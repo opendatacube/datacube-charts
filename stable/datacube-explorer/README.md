@@ -2,7 +2,7 @@ datacube-explorer
 =================
 A Helm chart for Datacube Explorer
 
-Current chart version is `0.5.26`
+Current chart version is `0.5.27`
 
 Source code can be found [here](https://www.opendatacube.org/documentation)
 
@@ -16,7 +16,6 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | additionalSettings | object | `{}` |  |
 | affinity | object | `{}` |  |
 | annotations | object | `{}` |  |
-| containerPort | int | `8080` |  |
 | database.database | string | `"datacube"` |  |
 | database.existingSecret | string | `""` |  |
 | database.host | string | `"localhost"` |  |
@@ -41,20 +40,24 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | dockerArgs[7] | string | `"gthread"` |  |
 | dockerArgs[8] | string | `"-t"` |  |
 | dockerArgs[9] | string | `"60"` |  |
+| externalPort | int | `80` |  |
 | image.pullPolicy | string | `"Always"` |  |
 | image.registry | string | `"docker.io"` |  |
 | image.repository | string | `"opendatacube/explorer"` |  |
 | image.tag | string | `"latest"` |  |
-| ingress.annotations."kubernetes.io/ingress.class" | string | `"alb"` |  |
+| ingress.annotations | string | `nil` |  |
 | ingress.enabled | bool | `false` |  |
 | ingress.hosts[0] | string | `""` |  |
-| ingress.path | string | `"/*"` |  |
+| ingress.path | string | `"/"` |  |
+| internalPort | int | `8080` |  |
+| livenessProbe | object | `{}` |  |
+| readinessProbe | object | `{}` |  |
 | replicaCount | int | `1` |  |
 | resources.limits.cpu | string | `"300m"` |  |
 | resources.limits.memory | string | `"1024Mi"` |  |
-| service.port | int | `80` |  |
-| service.type | string | `"NodePort"` |  |
+| service.type | string | `"ClusterIP"` |  |
 | serviceAccountName | string | `nil` |  |
+| startupProbe | string | `nil` |  |
 | updateCreationDt.backoffLimit | int | `0` |  |
 | updateCreationDt.concurrencyPolicy | string | `"Allow"` |  |
 | updateCreationDt.cron | string | `"0 13 * * *"` |  |

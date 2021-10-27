@@ -2,7 +2,39 @@
 {{- $fullName := include "datacube-explorer.fullname" . -}}
 {{- $ingressPath := .Values.ingress.path -}}
 {{- $ingressRedirect := .Values.ingress.redirect -}}
-{{- $servicePort := .Values.service.port -}}
+{{- $ingressPathType := .Values.ingress.pathType -}}
+{{- $externalPort := .Values.externalPort -}}
+
+{{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ $fullName }}
+  labels:
+    app: {{ .Release.Name }}
+    app.kubernetes.io/name: {{ include "datacube-explorer.name" . }}
+    helm.sh/chart: {{ include "datacube-explorer.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- with .Values.ingress.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+spec:
+  rules:
+    {{- range .Values.ingress.hosts }}
+    - host: {{ . | quote }}
+      http:
+        paths:
+          - path: {{ $ingressPath }}
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $fullName }}
+                port:
+                  number: {{ $externalPort }}
+    {{- end }}
+{{- else if .Capabilities.APIVersions.Has "networking.k8s.io/v1beta1/Ingress" }}
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
@@ -32,7 +64,7 @@ spec:
           - path: {{ $ingressPath }}
             backend:
               serviceName: {{ $fullName }}
-              servicePort: {{ $servicePort }}
+              servicePort: {{ $externalPort }}
     {{- end }}
     {{- else }}
     {{- range .Values.ingress.hosts }}
@@ -42,7 +74,8 @@ spec:
           - path: {{ $ingressPath }}
             backend:
               serviceName: {{ $fullName }}
-              servicePort: {{ $servicePort }}
+              servicePort: {{ $externalPort }}
     {{- end }}
     {{- end }}
+{{- end }}
 {{- end }}

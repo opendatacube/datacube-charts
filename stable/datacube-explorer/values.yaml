@@ -22,12 +22,17 @@ resources:
 
 annotations: {}
 
+livenessProbe: {}
+readinessProbe: {}
+startupProbe:
+
 additionalEnvironmentVars: {}
 
 service:
-  type: NodePort
-  port: 80
-containerPort: 8080 # Internal port on which pod is running and serving cubedash app
+  type: ClusterIP
+
+externalPort: 80 # External port on which service listen to
+internalPort: 8080 # Internal port on which pod is running and serving cubedash app
 
 dockerArgs: ["gunicorn", "-b", "0.0.0.0:8080", "-w", "3", "--threads=2", "-k",
    "gthread", "-t", "60", "--pid", "gunicorn.pid", "--worker-tmp-dir", "/dev/shm",
@@ -54,8 +59,7 @@ affinity: {}
 
 ingress:
   enabled: false
-  path: "/*"
+  path: "/"
   hosts:
     - ""
   annotations:
-    kubernetes.io/ingress.class: alb

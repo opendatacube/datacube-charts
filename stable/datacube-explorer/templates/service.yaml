@@ -13,8 +13,8 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: {{ .Values.containerPort }}
+    - port: {{ .Values.externalPort }}
+      targetPort: {{ .Values.internalPort }}
       protocol: TCP
       name: http
   selector:

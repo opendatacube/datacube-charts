@@ -79,11 +79,13 @@ spec:
           ports:
             # All http services
             - name: http
-              containerPort: {{ .Values.containerPort }}
+              containerPort: {{ .Values.internalPort }}
           livenessProbe:
 {{ toYaml .Values.livenessProbe | indent 12 }}
           readinessProbe:
 {{ toYaml .Values.readinessProbe | indent 12 }}
+          startupProbe:
+{{ toYaml .Values.startupProbe | indent 12 }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}

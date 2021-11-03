@@ -4,9 +4,9 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: 1-{{ $fullName }}
+  name: alpha-ingress
   labels:
-    app.kubernetes.io/name: {{ include "datacube-wps.name" . }}
+    app.kubernetes.io/name: beta-ingress
     helm.sh/chart: {{ include "datacube-wps.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}

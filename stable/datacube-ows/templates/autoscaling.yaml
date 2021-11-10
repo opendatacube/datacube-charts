@@ -1,6 +1,6 @@
 {{- if .Values.ows.enabled }}
-{{- if .Values.ows.autoscaling }}
-apiVersion: autoscaling/v2beta1
+{{- if .Values.ows.hpa.autoscaling }}
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ template "datacube-ows.fullname" . }}
@@ -17,9 +17,7 @@ spec:
   minReplicas: {{ .Values.minReplicas }}
   maxReplicas: {{ .Values.maxReplicas }}
   metrics:
-    - type: Resource
-      resource:
-        name: cpu
-        targetAverageUtilization: {{ .Values.ows.targetCpu }}
+{{ toYaml .Values.ows.hpa.metrics | indent 10 }}
+
 {{- end }}
 {{- end }}

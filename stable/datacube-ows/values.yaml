@@ -42,9 +42,7 @@ ows:
     limits:
       cpu: "1"
       memory: 2048Mi
-  targetCpu: 10
   dockerArgs: [ "gunicorn", "-b", "0.0.0.0:8000", "-w", "4", "--keep-alive", "50", "--timeout", "120", "datacube_wms.wsgi" ]
-  autoscaling: True
   annotations:
     iam.amazonaws.com/role: kubernetes-wms
   livenessProbe: {}
@@ -52,6 +50,9 @@ ows:
   startupProbe: {}
   # ows.securityContext -- Deployment level security context
   securityContext: {}
+  hpa:
+    autoscaling: True
+    metrics: {}
 owsConfig:
   image:
     registry: docker.io

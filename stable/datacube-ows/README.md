@@ -2,7 +2,7 @@ datacube-ows
 ============
 Datacube Web Map Service
 
-Current chart version is `0.18.16`
+Current chart version is `0.18.17`
 
 Source code can be found [here](https://www.opendatacube.org/documentation)
 
@@ -24,7 +24,6 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | maxReplicas | int | `2` |  |
 | minReplicas | int | `1` |  |
 | ows.annotations."iam.amazonaws.com/role" | string | `"kubernetes-wms"` |  |
-| ows.autoscaling | bool | `true` |  |
 | ows.dockerArgs[0] | string | `"gunicorn"` |  |
 | ows.dockerArgs[1] | string | `"-b"` |  |
 | ows.dockerArgs[2] | string | `"0.0.0.0:8000"` |  |
@@ -37,6 +36,8 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | ows.dockerArgs[9] | string | `"datacube_wms.wsgi"` |  |
 | ows.enabled | bool | `true` |  |
 | ows.externalPort | int | `80` |  |
+| ows.hpa.autoscaling | bool | `true` |  |
+| ows.hpa.metrics | object | `{}` |  |
 | ows.image.pullPolicy | string | `"Always"` |  |
 | ows.image.registry | string | `"docker.io"` |  |
 | ows.image.repository | string | `"opendatacube/ows"` |  |
@@ -50,7 +51,6 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | ows.resources.limits.memory | string | `"2048Mi"` |  |
 | ows.securityContext | object | `{}` | Deployment level security context |
 | ows.startupProbe | object | `{}` |  |
-| ows.targetCpu | int | `10` |  |
 | owsConfig.image.pullPolicy | string | `"Always"` |  |
 | owsConfig.image.registry | string | `"docker.io"` |  |
 | owsConfig.image.repository | string | `"geoscienceaustralia/dea-datakube-config"` |  |

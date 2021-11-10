@@ -2,7 +2,7 @@ datacube-ows
 ============
 Datacube Web Map Service
 
-Current chart version is `0.18.17`
+Current chart version is `0.18.18`
 
 Source code can be found [here](https://www.opendatacube.org/documentation)
 

@@ -16,8 +16,10 @@ spec:
     name: "{{ template "datacube-ows.fullname" . }}-{{ .Values.clusterInfo.envName }}"
   minReplicas: {{ .Values.minReplicas }}
   maxReplicas: {{ .Values.maxReplicas }}
+{{- with .Values.ows.hpa.metrics }}
   metrics:
-{{ toYaml .Values.ows.hpa.metrics | indent 10 }}
+{{ toYaml . | indent 8 }}
+{{- end }}
 
 {{- end }}
 {{- end }}

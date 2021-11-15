@@ -17,6 +17,7 @@ spec:
   selector:
     matchLabels:
       app: {{ template "datacube-ows.name" . }}
+      release: {{ .Release.Name }}
   strategy:
     rollingUpdate:
       maxSurge: {{ .Values.ows.maxSurge | quote }}

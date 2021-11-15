@@ -64,6 +64,10 @@ owsConfig:
 
 pyspy:
   image: {}
+  resources:
+    limits:
+      cpu: "0.125"
+      memory: 512Mi
 ##
 ## Prometheus Monitoring
 ##

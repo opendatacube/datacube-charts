@@ -71,6 +71,10 @@ spec:
 {{- end }}
       containers:
       - name: ows
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/usr/bin/sleep", "15"]
         env:
 {{- if .Values.owsConfig.url }}
         - name: OWS_CONFIG_URL

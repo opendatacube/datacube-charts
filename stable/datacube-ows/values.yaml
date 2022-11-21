@@ -42,7 +42,7 @@ ows:
     limits:
       cpu: "1"
       memory: 2048Mi
-  dockerArgs: [ "gunicorn", "-b", "0.0.0.0:8000", "-w", "4", "--keep-alive", "50", "--timeout", "120", "datacube_wms.wsgi" ]
+  dockerArgs: [ "gunicorn", "-b", "0.0.0.0:8000", "-w", "4", "--keep-alive", "50", "--timeout", "120", "datacube_ows.wsgi" ]
   annotations:
     iam.amazonaws.com/role: kubernetes-wms
   livenessProbe: {}
@@ -59,8 +59,11 @@ owsConfig:
     repository: geoscienceaustralia/dea-datakube-config
     tag: latest
     pullPolicy: Always
+    cfg_folder: "/opt/dea-config/dev/services/wms/ows_refactored"
   # owsConfig.securityContext -- Container level security context
   securityContext: {}
+  path: "/env/config"
+  ows_cfg: "ows_refactored.ows_root_cfg.ows_cfg"
 
 pyspy:
   image: {}
@@ -79,7 +82,7 @@ prometheus:
 ## cProfiling, only enable for debugging and profiling purposes
 ##
 profiling:
-  enabled: true
+  enabled: false
   path: "/opt/profiling/"
 
 service:

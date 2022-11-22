@@ -56,14 +56,17 @@ ows:
 owsConfig:
   image:
     registry: docker.io
-    repository: geoscienceaustralia/dea-datakube-config
+    repository: opendatacube/ows
     tag: latest
     pullPolicy: Always
-    cfg_folder: "/opt/dea-config/dev/services/wms/ows_refactored"
+    # the folder location within the docker image that contains
+    # ows config file
+    cfg_folder: "/code/integration_tests/cfg"
   # owsConfig.securityContext -- Container level security context
   securityContext: {}
   path: "/env/config"
-  ows_cfg: "ows_refactored.ows_root_cfg.ows_cfg"
+  # the ows config python objection
+  ows_cfg: "cfg.ows_test_cfg.ows_cfg"
 
 pyspy:
   image: {}

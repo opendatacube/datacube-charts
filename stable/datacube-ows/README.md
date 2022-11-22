@@ -51,12 +51,12 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | ows.resources.limits.memory | string | `"2048Mi"` |  |
 | ows.securityContext | object | `{}` | Deployment level security context |
 | ows.startupProbe | object | `{}` |  |
-| owsConfig.image.cfg_folder | string | `"/opt/dea-config/dev/services/wms/ows_refactored"` |  |
+| owsConfig.image.cfg_folder | string | `"/code/integration_tests/cfg"` |  |
 | owsConfig.image.pullPolicy | string | `"Always"` |  |
 | owsConfig.image.registry | string | `"docker.io"` |  |
-| owsConfig.image.repository | string | `"geoscienceaustralia/dea-datakube-config"` |  |
+| owsConfig.image.repository | string | `"opendatacube/ows"` |  |
 | owsConfig.image.tag | string | `"latest"` |  |
-| owsConfig.ows_cfg | string | `"ows_refactored.ows_root_cfg.ows_cfg"` |  |
+| owsConfig.ows_cfg | string | `"cfg.ows_test_cfg.ows_cfg"` |  |
 | owsConfig.path | string | `"/env/config"` |  |
 | owsConfig.securityContext | object | `{}` | Container level security context |
 | profiling.enabled | bool | `false` |  |

@@ -76,14 +76,6 @@ spec:
             exec:
               command: ["/usr/bin/sleep", "15"]
         env:
-{{- if .Values.owsConfig.url }}
-        - name: OWS_CONFIG_URL
-          value: {{ .Values.owsConfig.url | quote }}
-{{- end }}
-{{- if or .Values.owsConfig.configMap .Values.owsConfig.image }}
-        - value: "{{ .Values.owsConfig.path }}/{{ .Values.owsConfig.filename }}"
-          name: OWS_CONFIG_PATH
-{{- end }}
         - name: DB_HOSTNAME
           value: {{ .Values.database.host | quote }}
         - name: DB_PORT
@@ -100,6 +92,10 @@ spec:
             secretKeyRef:
               name: {{ template "datacube-ows.secretName" . }}
               key: postgres-password
+        - name: DATACUBE_OWS_CFG
+          value: {{ .Values.owsConfig.ows_cfg }}
+        - name: PYTHONPATH
+          value: {{ .Values.owsConfig.path}}
         - name: VIRTUAL_HOST
           value: localhost,127.0.0.
 {{- if $prometheus.enabled }}

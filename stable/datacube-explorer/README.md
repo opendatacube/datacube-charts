@@ -2,7 +2,7 @@ datacube-explorer
 =================
 A Helm chart for Datacube Explorer
 
-Current chart version is `0.5.28`
+Current chart version is `0.5.29`
 
 Source code can be found [here](https://www.opendatacube.org/documentation)
 
@@ -17,7 +17,7 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | affinity | object | `{}` |  |
 | annotations | object | `{}` |  |
 | database.database | string | `"datacube"` |  |
-| database.existingSecret | string | `""` |  |
+| database.existingSecret | string | `"explorer-reader"` |  |
 | database.host | string | `"localhost"` |  |
 | database.port | int | `5432` |  |
 | dockerArgs[0] | string | `"gunicorn"` |  |
@@ -50,14 +50,29 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | ingress.hosts[0] | string | `""` |  |
 | ingress.path | string | `"/"` |  |
 | internalPort | int | `8080` |  |
-| livenessProbe | object | `{}` |  |
-| readinessProbe | object | `{}` |  |
+| livenessProbe.failureThreshold | int | `5` |  |
+| livenessProbe.httpGet.path | string | `"/stac"` |  |
+| livenessProbe.httpGet.port | int | `8080` |  |
+| livenessProbe.initialDelaySeconds | int | `10` |  |
+| livenessProbe.periodSeconds | int | `30` |  |
+| livenessProbe.timeoutSeconds | int | `60` |  |
+| readinessProbe.failureThreshold | int | `5` |  |
+| readinessProbe.httpGet.path | string | `"/stac"` |  |
+| readinessProbe.httpGet.port | int | `8080` |  |
+| readinessProbe.initialDelaySeconds | int | `10` |  |
+| readinessProbe.periodSeconds | int | `30` |  |
+| readinessProbe.timeoutSeconds | int | `60` |  |
 | replicaCount | int | `1` |  |
 | resources.limits.cpu | string | `"300m"` |  |
 | resources.limits.memory | string | `"1024Mi"` |  |
 | service.type | string | `"ClusterIP"` |  |
 | serviceAccountName | string | `nil` |  |
-| startupProbe | string | `nil` |  |
+| startupProbe.failureThreshold | int | `5` |  |
+| startupProbe.httpGet.path | string | `"/stac"` |  |
+| startupProbe.httpGet.port | int | `8080` |  |
+| startupProbe.initialDelaySeconds | int | `10` |  |
+| startupProbe.periodSeconds | int | `30` |  |
+| startupProbe.timeoutSeconds | int | `60` |  |
 | updateCreationDt.backoffLimit | int | `0` |  |
 | updateCreationDt.concurrencyPolicy | string | `"Allow"` |  |
 | updateCreationDt.cron | string | `"0 13 * * *"` |  |

@@ -22,6 +22,7 @@ spec:
         app.kubernetes.io/name: {{ include "datacube-explorer.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
       annotations:
+        checksum/settings-configmap.yaml: {{ include (print $.Template.BasePath "/settings-configmap.yaml") . | sha256sum }}
       {{- range $key, $value := .Values.annotations }}
         {{ $key }}: {{ $value | quote }}
       {{- end }}

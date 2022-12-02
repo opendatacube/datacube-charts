@@ -13,7 +13,7 @@ database:
   database: datacube
   host: localhost
   port: 5432
-  existingSecret: ""
+  existingSecret: "explorer-reader"
 
 resources:
   limits:
@@ -22,9 +22,32 @@ resources:
 
 annotations: {}
 
-livenessProbe: {}
-readinessProbe: {}
+livenessProbe:
+  httpGet:
+    path: "/stac"
+    port: 8080
+  initialDelaySeconds: 10
+  periodSeconds: 30
+  timeoutSeconds: 60
+  failureThreshold: 5
+
+readinessProbe:
+  httpGet:
+    path: "/stac"
+    port: 8080
+  initialDelaySeconds: 10
+  periodSeconds: 30
+  timeoutSeconds: 60
+  failureThreshold: 5
+
 startupProbe:
+  httpGet:
+    path: "/stac"
+    port: 8080
+  initialDelaySeconds: 10
+  periodSeconds: 30
+  timeoutSeconds: 60
+  failureThreshold: 5
 
 additionalEnvironmentVars: {}
 

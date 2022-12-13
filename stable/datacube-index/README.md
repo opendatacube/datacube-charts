@@ -1,14 +1,23 @@
-datacube-index
-==============
+# datacube-index
+
+![Version: 0.4.4](https://img.shields.io/badge/Version-0.4.4-informational?style=flat-square)
+
 Datacube OGC Web Services Indexing
 
-Current chart version is `0.4.4`
+**Homepage:** <https://www.opendatacube.org/documentation>
 
-Source code can be found [here](https://www.opendatacube.org/documentation)
+## Maintainers
 
+| Name | Email | Url |
+| ---- | ------ | --- |
+| Tisham Dhar | <tisham.dhar@ga.gov.au> |  |
 
+## Source Code
 
-## Chart Values
+* <https://github.com/opendatacube/datacube-core>
+* <https://github.com/opendatacube/datacube-ows>
+
+## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -67,3 +76,4 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | index.wmsConfigURL | string | `nil` |  |
 | index.yaml_safety | string | `nil` |  |
 | wmsConfig.image | object | `{}` |  |
+

@@ -1,14 +1,10 @@
-datacube-processing
-===================
+# datacube-processing
+
+![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![AppVersion: 1.0](https://img.shields.io/badge/AppVersion-1.0-informational?style=flat-square)
+
 A Helm chart for datacube processing
 
-Current chart version is `0.1.1`
-
-
-
-
-
-## Chart Values
+## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -43,3 +39,4 @@ Current chart version is `0.1.1`
 | sqs.queue | string | `"wofs"` |  |
 | sqs.region | string | `"ap-southeast-2"` |  |
 | tolerations | list | `[]` |  |
+

@@ -1,14 +1,10 @@
-datacube-data
-=============
+# datacube-data
+
+![Version: 0.2.6](https://img.shields.io/badge/Version-0.2.6-informational?style=flat-square) ![AppVersion: 1.0](https://img.shields.io/badge/AppVersion-1.0-informational?style=flat-square)
+
 A Helm chart for running datacube data management
 
-Current chart version is `0.2.6`
-
-
-
-
-
-## Chart Values
+## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -34,3 +30,4 @@ Current chart version is `0.2.6`
 | sqs_queue_name | string | `""` |  |
 | tolerations | list | `[]` |  |
 | wmsConfig.image | object | `{}` |  |
+

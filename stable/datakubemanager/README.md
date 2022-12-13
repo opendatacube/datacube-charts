@@ -1,14 +1,10 @@
-datakubemanager
-===============
+# datakubemanager
+
+![Version: 0.2.4](https://img.shields.io/badge/Version-0.2.4-informational?style=flat-square) ![AppVersion: 0.1](https://img.shields.io/badge/AppVersion-0.1-informational?style=flat-square)
+
 A Helm chart for Deploying Datakubemanager
 
-Current chart version is `0.2.4`
-
-
-
-
-
-## Chart Values
+## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -49,3 +45,4 @@ Current chart version is `0.2.4`
 | worker.replicaCount | int | `1` |  |
 | worker.resources | object | `{}` |  |
 | worker.tolerations | list | `[]` |  |
+

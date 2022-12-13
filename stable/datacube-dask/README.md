@@ -1,14 +1,10 @@
-datacube-dask
-=============
+# datacube-dask
+
+![Version: 0.4.10](https://img.shields.io/badge/Version-0.4.10-informational?style=flat-square) ![AppVersion: alpha](https://img.shields.io/badge/AppVersion-alpha-informational?style=flat-square)
+
 Distributed Dask for Datacube
 
-Current chart version is `0.4.10`
-
-
-
-
-
-## Chart Values
+## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -87,3 +83,4 @@ Current chart version is `0.4.10`
 | worker.targetCpu | int | `75` |  |
 | worker.targetMemory | int | `75` |  |
 | worker.tolerations | list | `[]` |  |
+

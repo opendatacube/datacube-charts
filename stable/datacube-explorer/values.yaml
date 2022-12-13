@@ -33,6 +33,7 @@ postgresql:
   nameOverride: datacube-explorer-postgresql
   postgresqlUsername: postgres
   postgresqlDatabase: datacube
+  port: 5432
   existingSecret: "datacube-explorer"
 
   ## the key within `postgresql.existingSecret` containing the password string

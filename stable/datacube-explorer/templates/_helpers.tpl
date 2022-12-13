@@ -85,7 +85,7 @@ Set postgres port
 */}}
 {{- define "datacube-explorer.postgresql.port" -}}
 {{- if .Values.postgresql.enabled -}}
-{{- default 5432 .Values.postgresql.service.port }}
+{{- default 5432 .Values.postgresql.port }}
 {{- else -}}
 {{- required "A valid .Values.externalPostgresql.port is required" .Values.externalPostgresql.port -}}
 {{- end -}}

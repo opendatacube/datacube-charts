@@ -2,7 +2,7 @@ datacube-explorer
 =================
 A Helm chart for Datacube Explorer
 
-Current chart version is `0.5.29`
+Current chart version is `1.0.0`
 
 Source code can be found [here](https://www.opendatacube.org/documentation)
 
@@ -16,10 +16,6 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | additionalSettings | object | `{}` |  |
 | affinity | object | `{}` |  |
 | annotations | object | `{}` |  |
-| database.database | string | `"datacube"` |  |
-| database.existingSecret | string | `"explorer-reader"` |  |
-| database.host | string | `"localhost"` |  |
-| database.port | int | `5432` |  |
 | dockerArgs[0] | string | `"gunicorn"` |  |
 | dockerArgs[10] | string | `"--pid"` |  |
 | dockerArgs[11] | string | `"gunicorn.pid"` |  |
@@ -41,6 +37,10 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | dockerArgs[8] | string | `"-t"` |  |
 | dockerArgs[9] | string | `"60"` |  |
 | externalPort | int | `80` |  |
+| externalPostgresql.database | string | `"datacube"` |  |
+| externalPostgresql.existingSecret | string | `"explorer-reader"` |  |
+| externalPostgresql.host | string | `"localhost"` |  |
+| externalPostgresql.port | int | `5432` |  |
 | image.pullPolicy | string | `"Always"` |  |
 | image.registry | string | `"docker.io"` |  |
 | image.repository | string | `"opendatacube/explorer"` |  |
@@ -56,6 +56,21 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | livenessProbe.initialDelaySeconds | int | `10` |  |
 | livenessProbe.periodSeconds | int | `30` |  |
 | livenessProbe.timeoutSeconds | int | `60` |  |
+| postgresql.enabled | bool | `true` |  |
+| postgresql.existingSecret | string | `"datacube-explorer"` |  |
+| postgresql.existingSecretKey | string | `"postgresql-password"` |  |
+| postgresql.nameOverride | string | `"datacube-explorer-postgresql"` |  |
+| postgresql.persistence.accessModes[0] | string | `"ReadWriteOnce"` |  |
+| postgresql.persistence.enabled | bool | `true` |  |
+| postgresql.persistence.size | string | `"8Gi"` |  |
+| postgresql.persistence.storageClass | string | `""` |  |
+| postgresql.postgresqlDatabase | string | `"datacube"` |  |
+| postgresql.postgresqlUsername | string | `"postgres"` |  |
+| postgresql.replication.applicationName | string | `"datacube-explorer"` |  |
+| postgresql.replication.enabled | bool | `false` |  |
+| postgresql.replication.numSynchronousReplicas | int | `1` |  |
+| postgresql.replication.readReplicas | int | `2` |  |
+| postgresql.replication.synchronousCommit | string | `"on"` |  |
 | readinessProbe.failureThreshold | int | `5` |  |
 | readinessProbe.httpGet.path | string | `"/stac"` |  |
 | readinessProbe.httpGet.port | int | `8080` |  |
@@ -65,7 +80,7 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | replicaCount | int | `1` |  |
 | resources.limits.cpu | string | `"300m"` |  |
 | resources.limits.memory | string | `"1024Mi"` |  |
-| service.type | string | `"ClusterIP"` |  |
+| service.type | string | `"NodePort"` |  |
 | serviceAccountName | string | `nil` |  |
 | startupProbe.failureThreshold | int | `5` |  |
 | startupProbe.httpGet.path | string | `"/stac"` |  |

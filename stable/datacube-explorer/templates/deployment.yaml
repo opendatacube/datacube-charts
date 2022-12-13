@@ -41,22 +41,11 @@ spec:
           image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: Always
           env:
+          {{- include "datacube-explorer.dbenv" . | indent 10}}
           - name: DB_HOSTNAME
-            value: {{ .Values.database.host | quote }}
+            value: {{ include "datacube-explorer.postgresql.host" . | quote }}
           - name: DB_PORT
-            value: {{ .Values.database.port | quote }}
-          - name: DB_DATABASE
-            value: {{ .Values.database.database | quote }}
-          - name: DB_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: {{ .Values.database.existingSecret }}
-                key: postgres-username
-          - name: DB_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: {{ .Values.database.existingSecret }}
-                key: postgres-password
+            value: {{ include "datacube-explorer.postgresql.port" . | quote }}
           - name: VIRTUAL_HOST
             value: localhost,127.0.0.
           {{- if not (empty .Values.additionalSettings) }}

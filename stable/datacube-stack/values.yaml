@@ -1,0 +1,31 @@
+postgresql:
+  enabled: true
+  nameOverride: datacube-postgresql
+  postgresqlUsername: datacube-admin
+  postgresqlDatabase: datacube
+  postgresqlPassword: datacube-admin-password
+  persistence:
+    ## if postgres will use Persistent Volume Claims to store data
+    ## - [WARNING] if false, data will be LOST as postgres Pods restart
+    ##
+    enabled: true
+
+    ## the name of the StorageClass used by the PVC
+    ##
+    storageClass: ""
+
+    ## the access modes of the PVC
+    ##
+    accessModes:
+      - ReadWriteOnce
+
+    ## the size of PVC to request
+    ##
+    size: 8Gi
+
+  replication:
+    enabled: false
+    readReplicas: 2
+    synchronousCommit: "on"
+    numSynchronousReplicas: 1
+    applicationName: datacube

@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: datacube-indexer
+  labels:
+    app: datacube-indexer
+  annotations:
+    "helm.sh/hook": "post-install,post-upgrade"
+    "helm.sh/hook-weight": "10"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: datacube-indexer
+  template:
+    metadata:
+      labels:
+        app: datacube-indexer
+      annotations:
+      {{- range $key, $value := .Values.annotations }}
+        {{ $key }}: {{ $value | quote }}
+      {{- end }}
+    spec:
+      restartPolicy: Always
+      # Turning single-request-reopen option on would fix issue where in two requests from the same port are
+      # not handled correctly it will close the socket and open a new one before sending the second request.
+      dnsConfig:
+        options:
+          - name: single-request-reopen
+      {{- if .Values.serviceAccountName }}
+      serviceAccountName: {{ .Values.serviceAccountName }}
+      {{- end }}
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: indexer
+          image: "opendatacube/datacube-index:latest"
+          imagePullPolicy: Always
+          env:
+          - name: DB_HOSTNAME
+            value: {{ include "datacube.postgresql.host" . | quote }}
+          - name: DB_PORT
+            value: {{ include "datacube.postgresql.port" . | quote }}
+          - name: DB_DATABASE
+            value: {{ include "datacube.postgresql.database" . | quote }}
+          - name: DB_USERNAME
+            value: {{ include "datacube.postgresql.username" . | quote }}
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ default (include "datacube.postgresql.fullname" .) .Values.postgresql.existingSecret }}
+                key: {{ default "postgresql-password" .Values.postgresql.existingSecretKey }}
+          command: ["tail"]
+          args:
+            - "-f"
+            - "/dev/null"
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+status: {}

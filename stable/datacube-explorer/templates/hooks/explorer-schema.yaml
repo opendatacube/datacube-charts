@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "datacube-explorer.fullname" . }}-explorer-schema
+  labels:
+    app: {{ .Release.Name }}
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "1"
+    helm.sh/hook-delete-policy: before-hook-creation
+spec:
+  template:
+    metadata:
+      name: {{ include "datacube-explorer.fullname" . }}-schema
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: {{ include "datacube-explorer.fullname" . }}-schema
+        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: Always
+        command: ["cubedash-gen"]
+        args:
+          - "--init"
+          - "--all"
+        env:
+          {{- include "datacube-explorer.dbenv" . | indent 10}}
+          - name: DB_HOSTNAME
+            value: {{ include "datacube-explorer.postgresql.host" . | quote }}
+          - name: DB_PORT
+            value: {{ include "datacube-explorer.postgresql.port" . | quote }}
+      restartPolicy: Never

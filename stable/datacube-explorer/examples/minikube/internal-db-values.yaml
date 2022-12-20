@@ -1,0 +1,3 @@
+postgresql:
+  initDb: true
+  enabled: true

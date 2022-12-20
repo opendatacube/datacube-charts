@@ -12,9 +12,6 @@ keywords:
 - archive
 home: https://www.opendatacube.org/documentation
 # icon:
-sources: 
+sources:
 - https://github.com/opendatacube/datacube-core
 - https://github.com/opendatacube/datacube-ows
-maintainers:
- - name: Tisham Dhar
-   email: tisham.dhar@ga.gov.au

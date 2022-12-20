@@ -6,12 +6,6 @@ Datacube OGC Web Services Indexing
 
 **Homepage:** <https://www.opendatacube.org/documentation>
 
-## Maintainers
-
-| Name | Email | Url |
-| ---- | ------ | --- |
-| Tisham Dhar | <tisham.dhar@ga.gov.au> |  |
-
 ## Source Code
 
 * <https://github.com/opendatacube/datacube-core>

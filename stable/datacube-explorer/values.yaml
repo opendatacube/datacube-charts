@@ -15,9 +15,12 @@ image:
 ###################################
 externalPostgresql:
   database: datacube
+  initDb: false
   host: localhost
   port: 5432
-  existingSecret: "explorer-reader"
+  username: postgres
+  existingSecret: "external-postgresql"
+  existingSecretPasswordKey: "postgres-password"
 
 
 ###################################
@@ -29,16 +32,18 @@ postgresql:
   ## - [WARNING] consider using an external database with `externalDatabase.*`
   ## - set to `false` if using `externalDatabase.*`
   ##
-  enabled: true
-  nameOverride: datacube-explorer-postgresql
+  enabled: false
+  initDb: false
+  nameOverride: postgresql
   postgresqlUsername: postgres
+  postgresqlPassword: explorerpass
   postgresqlDatabase: datacube
   port: 5432
   existingSecret: "datacube-explorer"
 
   ## the key within `postgresql.existingSecret` containing the password string
   ##
-  existingSecretKey: "postgresql-password"
+  existingSecretKey: "postgres-password"
   persistence:
     ## if postgres will use Persistent Volume Claims to store data
     ## - [WARNING] if false, data will be LOST as postgres Pods restart

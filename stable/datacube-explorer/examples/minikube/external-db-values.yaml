@@ -1,0 +1,4 @@
+externalPostgresql:
+  initDb: true
+  host: "external-postgresql"
+  existingSecret: "external-postgresql"

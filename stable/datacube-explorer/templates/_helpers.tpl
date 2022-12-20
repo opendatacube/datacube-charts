@@ -53,41 +53,8 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- if contains $name .Release.Name -}}
 {{- .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{- printf "%s-%s" .Release.Name "datacube-explorer-postgresql" | trunc 63 | trimSuffix "-" -}}
+{{- printf " %s-%s" .Release.Name .Values.postgresql.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Set postgres host
-*/}}
-{{- define "datacube-explorer.postgresql.host" -}}
-{{- if .Values.postgresql.enabled -}}
-{{- template "datacube-explorer.postgresql.fullname" . -}}
-{{- else -}}
-{{ required "A valid .Values.externalPostgresql.host is required" .Values.externalPostgresql.host }}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Set postgres secret
-*/}}
-{{- define "datacube-explorer.postgresql.secret" -}}
-{{- if .Values.postgresql.enabled -}}
-{{- template "datacube-explorer.postgresql.fullname" . -}}
-{{- else -}}
-{{- template "datacube-explorer.fullname" . -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Set postgres port
-*/}}
-{{- define "datacube-explorer.postgresql.port" -}}
-{{- if .Values.postgresql.enabled -}}
-{{- default 5432 .Values.postgresql.port }}
-{{- else -}}
-{{- required "A valid .Values.externalPostgresql.port is required" .Values.externalPostgresql.port -}}
 {{- end -}}
 {{- end -}}
 
@@ -98,7 +65,7 @@ Set postgres port
   value: {{ .Values.postgresql.postgresqlDatabase | quote }}
 {{- else }}
 - name: DB_DATABASE
-  value: {{ .Values.externalDatabase.database | quote }}
+  value: {{ .Values.externalPostgresql.database | quote }}
 {{- end }}
 
 {{- /* set DB_USERNAME */ -}}
@@ -107,10 +74,7 @@ Set postgres port
   value: {{ .Values.postgresql.postgresqlUsername | quote }}
 {{- else }}
 - name: DB_USERNAME
-  valueFrom:
-    secretKeyRef:
-      name: {{ .Values.externalDatabase.existingSecret }}
-      key: postgres-username
+  value: {{ .Values.externalPostgresql.username | quote }}
 {{- end }}
 
 {{- /* set DB_PASSWORD */ -}}
@@ -120,10 +84,34 @@ Set postgres port
   valueFrom:
     secretKeyRef:
       name: {{ .Values.postgresql.existingSecret }}
-      key: postgresql-password
+      key: {{ .Values.postgresql.existingSecretKey }}
 {{- else }}
 - name: DB_PASSWORD
   value: {{ .Values.postgresql.postgresqlPassword }}
 {{- end }}
+{{- else }}
+- name: DB_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.externalPostgresql.existingSecret }}
+      key: {{ .Values.externalPostgresql.existingSecretPasswordKey }}
+{{- end }}
+
+{{/* Set DB_PORT */}}
+{{- if .Values.postgresql.enabled -}}
+- name: DB_PORT
+  value: {{ .Values.postgresql.port | quote }}
+{{- else -}}
+- name: DB_PORT
+  value: {{ .Values.externalPostgresql.port | quote }}
+{{- end }}
+
+{{/* Set DB_HOSTNAME */}}
+{{- if .Values.postgresql.enabled -}}
+- name: DB_HOSTNAME
+  value: {{ include "datacube-explorer.postgresql.fullname" . }}
+{{- else -}}
+- name: DB_HOSTNAME
+  value: {{ .Values.externalPostgresql.host |quote }}
 {{- end }}
 {{- end }}

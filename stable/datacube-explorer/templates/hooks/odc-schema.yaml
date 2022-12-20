@@ -1,3 +1,4 @@
+{{- if or (.Values.postgresql.initDb) (.Values.externalPostgresql.initDb) }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -25,8 +26,5 @@ spec:
           - "init"
         env:
         {{- include "datacube-explorer.dbenv" . | indent 10}}
-          - name: DB_HOSTNAME
-            value: {{ include "datacube-explorer.postgresql.host" . | quote }}
-          - name: DB_PORT
-            value: {{ include "datacube-explorer.postgresql.port" . | quote }}
-      restartPolicy: Never
+      restartPolicy: OnFailure
+{{- end }}

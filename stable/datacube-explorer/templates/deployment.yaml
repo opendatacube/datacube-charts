@@ -42,10 +42,6 @@ spec:
           imagePullPolicy: Always
           env:
           {{- include "datacube-explorer.dbenv" . | indent 10}}
-          - name: DB_HOSTNAME
-            value: {{ include "datacube-explorer.postgresql.host" . | quote }}
-          - name: DB_PORT
-            value: {{ include "datacube-explorer.postgresql.port" . | quote }}
           - name: VIRTUAL_HOST
             value: localhost,127.0.0.
           {{- if not (empty .Values.additionalSettings) }}

@@ -1,14 +1,23 @@
-datacube-wps
-============
+# datacube-wps
+
+![Version: 0.8.12](https://img.shields.io/badge/Version-0.8.12-informational?style=flat-square) ![AppVersion: alpha](https://img.shields.io/badge/AppVersion-alpha-informational?style=flat-square)
+
 A Helm chart for Datacube WPS on Kubernetes
 
-Current chart version is `0.8.12`
+**Homepage:** <https://www.opendatacube.org/documentation>
 
-Source code can be found [here](https://www.opendatacube.org/documentation)
+## Maintainers
 
+| Name | Email | Url |
+| ---- | ------ | --- |
+| Ben Lewis | <ben.lewis@ga.gov.au> |  |
 
+## Source Code
 
-## Chart Values
+* <https://github.com/opendatacube/datacube-core>
+* <https://github.com/opendatacube/datacube-wps>
+
+## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -42,3 +51,4 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | wps.resources.requests.memory | string | `"2048Mi"` |  |
 | wps.securityContext | object | `{}` |  |
 | wpsConfig.image | object | `{}` |  |
+

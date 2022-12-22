@@ -1,14 +1,18 @@
-datacube-explorer
-=================
+# datacube-explorer
+
+![Version: 0.5.29](https://img.shields.io/badge/Version-0.5.29-informational?style=flat-square)
+
 A Helm chart for Datacube Explorer
 
-Current chart version is `0.5.29`
+**Homepage:** <https://www.opendatacube.org/documentation>
 
-Source code can be found [here](https://www.opendatacube.org/documentation)
+## Maintainers
 
+| Name | Email | Url |
+| ---- | ------ | --- |
+| DEA Teams | <deacloudteam@ga.gov.au> |  |
 
-
-## Chart Values
+## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -84,3 +88,4 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | updateCreationDt.enabled | bool | `false` |  |
 | updateCreationDt.historyLimit | int | `1` |  |
 | updateCreationDt.suspend | bool | `false` |  |
+

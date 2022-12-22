@@ -1,14 +1,10 @@
-restcube
-========
+# restcube
+
+![Version: 0.2.9](https://img.shields.io/badge/Version-0.2.9-informational?style=flat-square) ![AppVersion: 0.1](https://img.shields.io/badge/AppVersion-0.1-informational?style=flat-square)
+
 A Helm chart for Deploying RestCube
 
-Current chart version is `0.2.9`
-
-
-
-
-
-## Chart Values
+## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -52,3 +48,4 @@ Current chart version is `0.2.9`
 | worker.replicaCount | int | `1` |  |
 | worker.resources | object | `{}` |  |
 | worker.tolerations | list | `[]` |  |
+

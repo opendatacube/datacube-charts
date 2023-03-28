@@ -13,4 +13,4 @@ You can use these helm charts in your own kubernetes cluster by adding the helm 
 Documentation for installing each chart is available in their own directories
 
 ## CI  Lint
-to pass lint and for each value change, please run `.github/helm-doc.sh` and this script will update the doc.
+to pass lint and for each value change, please run `.github/helm-docs.sh` and this script will update the doc.

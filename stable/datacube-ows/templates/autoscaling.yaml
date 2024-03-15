@@ -1,6 +1,6 @@
 {{- if .Values.ows.enabled }}
 {{- if .Values.ows.hpa.autoscaling }}
-apiVersion: autoscaling/v2beta2
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ template "datacube-ows.fullname" . }}

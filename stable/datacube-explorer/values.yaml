@@ -88,3 +88,10 @@ ingress:
   hosts:
     - ""
   annotations: {}
+#  extraRules:
+#    - host: hello.world
+#      paths:
+#        - path: "/robots.txt"
+#          backend:
+#            service:
+#              name: what

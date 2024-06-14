@@ -33,5 +33,7 @@ spec:
                 port:
                   number: {{ $externalPort }}
     {{- end }}
-
+{{- with .Values.ingress.extraRules}}
+{{ toYaml . | indent 4}}
+{{- end }}
 {{- end }}

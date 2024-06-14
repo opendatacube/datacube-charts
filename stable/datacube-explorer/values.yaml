@@ -63,17 +63,19 @@ dockerArgs: ["gunicorn", "-b", "0.0.0.0:8080", "-w", "3", "--threads=2", "-k",
    "||", "true"]
 
 updateCreationDt:
+  # --- Whether to create a CronJob to automatically keep the Explorer extents tables up to date
   enabled: false
   historyLimit: 1
+  # --- Allow concurrent executions of the Job
   concurrencyPolicy: Allow  # concurrent executions of a job
-  cron: "0 13 * * *"  ## Run daily at 11 pm AEST
+  # --- Default to run at 11pm Australia Eastern Daylight Time
+  cron: "0 13 * * *"
   suspend: false
   backoffLimit: 0  # Number of retries
   dockerArgs:
   - "cubedash-gen"
   - "--no-init-database"
   - "--refresh-stats"
-  - "--force-refresh"
   - "--all"
 
 additionalSettings: {}

@@ -16,6 +16,7 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | database.existingSecret | string | `nil` |  |
 | database.host | string | `"localhost"` |  |
 | database.port | int | `5432` |  |
+| ingress.ingressClassName | string | `""` |  | 
 | ingress.annotations | object | `{}` |  |
 | ingress.enabled | bool | `false` |  |
 | ingress.hosts[0] | string | `""` |  |

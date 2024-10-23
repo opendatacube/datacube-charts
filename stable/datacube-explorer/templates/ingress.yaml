@@ -1,5 +1,4 @@
 {{- if .Values.ingress.enabled -}}
-{{- $ingressClassName := .Values.ingress.ingressClassName -}}
 {{- $fullName := include "datacube-explorer.fullname" . -}}
 {{- $ingressPath := .Values.ingress.path -}}
 {{- $ingressRedirect := .Values.ingress.redirect -}}
@@ -22,9 +21,6 @@ metadata:
 {{ toYaml . | indent 4 }}
 {{- end }}
 spec:
-  {{- if $ingressClassName -}}
-  ingressClassName: {{ $ingressClassName }}
-  {{- end }}
   rules:
     {{- range .Values.ingress.hosts }}
     - host: {{ . | quote }}

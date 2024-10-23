@@ -1,6 +1,6 @@
 # datacube-explorer
 
-![Version: 0.5.29](https://img.shields.io/badge/Version-0.5.29-informational?style=flat-square)
+![Version: 0.5.30](https://img.shields.io/badge/Version-0.5.29-informational?style=flat-square)
 
 A Helm chart for Datacube Explorer
 
@@ -49,6 +49,7 @@ A Helm chart for Datacube Explorer
 | image.registry | string | `"docker.io"` |  |
 | image.repository | string | `"opendatacube/explorer"` |  |
 | image.tag | string | `"latest"` |  |
+| ingress.ingressClassName | string | `""` |  | 
 | ingress.annotations | object | `{}` |  |
 | ingress.enabled | bool | `false` |  |
 | ingress.hosts[0] | string | `""` |  |

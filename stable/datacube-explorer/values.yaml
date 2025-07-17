@@ -3,6 +3,16 @@
 serviceAccountName:
 replicaCount: 1
 
+hpa:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 6
+  metrics: []
+
+pdb:
+  enabled: true
+  minAvailable: 1
+
 image:
   registry: docker.io
   repository: opendatacube/explorer

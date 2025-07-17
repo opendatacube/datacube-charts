@@ -1,0 +1,36 @@
+{{- if .Values.pdb.enabled -}}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "datacube-explorer.fullname" . }}
+  labels:
+    app: {{ .Release.Name }}
+    app.kubernetes.io/name: {{ include "datacube-explorer.name" . }}
+    helm.sh/chart: {{ include "datacube-explorer.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  minAvailable: {{ .Values.pdb.minAvailable }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+      app.kubernetes.io/name: {{ include "datacube-explorer.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  {{- if .Values.pdb.annotations }}
+  annotations:
+    {{- range $key, $value := .Values.pdb.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
+{{- end -}}
+{{- if .Values.pdb.enabled }}
+{{- if not .Values.pdb.minAvailable }}
+{{- fail "minAvailable must be set when PodDisruptionBudget is enabled" }}
+{{- end }}
+{{- if not (hasKey .Values.pdb "minAvailable") }}
+{{- fail "minAvailable must be defined in values.yaml when PodDisruptionBudget is enabled" }}
+{{- end }}
+{{- end }}
+{{- if not (hasKey .Values.pdb "enabled") }}
+{{- fail "pdb.enabled must be set to true in values.yaml to enable PodDisruptionBudget" }}
+{{- end }}

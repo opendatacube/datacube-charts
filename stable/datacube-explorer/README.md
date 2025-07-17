@@ -1,6 +1,6 @@
 # datacube-explorer
 
-![Version: 0.5.31](https://img.shields.io/badge/Version-0.5.29-informational?style=flat-square)
+![Version: 0.5.32](https://img.shields.io/badge/Version-0.5.32-informational?style=flat-square)
 
 A Helm chart for Datacube Explorer
 
@@ -45,6 +45,10 @@ A Helm chart for Datacube Explorer
 | dockerArgs[8] | string | `"-t"` |  |
 | dockerArgs[9] | string | `"60"` |  |
 | externalPort | int | `80` |  |
+| hpa.enabled | bool | `true` | |
+| hpa.minReplicas | int | 1 | |
+| hpa.maxReplicas | int | 6 | |
+| hpa.metrics | object | `{}` | |
 | image.pullPolicy | string | `"Always"` |  |
 | image.registry | string | `"docker.io"` |  |
 | image.repository | string | `"opendatacube/explorer"` |  |
@@ -61,6 +65,8 @@ A Helm chart for Datacube Explorer
 | livenessProbe.initialDelaySeconds | int | `10` |  |
 | livenessProbe.periodSeconds | int | `30` |  |
 | livenessProbe.timeoutSeconds | int | `60` |  |
+| pdb.enabled | bool | `true` | |
+| pdb.minAvailable | int | `1` | |
 | readinessProbe.failureThreshold | int | `5` |  |
 | readinessProbe.httpGet.path | string | `"/stac"` |  |
 | readinessProbe.httpGet.port | int | `8080` |  |

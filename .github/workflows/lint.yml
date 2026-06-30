@@ -9,6 +9,9 @@ on:
     branches:
       - '**'
 
+permissions:
+  contents: read
+
 jobs:
   lint-docs:
     runs-on: ubuntu-latest
@@ -16,6 +19,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
       - name: Run helm-docs
         run: .github/helm-docs.sh
 
@@ -31,6 +36,7 @@ jobs:
           # Required for now because this script does a comparison against the
           # 'master' branch to know which charts to test.
           fetch-depth: 0
+          persist-credentials: false
       - name: Run kubeval
         run: .github/kubeval.sh
 
@@ -49,6 +55,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
       - name: Create kind ${{ matrix.k8s }} cluster
         uses: helm/kind-action@ef37e7f390d99f746eb8b610417061a60e82a6cc # v1.14.0
         with:
@@ -66,6 +74,7 @@ jobs:
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Install Helm
         uses: azure/setup-helm@9bc31f4ebc9c6b171d7bfbaa5d006ae7abdb4310 # v5.0.1

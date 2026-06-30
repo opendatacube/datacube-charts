@@ -1,5 +1,6 @@
-#!/bin/bash
-set -ex
+#!/usr/bin/env bash
+set -exuo pipefail
+IFS=$'\n\t'
 
 CHART_DIRS="$(git diff --find-renames --name-only "$(git rev-parse --abbrev-ref HEAD)" remotes/origin/master -- charts | grep '[cC]hart.yaml' | sed -e 's#/[Cc]hart.yaml##g')"
 KUBEVAL_VERSION="0.16.1"

@@ -13,12 +13,12 @@ repo="$1"
 folder="$2"
 
 # build helm charts and dependencies
-helm repo add datacube-charts $repo
+helm repo add datacube-charts "${repo}"
 helm repo add stable https://charts.helm.sh/stable
 helm repo update
 
 # Find dependencies in datacube-charts which match $REPO
-for chart in $folder/*
+for chart in "${folder}"/*
 do
     mkdir -p "${chart}/charts"
 
@@ -27,8 +27,11 @@ do
     helm dependency list "$chart" \
     | awk -v r="$repo" 'NR>1 {if (($3 == r) && ($4 != "ok")) print $1;}' \
     | xargs -n1 -I'{}' helm package "${folder}/{}" -d "${chart}/charts"
-    
-    #Manual fetch of remote charts
+
+    # Manual fetch of remote charts
+    #
+    # We're using xargs + bash so it's correct to use single quotes here
+    # shellcheck disable=SC2016
     helm dependency list "$chart" \
     | awk -v r="$repo" 'NR>1 {if (($3 != r) && ($4 != "ok")) print $3,$1;}' \
     | cut -d' ' -f1,2 \
@@ -38,10 +41,10 @@ do
 done
 
 # copy charts that don't already exist (ignore fail messages if they do)
-cp -nv *.tgz charts/ 2>/dev/null || :
+cp -nv ./*.tgz charts/ 2>/dev/null || :
 
 # clean up duplicate charts so they don't polute the website
-rm *.tgz
+rm ./*.tgz
 
 # rebuild index
-helm repo index charts --url $repo
+helm repo index charts --url "${repo}"

@@ -14,12 +14,12 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       with:
         fetch-depth: 0
 
     - name: Install Helm
-      uses: azure/setup-helm@v1
+      uses: azure/setup-helm@9bc31f4ebc9c6b171d7bfbaa5d006ae7abdb4310 # v5.0.1
       with:
         version: v3.4.0
 
@@ -30,7 +30,7 @@ jobs:
         bash deploy-charts.sh $REPO stable
 
     - name: Publish charts to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
+      uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./charts
@@ -41,7 +41,7 @@ jobs:
         commit_message: "deployed charts for"
 
     - name: Checkout the gh-pages branch
-      uses: actions/checkout@v2
+      uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       with:
         fetch-depth: 0
         ref: gh-pages

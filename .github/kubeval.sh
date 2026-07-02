@@ -3,11 +3,13 @@ set -exuo pipefail
 IFS=$'\n\t'
 
 CHART_DIRS="$(
-  git diff --find-renames --name-only remotes/origin/master -- stable |
+  git diff --find-renames --name-only remotes/origin/main -- stable |
     awk 'tolower($0) ~ /\/chart\.yaml$/ { sub(/[\/][Cc]hart\.yaml$/, ""); print }'
 )"
 # Lowest supported k8s version as of 2026-07-02
 KUBERNETES_VERSION="1.33"
+CHART_DIRS="$(git diff --find-renames --name-only "$(git rev-parse --abbrev-ref HEAD)" remotes/origin/main -- charts | grep '[cC]hart.yaml' | sed -e 's#/[Cc]hart.yaml##g')"
+KUBEVAL_VERSION="0.16.1"
 SCHEMA_LOCATION="https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/"
 
 if [[ -z "${CHART_DIRS}" ]]; then

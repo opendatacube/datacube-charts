@@ -3,7 +3,7 @@ pull_request_rules:
     conditions:
       - "#approved-reviews-by>=2"
       - status-success=lint-check
-      - base=master
+      - base=main
       - label=ready-to-merge  # only auto-merge when PR with this label
     actions:
       merge:

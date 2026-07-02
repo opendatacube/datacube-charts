@@ -5,7 +5,7 @@ on:
     paths:
       - "stable/**"
     branches:
-      - "master"
+      - "main"
 
 env:
   REPO : "https://opendatacube.github.io/datacube-charts/charts"

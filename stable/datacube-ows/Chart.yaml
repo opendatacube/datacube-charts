@@ -14,8 +14,8 @@ keywords:
 - web
 - application
 - python
-home: https://www.opendatacube.org/documentation
-# icon:
+home: https://www.opendatacube.org/
+icon: https://opendatacube.readthedocs.io/en/latest/_static/odc-icon.svg
 sources:
 - https://github.com/opendatacube/datacube-core
 - https://github.com/opendatacube/datacube-ows

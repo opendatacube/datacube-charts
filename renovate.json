@@ -2,5 +2,40 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
+  ],
+  "customManagers": [
+
+  ],
+  "packageRules": [
+    {
+      "enabled": true,
+      "matchFileNames": [
+        "charts/**"
+      ],
+      "commitMessagePrefix": "[{{ lookup (split packageFileDir '/') 1 }}] ",
+      "groupName": "{{ lookup (split packageFileDir '/') 1 }} dependency non-major updates",
+      "separateMajorMinor": true,
+      "postUpdateOptions": [
+        "helmUpdateSubChartArchives"
+      ],
+      "schedule": null,
+      "labels": ["dependencies", "dependencies/auto-merge"],
+      "major": {
+        "description": "Exclude major version bumps from auto merge.",
+        "labels": ["dependencies"],
+        "groupName": "{{ lookup (split packageFileDir '/') 1 }} dependency major updates"
+      },
+      "matchPackageNames": [
+        "*"
+      ],
+      "bumpVersions": [
+        {
+          "name": "Updating Chart version",
+          "filePatterns": ["/^({{#each (distinct (lookupArray upgrades \"packageFileDir\"))}}{{{lookup (split . \"/\") 0}}}/{{{lookup (split . \"/\") 1}}}{{#unless @last}}|{{/unless}}{{/each}})/Chart\\.ya?ml$/"],
+          "matchStrings": ["(?:^|\\n)version:\\s\"?(?<version>\\d+\\.\\d+\\.\\d+)\"?(?:$|\\n)"],
+          "bumpType": "{{#if (or isPinDigest isPatch)}}patch{{else}}minor{{/if}}"
+        }
+      ]
+    }
   ]
 }

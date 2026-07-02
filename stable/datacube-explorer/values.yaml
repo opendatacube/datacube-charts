@@ -16,8 +16,9 @@ pdb:
 image:
   registry: ghcr.io
   repository: opendatacube/explorer
-  tag: "latest"
-  pullPolicy: Always
+  # Overrides the Grafana image tag whose default is the chart appVersion
+  tag: ""
+  pullPolicy: IfNotPresent
 
 database:
   database: datacube

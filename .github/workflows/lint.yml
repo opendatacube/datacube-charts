@@ -2,12 +2,10 @@ name: Lint and Test Charts
 
 on:
   pull_request:
-    paths:
-      - '**'
 
   push:
     branches:
-      - '**'
+      - master
 
 permissions:
   contents: read

@@ -27,6 +27,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          # Required for now because this script does a comparison against the
+          # 'master' branch to know which charts to test.
+          fetch-depth: 0
       - name: Run kubeval
         run: .github/kubeval.sh
 

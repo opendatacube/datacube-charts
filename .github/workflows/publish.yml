@@ -8,13 +8,15 @@ on:
       - "main"
 
 env:
-  REPO : "https://opendatacube.github.io/datacube-charts/charts"
+  CHARTS_DEST: https://opendatacube.github.io/datacube-charts/charts
 
-permissions:
-  contents: write
+permissions: {}
 
 jobs:
   publish:
+    permissions:
+      contents: write
+
     runs-on: ubuntu-latest
     steps:
     - name: Install Helm
@@ -22,7 +24,7 @@ jobs:
       with:
         version: v3.4.0
 
-    - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         fetch-depth: 0
         persist-credentials: false
@@ -31,7 +33,8 @@ jobs:
       run: |
         git remote set-branches --add origin gh-pages
         git checkout origin/gh-pages -- charts/
-        bash deploy-charts.sh $REPO stable
+
+        bash deploy-charts.sh "${CHARTS_DEST}" stable
 
     - name: Publish charts to GitHub Pages
       uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
@@ -45,7 +48,7 @@ jobs:
         commit_message: "deployed charts for"
 
     - name: Checkout the gh-pages branch
-      uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         fetch-depth: 0
         ref: gh-pages

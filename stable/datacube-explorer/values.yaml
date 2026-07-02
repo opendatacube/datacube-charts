@@ -14,7 +14,7 @@ pdb:
   minAvailable: 1
 
 image:
-  registry: docker.io
+  registry: ghcr.io
   repository: opendatacube/explorer
   tag: "latest"
   pullPolicy: Always

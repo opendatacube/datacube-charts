@@ -13,13 +13,12 @@ keywords:
   - application
   - python
   - stac
-home: https://www.opendatacube.org/documentation
-
+home: https://www.opendatacube.org/
 maintainers:
 - name: omad
 - name: pjonsson
 sources:
-  - https://github.com/opendatacube/explorer
+  - https://github.com/opendatacube/datacube-explorer
   - https://github.com/opendatacube/datacube-charts
 annotations:
   "artifacthub.io/license": Apache-2.0
@@ -27,4 +26,4 @@ annotations:
     - name: Chart Source
       url: https://github.com/opendatacube/datacube-charts
     - name: Upstream Project
-      url: https://github.com/opendatacube/explorer
+      url: https://github.com/opendatacube/datacube-explorer

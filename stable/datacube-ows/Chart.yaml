@@ -2,17 +2,20 @@ apiVersion: v2
 type: application
 name: datacube-ows
 description: Datacube Web Map Service
-version: 0.22.0
-# renovate: docker=ghcr.io/opendatacube/ows
+version: 0.24.0
+# The following 'renovate' comment is a marker for
+# https://docs.renovatebot.com/presets-customManagers/#custommanagershelmchartyamlappversions
+#
+# renovate: image=ghcr.io/opendatacube/ows
 appVersion: 1.9.17
-icon: https://opendatacube.readthedocs.io/en/latest/_static/odc-icon.svg
 keywords:
-  - datacube
-  - http
-  - web
-  - application
-  - python
+- datacube
+- http
+- web
+- application
+- python
 home: https://www.opendatacube.org/documentation
+# icon:
 sources:
 - https://github.com/opendatacube/datacube-core
 - https://github.com/opendatacube/datacube-ows

@@ -1,17 +1,21 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
+    "config:recommended",
+    "helpers:pinGitHubActionDigestsToSemver",
+    "customManagers:helmChartYamlAppVersions"
   ],
+  "rebaseWhen": "behind-base-branch",
+  "enabledManagers": ["helm-values"],
   "packageRules": [
     {
       "enabled": true,
+      "description": "Bump the Chart version (either major or minor) if we've made changes to the chart",
       "matchFileNames": [
         "stable/**"
       ],
       "commitMessagePrefix": "[{{ lookup (split packageFileDir '/') 1 }}] ",
       "groupName": "{{ lookup (split packageFileDir '/') 1 }} dependency non-major updates",
-      "separateMajorMinor": true,
       "postUpdateOptions": [
         "helmUpdateSubChartArchives"
       ],
@@ -42,9 +46,5 @@
         }
       ]
     }
-  ],
-  "description": "GitHub Actions are handled by Dependabot (.github/dependabot.yml), so Renovate leaves them alone to avoid duplicate PRs.",
-  "github-actions": {
-    "enabled": false
-  }
+  ]
 }

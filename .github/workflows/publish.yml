@@ -10,6 +10,8 @@ on:
 env:
   CHARTS_DEST: https://opendatacube.github.io/datacube-charts/charts
 
+permissions: {}
+
 jobs:
   publish:
     permissions:

@@ -8,7 +8,6 @@ chart-dirs:
   - stable/datacube-index
   - stable/datacube-ows
   - stable/datacube-processing
-  - stable/datacube-wps
   - stable/datakubemanager
   - stable/restcube
 chart-repos:

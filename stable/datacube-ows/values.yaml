@@ -29,7 +29,7 @@ database:
 ##
 ows:
   image:
-    registry: docker.io
+    registry: ghcr.io
     repository: opendatacube/ows
     tag: latest
     pullPolicy: Always
@@ -55,7 +55,7 @@ ows:
     metrics: {}
 owsConfig:
   image:
-    registry: docker.io
+    registry: ghcr.io
     repository: opendatacube/ows
     tag: latest
     pullPolicy: Always

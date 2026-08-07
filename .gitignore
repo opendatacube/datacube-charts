@@ -1,3 +1,11 @@
 /*.tgz
+# Helm dependency archives fetched into each chart
+charts/*/charts
 stable/*/charts
 .idea/
+# Pinned tools installed by `make tools`
+/.bin/
+# Packaged charts and generated repo index
+/dist/
+
+.cr-release-packages

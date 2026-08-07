@@ -19,45 +19,19 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-    - name: Install Helm
-      uses: azure/setup-helm@9bc31f4ebc9c6b171d7bfbaa5d006ae7abdb4310 # v5.0.1
-      with:
-        version: v4.2.2
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
 
-    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      with:
-        fetch-depth: 0
-        persist-credentials: false
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
-    - name: Package charts into a tarball
-      run: |
-        git remote set-branches --add origin gh-pages
-        git checkout origin/gh-pages -- charts/
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@cae68fefc6b5f367a0275617c9f83181ba54714f # v1.7.0
+        env:
+          CR_PAGES_INDEX_PATH: "charts/index.yaml"
 
-        bash deploy-charts.sh "${CHARTS_DEST}" stable
 
-    - name: Publish charts to GitHub Pages
-      uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./charts
-        publish_branch: gh-pages
-        destination_dir: ./charts
-        keep_files: true
-        enable_jekyll: true
-        commit_message: "deployed charts for"
-
-    - name: Checkout the gh-pages branch
-      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      with:
-        fetch-depth: 0
-        ref: gh-pages
-
-    - name: update latest _data/versions file from charts
-      run: |
-        cp ./charts/index.yaml _data/versions.yaml
-        git config user.name github-actions
-        git config user.email github-actions@github.com
-        git add _data/versions.yaml
-        git commit -m "updated versions file"
-        git push

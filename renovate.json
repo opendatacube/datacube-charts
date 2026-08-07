@@ -4,7 +4,17 @@
     "config:recommended"
   ],
   "customManagers": [
-
+    {
+      "customType": "regex",
+      "description": "Pinned CI tool versions in the Makefile",
+      "managerFilePatterns": [
+        "/^Makefile$/"
+      ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>[a-z-]+) depName=(?<depName>\\S+)\\s+[A-Z_]+\\s*:=\\s*(?<currentValue>\\S+)"
+      ],
+      "extractVersionTemplate": "^v?(?<version>.+)$"
+    }
   ],
   "packageRules": [
     {
@@ -19,10 +29,15 @@
         "helmUpdateSubChartArchives"
       ],
       "schedule": null,
-      "labels": ["dependencies", "dependencies/auto-merge"],
+      "labels": [
+        "dependencies",
+        "dependencies/auto-merge"
+      ],
       "major": {
         "description": "Exclude major version bumps from auto merge.",
-        "labels": ["dependencies"],
+        "labels": [
+          "dependencies"
+        ],
         "groupName": "{{ lookup (split packageFileDir '/') 1 }} dependency major updates"
       },
       "matchPackageNames": [
@@ -31,11 +46,19 @@
       "bumpVersions": [
         {
           "name": "Updating Chart version",
-          "filePatterns": ["/^({{#each (distinct (lookupArray upgrades \"packageFileDir\"))}}{{{lookup (split . \"/\") 0}}}/{{{lookup (split . \"/\") 1}}}{{#unless @last}}|{{/unless}}{{/each}})/Chart\\.ya?ml$/"],
-          "matchStrings": ["(?:^|\\n)version:\\s\"?(?<version>\\d+\\.\\d+\\.\\d+)\"?(?:$|\\n)"],
+          "filePatterns": [
+            "/^({{#each (distinct (lookupArray upgrades \"packageFileDir\"))}}{{{lookup (split . \"/\") 0}}}/{{{lookup (split . \"/\") 1}}}{{#unless @last}}|{{/unless}}{{/each}})/Chart\\.ya?ml$/"
+          ],
+          "matchStrings": [
+            "(?:^|\\n)version:\\s\"?(?<version>\\d+\\.\\d+\\.\\d+)\"?(?:$|\\n)"
+          ],
           "bumpType": "{{#if (or isPinDigest isPatch)}}patch{{else}}minor{{/if}}"
         }
       ]
     }
-  ]
+  ],
+  "description": "GitHub Actions are handled by Dependabot (.github/dependabot.yml), so Renovate leaves them alone to avoid duplicate PRs.",
+  "github-actions": {
+    "enabled": false
+  }
 }

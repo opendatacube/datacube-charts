@@ -1,0 +1,250 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "affinity": {
+      "type": "object"
+    },
+    "clusterInfo": {
+      "type": "object",
+      "properties": {
+        "envName": {
+          "type": "string"
+        }
+      }
+    },
+    "database": {
+      "type": "object",
+      "properties": {
+        "database": {
+          "type": "string"
+        },
+        "existingSecret": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "host": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer"
+        }
+      }
+    },
+    "ingress": {
+      "type": "object",
+      "properties": {
+        "annotations": {
+          "type": "object"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "hosts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "path": {
+          "type": "string"
+        },
+        "redirect": {
+          "type": "boolean"
+        }
+      }
+    },
+    "maxReplicas": {
+      "type": "integer"
+    },
+    "minReplicas": {
+      "type": "integer"
+    },
+    "ows": {
+      "type": "object",
+      "properties": {
+        "annotations": {
+          "type": "object",
+          "properties": {
+            "iam.amazonaws.com/role": {
+              "type": "string"
+            }
+          }
+        },
+        "dockerArgs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "externalPort": {
+          "type": "integer"
+        },
+        "hpa": {
+          "type": "object",
+          "properties": {
+            "autoscaling": {
+              "type": "boolean"
+            },
+            "metrics": {
+              "type": "array"
+            }
+          }
+        },
+        "image": {
+          "type": "object",
+          "properties": {
+            "pullPolicy": {
+              "type": "string"
+            },
+            "registry": {
+              "type": "string"
+            },
+            "repository": {
+              "type": "string"
+            },
+            "tag": {
+              "type": "string"
+            }
+          }
+        },
+        "internalPort": {
+          "type": "integer"
+        },
+        "livenessProbe": {
+          "type": "object"
+        },
+        "maxSurge": {
+          "type": "string"
+        },
+        "maxUnavailable": {
+          "type": "string"
+        },
+        "readinessProbe": {
+          "type": "object"
+        },
+        "resources": {
+          "type": "object",
+          "properties": {
+            "limits": {
+              "type": "object",
+              "properties": {
+                "cpu": {
+                  "type": "string"
+                },
+                "memory": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "securityContext": {
+          "type": "object"
+        },
+        "startupProbe": {
+          "type": "object"
+        }
+      }
+    },
+    "owsConfig": {
+      "type": "object",
+      "properties": {
+        "image": {
+          "type": "object",
+          "properties": {
+            "cfg_folder": {
+              "type": "string"
+            },
+            "pullPolicy": {
+              "type": "string"
+            },
+            "registry": {
+              "type": "string"
+            },
+            "repository": {
+              "type": "string"
+            },
+            "tag": {
+              "type": "string"
+            }
+          }
+        },
+        "ows_cfg": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "securityContext": {
+          "type": "object"
+        }
+      }
+    },
+    "profiling": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "path": {
+          "type": "string"
+        }
+      }
+    },
+    "prometheus": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "path": {
+          "type": "string"
+        }
+      }
+    },
+    "pyspy": {
+      "type": "object",
+      "properties": {
+        "image": {
+          "type": "object"
+        },
+        "resources": {
+          "type": "object",
+          "properties": {
+            "limits": {
+              "type": "object",
+              "properties": {
+                "cpu": {
+                  "type": "string"
+                },
+                "memory": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "service": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "serviceAccount": {
+      "type": "object"
+    },
+    "tolerations": {
+      "type": "object"
+    }
+  }
+}

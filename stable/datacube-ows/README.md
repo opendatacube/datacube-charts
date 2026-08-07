@@ -2,7 +2,7 @@
 
 Datacube Web Map Service
 
-Current chart version is `0.20.3`
+Current chart version is `0.21.0`
 
 Source code can be found [here](https://www.opendatacube.org/documentation)
 
@@ -13,7 +13,7 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | affinity | object | `{}` |  |
 | clusterInfo.envName | string | `"dev"` |  |
 | database.database | string | `"datacube"` |  |
-| database.existingSecret | string | `nil` |  |
+| database.existingSecret | string | `nil` | Name of an existing Secret holding `postgres-username` / `postgres-password`. |
 | database.host | string | `"localhost"` |  |
 | database.port | int | `5432` |  |
 | ingress.annotations | object | `{}` |  |
@@ -37,7 +37,7 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | ows.enabled | bool | `true` |  |
 | ows.externalPort | int | `80` |  |
 | ows.hpa.autoscaling | bool | `true` |  |
-| ows.hpa.metrics | object | `{}` |  |
+| ows.hpa.metrics | list | `[]` | HorizontalPodAutoscaler metrics. A list, as per the HPA v2 spec. |
 | ows.image.pullPolicy | string | `"Always"` |  |
 | ows.image.registry | string | `"ghcr.io"` |  |
 | ows.image.repository | string | `"opendatacube/ows"` |  |

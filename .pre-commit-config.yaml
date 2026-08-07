@@ -1,4 +1,9 @@
 repos:
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.29.0
+    hooks:
+      - id: yamllint
+        args: [--strict]
   - repo: https://github.com/dadav/helm-schema
     rev: 0.23.5
     hooks:
@@ -12,3 +17,4 @@ repos:
         args:
           # Make the tool search for charts only under the `charts` directory
           - --chart-search-root=stable
+          - --skip-version-footer

@@ -18,6 +18,8 @@ serviceAccount: {}
 clusterInfo:
   envName: dev
 database:
+  # @schema type: [string, null]
+  # -- Name of an existing Secret holding `postgres-username` / `postgres-password`.
   existingSecret:
   database: datacube
   host: localhost
@@ -48,24 +50,25 @@ ows:
   livenessProbe: {}
   readinessProbe: {}
   startupProbe: {}
-  # ows.securityContext -- Deployment level security context
+  # Deployment level security context
   securityContext: {}
   hpa:
     autoscaling: true
-    metrics: {}
+    # HorizontalPodAutoscaler metrics.
+    metrics: []
 owsConfig:
   image:
     registry: ghcr.io
     repository: opendatacube/ows
     tag: latest
     pullPolicy: Always
-    # the folder location within the docker image that contains
+    # The folder location within the running Pod which contains the
     # ows config file
     cfg_folder: "/code/integration_tests/cfg"
-  # owsConfig.securityContext -- Container level security context
+  # securityContext -- Container level security context
   securityContext: {}
   path: "/env/config"
-  # the ows config python objection
+  # the OWS config Python Object
   ows_cfg: "cfg.ows_test_cfg.ows_cfg"
 
 pyspy:

@@ -2,60 +2,44 @@ name: Publish charts
 
 on:
   push:
-    paths:
-      - "stable/**"
     branches:
       - "main"
 
-env:
-  CHARTS_DEST: https://opendatacube.github.io/datacube-charts/charts
-
 permissions: {}
 
+# cr pushes index.yaml to gh-pages, so never let two runs overlap.
+concurrency:
+  group: publish-charts
+  cancel-in-progress: false
+
 jobs:
-  publish:
+  release:
     permissions:
       contents: write
 
     runs-on: ubuntu-latest
     steps:
-    - name: Install Helm
-      uses: azure/setup-helm@9bc31f4ebc9c6b171d7bfbaa5d006ae7abdb4310 # v5.0.1
 
-    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      with:
-        fetch-depth: 0
-        persist-credentials: false
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # cr needs full history to diff against the previous tag, and needs
+          # refs/remotes/origin/gh-pages present to build its worktree.
+          fetch-depth: 0
 
-    - name: Package charts into a tarball
-      run: |
-        git remote set-branches --add origin gh-pages
-        git checkout origin/gh-pages -- charts/
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
-        bash deploy-charts.sh "${CHARTS_DEST}" stable
-
-    - name: Publish charts to GitHub Pages
-      uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./charts
-        publish_branch: gh-pages
-        destination_dir: ./charts
-        keep_files: true
-        enable_jekyll: true
-        commit_message: "deployed charts for"
-
-    - name: Checkout the gh-pages branch
-      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      with:
-        fetch-depth: 0
-        ref: gh-pages
-
-    - name: update latest _data/versions file from charts
-      run: |
-        cp ./charts/index.yaml _data/versions.yaml
-        git config user.name github-actions
-        git config user.email github-actions@github.com
-        git add _data/versions.yaml
-        git commit -m "updated versions file"
-        git push
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@cae68fefc6b5f367a0275617c9f83181ba54714f # v1.7.0
+        with:
+          # Chart sources live in stable/, not the action's default charts/.
+          charts_dir: stable
+          skip_existing: true
+          generate_release_notes: true
+        env:
+          CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Keep updating the historical index location on gh-pages.
+          CR_PAGES_INDEX_PATH: charts/index.yaml

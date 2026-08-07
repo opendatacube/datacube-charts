@@ -1,0 +1,35 @@
+---
+# Exercises the optional templates: ingress, service account and HPA metrics.
+serviceAccount:
+  enabled: true
+  name: datacube-ows-ci
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/datacube-ows-ci
+
+database:
+  existingSecret: ows-db-ci
+
+ows:
+  hpa:
+    autoscaling: true
+    metrics:
+      - type: Resource
+        resource:
+          name: cpu
+          target:
+            type: Utilization
+            averageUtilization: 80
+
+ingress:
+  enabled: true
+  path: /
+  hosts:
+    - ows.ci.example.com
+  annotations:
+    kubernetes.io/tls-acme: "true"
+
+prometheus:
+  enabled: true
+
+profiling:
+  enabled: true

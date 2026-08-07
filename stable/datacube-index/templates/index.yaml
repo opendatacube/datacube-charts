@@ -57,8 +57,8 @@ spec:
           value: {{ $dc.wmsConfigURL | quote }}
 {{- end }}
 {{- if or .Values.wmsConfig.configMap .Values.wmsConfig.image }}
-          - value: "{{ .Values.wmsConfig.path }}/{{ .Values.wmsConfig.filename }}"
-            name: WMS_CONFIG_PATH
+        - name: WMS_CONFIG_PATH
+          value: "{{ .Values.wmsConfig.path }}/{{ .Values.wmsConfig.filename }}"
 {{- end }}
 {{- if $index.products }}
         - name: PRODUCT_URLS

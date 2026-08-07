@@ -1,0 +1,44 @@
+---
+# Exercises every optional template in the chart so CI validates them.
+# Picked up automatically by `ct` and by `make validate`.
+serviceAccountName: datacube-explorer-ci
+
+hpa:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 4
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+
+pdb:
+  enabled: true
+  minAvailable: 1
+  annotations:
+    example.com/owner: ci
+
+database:
+  existingSecret: explorer-reader-ci
+
+ingress:
+  enabled: true
+  path: /
+  pathType: Prefix
+  ingressClassName: nginx
+  hosts:
+    - explorer.ci.example.com
+  annotations:
+    kubernetes.io/tls-acme: "true"
+
+updateCreationDt:
+  enabled: true
+
+additionalEnvironmentVars:
+  EXAMPLE_VAR: example-value
+
+additionalSettings:
+  SHOW_DATA_LOCATION: true

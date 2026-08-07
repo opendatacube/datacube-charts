@@ -3,7 +3,7 @@
 ##
 ## whether we should create an index or not
 index:
-  dockerArgs: [ "/bin/bash", "-c", "cd index; ./create-index.sh" ]
+  dockerArgs: ["/bin/bash", "-c", "cd index; ./create-index.sh"]
   bucket: dea-public-data
   suffix: .yaml
   prefix: []
@@ -17,20 +17,35 @@ index:
     limits:
       cpu: 500m
       memory: 1024Mi
-  additionalEnvironmentVars: { }
+  additionalEnvironmentVars: {}
+  # @schema type: [string, null]
+  # -- Overrides `datacube.wmsConfigURL` for the index job.
   wmsConfigURL:
+  # @schema type: [array, string, null]
+  # -- Overrides `datacube.products` for the index job.
   products:
+  # @schema type: [string, null]
+  # -- Product to refresh the ranges for.
   product_ranges:
+  # @schema type: [string, boolean, null]
+  # -- Passed through as `DC_INDEX_YAML_SAFETY`.
   yaml_safety:
+  # @schema type: [string, boolean, null]
+  # -- Skip lineage when indexing.
   ignore_lineage:
+  # @schema type: [string, null]
+  # -- Multiproduct to refresh the ranges for.
   multiproduct_ranges:
+  # @schema type: [string, null]
+  # -- Product to exclude from indexing.
   exclude_product:
-  #set threddsky days to index from current day-threddsky days
+  # @schema type: [integer, string, null]
+  # -- Number of days back from today to index from THREDDS.
   thredds_days:
 
 archive:
   enable: false
-  dockerArgs: [ "/bin/bash", "-c", "cd archive; ./archive-wrapper.sh" ]
+  dockerArgs: ["/bin/bash", "-c", "cd archive; ./archive-wrapper.sh"]
   imageTag: archive-k
   historyLimit: 5
   cron: "0 0 31 2 *"
@@ -38,6 +53,8 @@ archive:
   bucket: dea-public-data
   suffix: .yaml
   prefix: []
+  # @schema type: [integer, string, null]
+  # -- Archive datasets older than this many days.
   days:
   annotations:
     iam.amazonaws.com/role: kubernetes-wms
@@ -48,25 +65,25 @@ archive:
     limits:
       cpu: 500m
       memory: 1024Mi
-  additionalEnvironmentVars: { }
-  
+  additionalEnvironmentVars: {}
+
 cron:
-  # Every day at 12.00 am
+  # -- Run the index job on a schedule instead of once at install time.
   enabled: false
+  # -- Every day at 12.00 am
   schedule: "0 0 * * *"
   suspend: false
   concurrencyPolicy: Allow
   historyLimit: 1
-  
+
 image:
   registry: docker.io
   repository: opendatacube/ows
   tag: 'latest'
   pullPolicy: Always
 
-
 datacube:
-  wmsConfigURL: "" 
+  wmsConfigURL: ""
   products: []
 
 database:
@@ -75,6 +92,6 @@ database:
   port: 5432
   existingSecret: datacube
 
-# Image to pull WMS Config from
+# -- Image to pull the OWS config from, if it is not baked into the index image.
 wmsConfig:
-  image: { }
+  image: {}

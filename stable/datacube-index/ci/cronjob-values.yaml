@@ -1,0 +1,20 @@
+---
+# Exercises the CronJob and archive templates, which are disabled by default.
+cron:
+  enabled: true
+  schedule: "0 0 * * *"
+
+archive:
+  enable: true
+  days: 30
+
+index:
+  wmsConfigURL: https://example.com/ows_cfg.py
+  products:
+    - ls8_nbart_albers
+    - ls7_nbart_albers
+  thredds_days: 5
+  yaml_safety: "true"
+  ignore_lineage: "true"
+  additionalEnvironmentVars:
+    EXAMPLE_VAR: example-value

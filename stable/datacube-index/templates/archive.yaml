@@ -2,7 +2,7 @@
 {{- $dc := .Values.datacube }}
 {{- $archive := .Values.archive }}
 {{- $image := .Values.image }}
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: {{template "datacube-index.fullname" .}}-archive
@@ -44,6 +44,10 @@ spec:
             image: "{{ $image.repository }}:{{ $image.tag }}"
             imagePullPolicy: {{ $image.pullPolicy }}
             args: [ {{- range $archive.dockerArgs }} {{ . | quote }}, {{ end -}} ]
+            {{- with $archive.resources }}
+            resources:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
             env:
             - name: WMS_CONFIG_URL
               value: {{ $dc.wmsConfigURL | quote }}
@@ -80,17 +84,4 @@ spec:
             {{- end }}
             {{- end }}
           restartPolicy: Never
-          {{- with $archive.resources }}
-          resources:
-            {{- with .limits }}
-            limits:
-              {{ if .cpu }}cpu: {{ .cpu | quote }} {{ end }}
-              {{ if .memory }}memory: {{ .memory | quote }} {{ end }}
-            {{- end }}
-            {{- with .requests }}
-              requests:
-              {{ if .cpu }}cpu: {{ .cpu | quote }} {{ end }}
-              {{ if .memory }}memory: {{ .memory | quote }} {{ end }}
-            {{- end }}
-          {{- end }}
 {{- end }}

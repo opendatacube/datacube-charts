@@ -1,6 +1,10 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+
+# @schema type: [string, null]
+# -- Name of an existing ServiceAccount to run the pods under.
 serviceAccountName:
+# -- Number of replicas. Ignored when `hpa.enabled` is true.
 replicaCount: 1
 
 hpa:
@@ -12,6 +16,7 @@ hpa:
 pdb:
   enabled: true
   minAvailable: 1
+  annotations: {}
 
 image:
   registry: ghcr.io
@@ -68,10 +73,27 @@ service:
 externalPort: 80 # External port on which service listen to
 internalPort: 8080 # Internal port on which pod is running and serving cubedash app
 
-dockerArgs: ["gunicorn", "-b", "0.0.0.0:8080", "-w", "3", "--threads=2", "-k",
-   "gthread", "-t", "60", "--pid", "gunicorn.pid", "--worker-tmp-dir", "/dev/shm",
-   "--preload", "--config", "python:cubedash.gunicorn_config", "cubedash:app",
-   "||", "true"]
+dockerArgs:
+  - "gunicorn"
+  - "-b"
+  - "0.0.0.0:8080"
+  - "-w"
+  - "3"
+  - "--threads=2"
+  - "-k"
+  - "gthread"
+  - "-t"
+  - "60"
+  - "--pid"
+  - "gunicorn.pid"
+  - "--worker-tmp-dir"
+  - "/dev/shm"
+  - "--preload"
+  - "--config"
+  - "python:cubedash.gunicorn_config"
+  - "cubedash:app"
+  - "||"
+  - "true"
 
 updateCreationDt:
   enabled: false
@@ -94,6 +116,10 @@ affinity: {}
 ingress:
   enabled: false
   path: "/"
+  # -- Ingress path type. One of Prefix, Exact or ImplementationSpecific.
+  pathType: Prefix
+  # -- Name of the IngressClass to use. Left empty the cluster default applies.
+  ingressClassName: ""
   hosts:
     - ""
   annotations: {}

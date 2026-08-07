@@ -30,7 +30,7 @@ spec:
       http:
         paths:
           - path: {{ $ingressPath }}
-            pathType: Prefix
+            pathType: {{ $ingressPathType | default "Prefix" }}
             backend:
               service:
                 name: {{ $fullName }}

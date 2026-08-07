@@ -1,0 +1,11 @@
+---
+# Exercises the wmsConfig init container and the WMS_CONFIG_PATH env entry.
+wmsConfig:
+  path: /env/config
+  filename: ows_cfg.py
+  subpath: ows_cfg.py
+  image:
+    repository: ghcr.io/opendatacube/ows
+    tag: latest
+    pullPolicy: IfNotPresent
+    src: /code/integration_tests/cfg/ows_test_cfg.py

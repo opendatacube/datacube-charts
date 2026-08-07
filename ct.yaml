@@ -1,0 +1,20 @@
+# chart-testing (ct) configuration
+# https://github.com/helm/chart-testing
+#
+# Picked up automatically by `ct` when run from the repository root.
+remote: origin
+target-branch: main
+
+# Parent directories that contain charts. NOT the chart directories themselves.
+chart-dirs:
+  - stable
+
+# Require a Chart.yaml version bump in any PR that touches a chart.
+check-version-increment: true
+
+# Share one yamllint config with the rest of the repo.
+lint-conf: .yamllint.yaml
+
+# Validate maintainers exist as GitHub users. Off: charts here use team aliases.
+validate-maintainers: false
+

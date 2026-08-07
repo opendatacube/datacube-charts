@@ -1,0 +1,33 @@
+# yamllint configuration
+#
+# Used both by the repo-wide `yamllint` CI step and by `ct lint`
+# (see `lint-conf` in ct.yaml), so a single set of rules applies everywhere.
+---
+extends: default
+
+rules:
+  # Helm values files are frequently long; wrapping them hurts readability.
+  line-length: disable
+  # Charts don't use document start markers.
+  document-start: disable
+  # `on:` in workflow files is a YAML 1.1 boolean. Warn, don't fail.
+  truthy:
+    level: warning
+  comments:
+    require-starting-space: true
+    min-spaces-from-content: 1
+  indentation:
+    spaces: consistent
+    indent-sequences: whatever
+    check-multi-line-strings: false
+  braces:
+    min-spaces-inside: 0
+    max-spaces-inside: 1
+  brackets:
+    min-spaces-inside: 0
+    max-spaces-inside: 1
+
+ignore: |
+  charts/*/templates/
+  charts/*/charts/
+  dist/

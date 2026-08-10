@@ -7,13 +7,15 @@ on:
     branches:
       - "main"
 
-env:
-  CHARTS_DEST: https://opendatacube.github.io/datacube-charts/charts
-
 permissions: {}
 
+# cr pushes index.yaml to gh-pages, so never let two runs overlap.
+concurrency:
+  group: publish-charts
+  cancel-in-progress: false
+
 jobs:
-  publish:
+  release:
     permissions:
       contents: write
 
@@ -22,16 +24,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          # cr needs full history to diff against the previous tag, and needs
+          # refs/remotes/origin/gh-pages present to build its worktree.
           fetch-depth: 0
 
       - name: Configure Git
         run: |
-          git config user.name "$GITHUB_ACTOR"
-          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@cae68fefc6b5f367a0275617c9f83181ba54714f # v1.7.0
+        with:
+          # Chart sources live in stable/, not the action's default charts/.
+          charts_dir: stable
+          skip_existing: true
         env:
-          CR_PAGES_INDEX_PATH: "charts/index.yaml"
-
-
+          CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Keep updating the historical index location on gh-pages.
+          CR_PAGES_INDEX_PATH: charts/index.yaml

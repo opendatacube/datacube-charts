@@ -8,4 +8,6 @@ stable/*/charts
 # Packaged charts and generated repo index
 /dist/
 
-.cr-release-packages
+# chart-releaser scratch directories
+.cr-release-packages/
+.cr-index/

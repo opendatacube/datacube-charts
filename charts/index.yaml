@@ -1408,6 +1408,37 @@ entries:
     - https://opendatacube.github.io/datacube-charts/charts/datacube-dev-env-0.1.0.tgz
     version: 0.1.0
   datacube-explorer:
+  - annotations:
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: Chart Source
+          url: https://github.com/opendatacube/datacube-charts
+        - name: Upstream Project
+          url: https://github.com/opendatacube/explorer
+    apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-08-10T16:35:40.471839+10:00"
+    description: A Helm chart for Datacube Explorer
+    digest: 2cd46a6533649c7e1abbfa513f285889a48a4a6385950f7a4418af46af01cd6e
+    home: https://www.opendatacube.org/documentation
+    keywords:
+    - datacube
+    - http
+    - web
+    - application
+    - python
+    - stac
+    maintainers:
+    - email: deacloudteam@ga.gov.au
+      name: DEA Teams
+    name: datacube-explorer
+    sources:
+    - https://github.com/opendatacube/explorer
+    - https://github.com/opendatacube/datacube-charts
+    type: application
+    urls:
+    - https://github.com/opendatacube/datacube-charts/releases/download/datacube-explorer-0.6.0/datacube-explorer-0.6.0.tgz
+    version: 0.6.0
   - apiVersion: v1
     created: "2026-07-23T05:21:02.813880085Z"
     description: A Helm chart for Datacube Explorer
@@ -1822,6 +1853,34 @@ entries:
     - https://opendatacube.github.io/datacube-charts/charts/datacube-explorer-0.5.11.tgz
     version: 0.5.11
   datacube-index:
+  - annotations:
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: Chart Source
+          url: https://github.com/opendatacube/datacube-charts
+    apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-08-10T16:35:40.858684+10:00"
+    description: Datacube OGC Web Services Indexing
+    digest: 95972c5e775e5dd41c2bf17582884c80aaf9d6db62d19a96710337f6f8fc2357
+    home: https://www.opendatacube.org/documentation
+    keywords:
+    - datacube
+    - http
+    - web
+    - application
+    - python
+    - index
+    - archive
+    name: datacube-index
+    sources:
+    - https://github.com/opendatacube/datacube-charts
+    - https://github.com/opendatacube/datacube-core
+    - https://github.com/opendatacube/datacube-ows
+    type: application
+    urls:
+    - https://github.com/opendatacube/datacube-charts/releases/download/datacube-index-0.5.0/datacube-index-0.5.0.tgz
+    version: 0.5.0
   - apiVersion: v1
     created: "2026-07-23T05:21:02.823916052Z"
     description: Datacube OGC Web Services Indexing
@@ -2266,6 +2325,34 @@ entries:
     - https://opendatacube.github.io/datacube-charts/charts/datacube-index-0.2.12.tgz
     version: 0.2.12
   datacube-ows:
+  - annotations:
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: Chart Source
+          url: https://github.com/opendatacube/datacube-charts
+        - name: Upstream Project
+          url: https://github.com/opendatacube/datacube-ows
+    apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-08-10T16:35:41.243+10:00"
+    description: Datacube Web Map Service
+    digest: 31c456fe944786fd8b5eb28bed390ba4b93d7976294eae6ce3af54a3f6c4faf9
+    home: https://www.opendatacube.org/documentation
+    keywords:
+    - datacube
+    - http
+    - web
+    - application
+    - python
+    name: datacube-ows
+    sources:
+    - https://github.com/opendatacube/datacube-charts
+    - https://github.com/opendatacube/datacube-core
+    - https://github.com/opendatacube/datacube-ows
+    type: application
+    urls:
+    - https://github.com/opendatacube/datacube-charts/releases/download/datacube-ows-0.21.0/datacube-ows-0.21.0.tgz
+    version: 0.21.0
   - apiVersion: v1
     created: "2026-07-23T05:21:02.838017202Z"
     description: Datacube Web Map Service
@@ -3270,4 +3357,4 @@ entries:
     urls:
     - https://opendatacube.github.io/datacube-charts/charts/restcube-0.1.0.tgz
     version: 0.1.0
-generated: "2026-07-23T05:21:02.731502003Z"
+generated: "2026-08-10T16:35:41.243708+10:00"

@@ -20,7 +20,10 @@ jobs:
         with:
           persist-credentials: false
       - name: Run helm-docs
-        run: .github/helm-docs.sh
+        # Installs helm-docs and fails if the committed docs are out of date.
+        uses: losisin/helm-docs-github-action@9e0787c426fdec38be6288bb5c0559dcb388412c # v2.0.1
+        with:
+          fail-on-diff: true
 
   kubeval-chart:
     runs-on: ubuntu-latest

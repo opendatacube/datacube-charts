@@ -115,6 +115,11 @@ dockerArgs:
   - "||"
   - "true"
 
+initSchema:
+  enabled: true
+  epsg: 6933  # EPSG code used to initialise the cubedash summary schema
+  backoffLimit: 0  # Number of retries
+
 updateCreationDt:
   enabled: false
   historyLimit: 1

@@ -53,7 +53,6 @@ jobs:
             helm kubeconform --verbose --summary "${chartdir}"
           done
 
-
   chart-testing:
     runs-on: ubuntu-latest
     outputs:
@@ -135,4 +134,3 @@ jobs:
         env:
           chart: "${{ matrix.chart }}"
         run: ct install --config ct.yaml --charts "$chart"
-

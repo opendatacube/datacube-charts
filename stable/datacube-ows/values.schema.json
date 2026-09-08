@@ -213,7 +213,7 @@
           "additionalProperties": false,
           "properties": {
             "pullPolicy": {
-              "default": "Always",
+              "default": "IfNotPresent",
               "title": "pullPolicy",
               "type": "string"
             },
@@ -228,7 +228,7 @@
               "type": "string"
             },
             "tag": {
-              "default": "latest",
+              "default": "",
               "title": "tag",
               "type": "string"
             }
@@ -352,7 +352,7 @@
               "type": "string"
             },
             "tag": {
-              "default": "latest",
+              "default": "",
               "title": "tag",
               "type": "string"
             }

@@ -15,6 +15,7 @@ hpa:
   maxReplicas: 6
   metrics: []
 
+# Pod Disruption Budget
 pdb:
   enabled: true
   minAvailable: 1
@@ -26,8 +27,8 @@ pdb:
 image:
   registry: ghcr.io
   repository: opendatacube/explorer
-  tag: "latest"
-  pullPolicy: Always
+  tag: ""  # Defaults to the chart appVersion when left empty
+  pullPolicy: IfNotPresent
 
 database:
   database: datacube

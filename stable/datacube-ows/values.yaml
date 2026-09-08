@@ -48,8 +48,8 @@ ows:
   image:
     registry: ghcr.io
     repository: opendatacube/ows
-    tag: latest
-    pullPolicy: Always
+    tag: ""
+    pullPolicy: IfNotPresent
   enabled: true
   maxSurge: 25%
   maxUnavailable: 25%
@@ -92,7 +92,7 @@ owsConfig:
   image:
     registry: ghcr.io
     repository: opendatacube/ows
-    tag: latest
+    tag: ""
     pullPolicy: Always
     # The folder location within the running Pod which contains the
     # ows config file

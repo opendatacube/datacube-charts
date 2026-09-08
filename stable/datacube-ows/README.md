@@ -2,7 +2,7 @@
 
 Datacube Web Map Service
 
-Current chart version is `0.21.0`
+Current chart version is `0.22.0`
 
 Source code can be found [here](https://www.opendatacube.org/documentation)
 
@@ -38,10 +38,10 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | ows.externalPort | int | `80` |  |
 | ows.hpa.autoscaling | bool | `true` |  |
 | ows.hpa.metrics | list | `[]` |  |
-| ows.image.pullPolicy | string | `"Always"` |  |
+| ows.image.pullPolicy | string | `"IfNotPresent"` |  |
 | ows.image.registry | string | `"ghcr.io"` |  |
 | ows.image.repository | string | `"opendatacube/ows"` |  |
-| ows.image.tag | string | `"latest"` |  |
+| ows.image.tag | string | `""` |  |
 | ows.internalPort | int | `8000` |  |
 | ows.livenessProbe | object | `{}` |  |
 | ows.maxSurge | string | `"25%"` |  |
@@ -55,7 +55,7 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | owsConfig.image.pullPolicy | string | `"Always"` |  |
 | owsConfig.image.registry | string | `"ghcr.io"` |  |
 | owsConfig.image.repository | string | `"opendatacube/ows"` |  |
-| owsConfig.image.tag | string | `"latest"` |  |
+| owsConfig.image.tag | string | `""` |  |
 | owsConfig.ows_cfg | string | `"cfg.ows_test_cfg.ows_cfg"` |  |
 | owsConfig.path | string | `"/env/config"` |  |
 | owsConfig.securityContext | object | `{}` |  |

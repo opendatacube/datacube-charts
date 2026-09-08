@@ -35,6 +35,7 @@ database:
   host: localhost
   port: 5432
   existingSecret: "explorer-reader"
+  adminExistingSecret: "explorer-admin"  # Secret used for schema migration hooks (needs write/DDL privileges)
 
 resources:
   limits:

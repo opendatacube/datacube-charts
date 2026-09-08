@@ -7,6 +7,8 @@ metadata:
     app.kubernetes.io/name: {{ include "datacube-explorer.name" . }}
     helm.sh/chart: {{ include "datacube-explorer.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Values.image.tag | default .Chart.AppVersion }}
+    app.kubernetes.io/component: database-initialisation
     app.kubernetes.io/managed-by: {{ .Release.Service }}
   annotations:
     # Run on install and upgrade, after other resources are created/updated.
@@ -49,12 +51,12 @@ spec:
           - name: DB_USERNAME
             valueFrom:
               secretKeyRef:
-                name: {{ .Values.database.existingSecret }}
+                name: {{ .Values.database.adminExistingSecret }}
                 key: postgres-username
           - name: DB_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: {{ .Values.database.existingSecret }}
+                name: {{ .Values.database.adminExistingSecret }}
                 key: postgres-password
           {{- if not (empty .Values.additionalSettings) }}
           - name: CUBEDASH_SETTINGS

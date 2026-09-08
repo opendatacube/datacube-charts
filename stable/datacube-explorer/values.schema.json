@@ -25,6 +25,11 @@
     "database": {
       "additionalProperties": false,
       "properties": {
+        "adminExistingSecret": {
+          "default": "explorer-admin",
+          "title": "adminExistingSecret",
+          "type": "string"
+        },
         "database": {
           "default": "datacube",
           "title": "database",
@@ -50,7 +55,8 @@
         "database",
         "host",
         "port",
-        "existingSecret"
+        "existingSecret",
+        "adminExistingSecret"
       ],
       "title": "database",
       "type": "object"

@@ -10,7 +10,8 @@ A Helm chart for Datacube Explorer
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| DEA Teams | <deacloudteam@ga.gov.au> |  |
+| omad |  |  |
+| pjonsson |  |  |
 
 ## Values
 

@@ -76,7 +76,7 @@ jobs:
       - name: Run chart-testing (list-changed)
         id: list-changed
         run: |
-          changed=$(ct list-changed)
+          changed=$(ct list-changed --config ct.yaml)
           changed_list=$(echo $changed | jq -Rn --compact-output '[inputs]')
           if [[ -n "$changed" ]]; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -84,7 +84,7 @@ jobs:
           fi
 
       - name: Run chart-testing (lint)
-        run: ct lint --github-groups
+        run: ct lint --github-groups --config ct.yaml
 
   install-chart:
     name: install-chart
@@ -116,4 +116,4 @@ jobs:
       - name: Test install chart ${{matrix.chart}}
         env:
           chart: "${{ matrix.chart }}"
-        run: ct install --charts "$chart"
+        run: ct install --config ct.yaml --charts "$chart"

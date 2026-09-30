@@ -1,7 +1,6 @@
 remote: origin
 target-branch: main
 check-version-increment: true
-debug: true
 chart-dirs:
   - stable/
 chart-repos:

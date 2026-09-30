@@ -49,7 +49,7 @@ jobs:
           done
 
 
-  chart-testing-lint:
+  chart-testing:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -77,8 +77,10 @@ jobs:
         id: list-changed
         run: |
           changed=$(ct list-changed)
+          changed_list=$(echo $changed | jq -Rn --compact-output '[inputs]')
           if [[ -n "$changed" ]]; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "changed_charts=${changed_list}" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Run chart-testing (lint)
@@ -87,28 +89,32 @@ jobs:
   install-chart:
     name: install-chart
     runs-on: ubuntu-latest
+    if: needs.chart-testing.outputs.changed == 'true'
     needs:
       - lint-docs
       - kubeconform-chart
-      - chart-testing-lint
+      - chart-testing
     strategy:
       matrix:
-        k8s:
+        k8s_versions:
           # https://hub.docker.com/r/kindest/node/tags
           - v1.35.8
+        chart: ${{ fromJSON(needs.chart-testing.outputs.changed_charts) }}
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - name: Create kind ${{ matrix.k8s }} cluster
+      - name: Create kind ${{ matrix.k8s_versions }} cluster
         uses: helm/kind-action@06c1ae10762d3b9c1644e7fe69596ae519e015a2 # v1.15.0
         with:
-          node_image: kindest/node:${{ matrix.k8s }}
+          node_image: kindest/node:${{ matrix.k8s_versions }}
 
       - name: Run chart-testing (install)
         uses: helm/chart-testing-action@6ec842c01de15ebb84c8627d2744a0c2f2755c9f # v2.8.0
 
       - name: Run chart-testing (install)
         if: steps.list-changed.outputs.changed == 'true'
+        env:
+          chart: "${{ matrix.chart }}"
         run: ct install

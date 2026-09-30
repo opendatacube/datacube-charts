@@ -1,6 +1,6 @@
 # datacube-explorer
 
-![Version: 0.5.32](https://img.shields.io/badge/Version-0.5.32-informational?style=flat-square)
+![Version: 0.5.34](https://img.shields.io/badge/Version-0.5.34-informational?style=flat-square)
 
 A Helm chart for Datacube Explorer
 

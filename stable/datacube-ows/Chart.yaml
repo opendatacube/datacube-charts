@@ -14,5 +14,5 @@ sources:
 - https://github.com/opendatacube/datacube-core
 - https://github.com/opendatacube/datacube-ows
 maintainers:
-- name: Pin Jin
-  email: pin.jin@ga.gov.au
+- name: omad
+- name: pjonsson

@@ -10,6 +10,7 @@ keywords:
 - python
 - stac
 home: https://www.opendatacube.org/documentation
+
 maintainers:
- - name: DEA Teams
-   email: deacloudteam@ga.gov.au
+- name: omad
+- name: pjonsson

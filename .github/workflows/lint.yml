@@ -51,6 +51,10 @@ jobs:
 
   chart-testing:
     runs-on: ubuntu-latest
+    outputs:
+        changed: ${{ steps.list-changed.outputs.changed }}
+        changed_list: ${{ steps.list-changed.outputs.changed_list }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -79,8 +83,10 @@ jobs:
           changed=$(ct list-changed --config ct.yaml)
           changed_list=$(echo $changed | jq -Rn --compact-output '[inputs]')
           if [[ -n "$changed" ]]; then
+            echo "changed=true"
             echo "changed=true" >> "$GITHUB_OUTPUT"
-            echo "changed_charts=${changed_list}" >> "$GITHUB_OUTPUT"
+            echo "changed_list=${changed_list}"
+            echo "changed_list=${changed_list}" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Run chart-testing (lint)
@@ -99,7 +105,7 @@ jobs:
         k8s_versions:
           # https://hub.docker.com/r/kindest/node/tags
           - v1.35.8
-        chart: ${{ fromJSON(needs.chart-testing.outputs.changed_charts) }}
+        chart: ${{ fromJSON(needs.chart-testing.outputs.changed_list) }}
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

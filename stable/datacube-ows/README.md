@@ -2,7 +2,7 @@
 
 Datacube Web Map Service
 
-Current chart version is `0.19.0`
+Current chart version is `0.20.3`
 
 Source code can be found [here](https://www.opendatacube.org/documentation)
 
@@ -16,7 +16,6 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | database.existingSecret | string | `nil` |  |
 | database.host | string | `"localhost"` |  |
 | database.port | int | `5432` |  |
-| ingress.ingressClassName | string | `""` |  | 
 | ingress.annotations | object | `{}` |  |
 | ingress.enabled | bool | `false` |  |
 | ingress.hosts[0] | string | `""` |  |
@@ -40,7 +39,7 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | ows.hpa.autoscaling | bool | `true` |  |
 | ows.hpa.metrics | object | `{}` |  |
 | ows.image.pullPolicy | string | `"Always"` |  |
-| ows.image.registry | string | `"docker.io"` |  |
+| ows.image.registry | string | `"ghcr.io"` |  |
 | ows.image.repository | string | `"opendatacube/ows"` |  |
 | ows.image.tag | string | `"latest"` |  |
 | ows.internalPort | int | `8000` |  |
@@ -54,7 +53,7 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | ows.startupProbe | object | `{}` |  |
 | owsConfig.image.cfg_folder | string | `"/code/integration_tests/cfg"` |  |
 | owsConfig.image.pullPolicy | string | `"Always"` |  |
-| owsConfig.image.registry | string | `"docker.io"` |  |
+| owsConfig.image.registry | string | `"ghcr.io"` |  |
 | owsConfig.image.repository | string | `"opendatacube/ows"` |  |
 | owsConfig.image.tag | string | `"latest"` |  |
 | owsConfig.ows_cfg | string | `"cfg.ows_test_cfg.ows_cfg"` |  |

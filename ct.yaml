@@ -1,5 +1,8 @@
 remote: origin
 target-branch: main
+check-version-increment: true
+debug: true
+validate-maintainers: false
 chart-dirs:
   - stable/datacube-explorer
   - stable/datacube-ows

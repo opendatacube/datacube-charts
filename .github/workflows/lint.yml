@@ -14,7 +14,6 @@ permissions:
 jobs:
   lint-docs:
     runs-on: ubuntu-latest
-    needs: lint-test
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -28,9 +27,6 @@ jobs:
 
   kubeconform-chart:
     runs-on: ubuntu-latest
-    needs:
-      - lint-test
-      - lint-docs
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -53,7 +49,7 @@ jobs:
           done
 
 
-  lint-test:
+  chart-testing-lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -64,6 +60,11 @@ jobs:
 
       - name: Install Helm
         uses: azure/setup-helm@9bc31f4ebc9c6b171d7bfbaa5d006ae7abdb4310 # v5.0.1
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.x'
+          check-latest: true
 
       - name: Install chart-testing
         uses: helm/chart-testing-action@6ec842c01de15ebb84c8627d2744a0c2f2755c9f # v2.8.0
@@ -77,19 +78,19 @@ jobs:
         run: |
           changed=$(ct list-changed)
           if [[ -n "$changed" ]]; then
-            echo "::set-output name=changed::true"
+            echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Run chart-testing (lint)
-        run: ct lint
+        run: ct lint --github-groups
 
   install-chart:
     name: install-chart
     runs-on: ubuntu-latest
     needs:
-      - lint-test
       - lint-docs
       - kubeconform-chart
+      - chart-testing-lint
     strategy:
       matrix:
         k8s:
@@ -107,5 +108,7 @@ jobs:
 
       - name: Run chart-testing (install)
         uses: helm/chart-testing-action@6ec842c01de15ebb84c8627d2744a0c2f2755c9f # v2.8.0
-        with:
-          command: install
+
+      - name: Run chart-testing (install)
+        if: steps.list-changed.outputs.changed == 'true'
+        run: ct install

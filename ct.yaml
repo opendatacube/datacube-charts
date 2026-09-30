@@ -2,10 +2,8 @@ remote: origin
 target-branch: main
 check-version-increment: true
 debug: true
-validate-maintainers: false
 chart-dirs:
-  - stable/datacube-explorer
-  - stable/datacube-ows
+  - stable/
 chart-repos:
   - stable=https://charts.helm.sh/stable
 helm-extra-args: --timeout=900s

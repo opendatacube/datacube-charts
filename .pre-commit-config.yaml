@@ -1,0 +1,14 @@
+repos:
+  - repo: https://github.com/dadav/helm-schema
+    rev: 0.23.5
+    hooks:
+      - id: helm-schema
+        pass_filenames: false
+        args: [--keep-existing-dep-schemas]
+  - repo: https://github.com/norwoodj/helm-docs
+    rev: v1.14.2
+    hooks:
+      - id: helm-docs-built
+        args:
+          # Make the tool search for charts only under the `charts` directory
+          - --chart-search-root=stable

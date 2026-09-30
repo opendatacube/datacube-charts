@@ -81,7 +81,7 @@ jobs:
         id: list-changed
         run: |
           changed=$(ct list-changed --config ct.yaml)
-          changed_list=$(echo $changed | jq -Rn --compact-output '[inputs]')
+          changed_list=$(echo "$changed" | jq -Rn --compact-output '[inputs]')
           if [[ -n "$changed" ]]; then
             echo "changed=true"
             echo "changed=true" >> "$GITHUB_OUTPUT"

@@ -4,6 +4,19 @@
 minReplicas: 1
 maxReplicas: 2
 # serviceAccount -- See configuration below
+# @schema
+# properties:
+#   enabled:
+#     title: enabled
+#     type: boolean
+#     description: Whether to create and use a Service Account
+#   name:
+#     title: name
+#     type: string
+#   annotations:
+#     title: annotations
+#     type: object
+# @schema
 serviceAccount: {}
 # If using IRSA the service account can be configured by replacing the ${...} variables with your deployments values
 # serviceAccount:
@@ -47,12 +60,29 @@ ows:
       cpu: "1"
       memory: 2048Mi
   dockerArgs: ["gunicorn", "-b", "0.0.0.0:8000", "-w", "4", "--keep-alive", "50", "--timeout", "120", "datacube_ows.wsgi"]
-  annotations:
-    iam.amazonaws.com/role: kubernetes-wms
+  # @schema
+  # type: object
+  # default: {"iam.amazonaws.com/role": "kubernetes-wms"}
+  # additionalProperties: true
+  # @schema
+  # Extra annotations to apply to the OWS Pods
+  annotations: {}
+  # @schema
+  # additionalProperties: true
+  # @schema
   livenessProbe: {}
+  # @schema
+  # additionalProperties: true
+  # @schema
   readinessProbe: {}
+  # @schema
+  # additionalProperties: true
+  # @schema
   startupProbe: {}
   # Deployment level security context
+  # @schema
+  # additionalProperties: true
+  # @schema
   securityContext: {}
   hpa:
     autoscaling: true
@@ -74,6 +104,9 @@ owsConfig:
   ows_cfg: "cfg.ows_test_cfg.ows_cfg"
 
 pyspy:
+  # @schema
+  # additionalProperties: true
+  # @schema
   image: {}
   resources:
     limits:
@@ -96,8 +129,14 @@ profiling:
 service:
   type: NodePort
 
+# @schema
+# additionalProperties: true
+# @schema
 affinity: {}
 
+# @schema
+# additionalProperties: true
+# @schema
 tolerations: {}
 
 ingress:
@@ -108,4 +147,7 @@ ingress:
     - ""
   path: "/"
   redirect: false
+  # @schema
+  # additionalProperties: true
+  # @schema
   annotations: {}

@@ -18,6 +18,9 @@ hpa:
 pdb:
   enabled: true
   minAvailable: 1
+  # @schema
+  # additionalProperties: true
+  # @schema
   annotations: {}
 
 image:
@@ -37,35 +40,50 @@ resources:
     cpu: "300m"
     memory: 1024Mi
 
+# @schema
+# additionalProperties: true
+# @schema
 annotations: {}
 
-livenessProbe:
-  httpGet:
-    path: "/stac"
-    port: 8080
-  initialDelaySeconds: 10
-  periodSeconds: 30
-  timeoutSeconds: 60
-  failureThreshold: 5
+# @schema
+# additionalProperties: true
+# @schema
+livenessProbe: {}
+# httpGet:
+#   path: "/stac"
+#   port: 8080
+# initialDelaySeconds: 10
+# periodSeconds: 30
+# timeoutSeconds: 60
+# failureThreshold: 5
 
-readinessProbe:
-  httpGet:
-    path: "/stac"
-    port: 8080
-  initialDelaySeconds: 10
-  periodSeconds: 30
-  timeoutSeconds: 60
-  failureThreshold: 5
+# @schema
+# additionalProperties: true
+# @schema
+readinessProbe: {}
+# httpGet:
+#   path: "/stac"
+#   port: 8080
+# initialDelaySeconds: 10
+# periodSeconds: 30
+# timeoutSeconds: 60
+# failureThreshold: 5
 
-startupProbe:
-  httpGet:
-    path: "/stac"
-    port: 8080
-  initialDelaySeconds: 10
-  periodSeconds: 30
-  timeoutSeconds: 60
-  failureThreshold: 5
+# @schema
+# additionalProperties: true
+# @schema
+startupProbe: {}
+# httpGet:
+#   path: "/stac"
+#   port: 8080
+# initialDelaySeconds: 10
+# periodSeconds: 30
+# timeoutSeconds: 60
+# failureThreshold: 5
 
+# @schema
+# additionalProperties: true
+# @schema
 additionalEnvironmentVars: {}
 
 service:
@@ -110,8 +128,14 @@ updateCreationDt:
   - "--force-refresh"
   - "--all"
 
+# @schema
+# additionalProperties: true
+# @schema
 additionalSettings: {}
 
+# @schema
+# additionalProperties: true
+# @schema
 affinity: {}
 
 ingress:
@@ -123,4 +147,7 @@ ingress:
   ingressClassName: ""
   hosts:
     - ""
+  # @schema
+  # additionalProperties: true
+  # @schema
   annotations: {}

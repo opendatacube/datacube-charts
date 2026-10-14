@@ -23,7 +23,7 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | ingress.redirect | bool | `false` |  |
 | maxReplicas | int | `2` |  |
 | minReplicas | int | `1` |  |
-| ows.annotations."iam.amazonaws.com/role" | string | `"kubernetes-wms"` |  |
+| ows.annotations | object | `{}` |  |
 | ows.dockerArgs[0] | string | `"gunicorn"` |  |
 | ows.dockerArgs[1] | string | `"-b"` |  |
 | ows.dockerArgs[2] | string | `"0.0.0.0:8000"` |  |
@@ -67,7 +67,7 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | pyspy.resources.limits.cpu | string | `"0.125"` |  |
 | pyspy.resources.limits.memory | string | `"512Mi"` |  |
 | service.type | string | `"NodePort"` |  |
-| serviceAccount | object | `{}` | See configuration below |
+| serviceAccount | object | `{}` | See configuration below @schema properties:   enabled:     title: enabled     type: boolean     description: Whether to create and use a Service Account   name:     title: name     type: string   annotations:     title: annotations     type: object @schema |
 | tolerations | object | `{}` |  |
 
 ## Service Account configuration

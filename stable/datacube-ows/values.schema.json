@@ -202,7 +202,7 @@
               "type": "boolean"
             },
             "metrics": {
-              "description": "HorizontalPodAutoscaler metrics. A list, as per the HPA v2 spec.",
+              "description": "HorizontalPodAutoscaler metrics.",
               "items": {
                 "required": []
               },
@@ -310,7 +310,7 @@
         },
         "securityContext": {
           "additionalProperties": false,
-          "description": "ows.securityContext -- Deployment level security context",
+          "description": "Deployment level security context",
           "required": [],
           "title": "securityContext",
           "type": "object"
@@ -349,7 +349,7 @@
           "properties": {
             "cfg_folder": {
               "default": "/code/integration_tests/cfg",
-              "description": "the folder location within the docker image that contains\nows config file",
+              "description": "The folder location within the running Pod which contains the\nows config file",
               "title": "cfg_folder",
               "type": "string"
             },
@@ -386,7 +386,7 @@
         },
         "ows_cfg": {
           "default": "cfg.ows_test_cfg.ows_cfg",
-          "description": "the ows config python objection",
+          "description": "the OWS config Python Object",
           "title": "ows_cfg",
           "type": "string"
         },
@@ -397,7 +397,7 @@
         },
         "securityContext": {
           "additionalProperties": false,
-          "description": "owsConfig.securityContext -- Container level security context",
+          "description": "securityContext -- Container level security context",
           "required": [],
           "title": "securityContext",
           "type": "object"

@@ -37,7 +37,7 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | ows.enabled | bool | `true` |  |
 | ows.externalPort | int | `80` |  |
 | ows.hpa.autoscaling | bool | `true` |  |
-| ows.hpa.metrics | list | `[]` | HorizontalPodAutoscaler metrics. A list, as per the HPA v2 spec. |
+| ows.hpa.metrics | list | `[]` |  |
 | ows.image.pullPolicy | string | `"Always"` |  |
 | ows.image.registry | string | `"ghcr.io"` |  |
 | ows.image.repository | string | `"opendatacube/ows"` |  |
@@ -49,7 +49,7 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | ows.readinessProbe | object | `{}` |  |
 | ows.resources.limits.cpu | string | `"1"` |  |
 | ows.resources.limits.memory | string | `"2048Mi"` |  |
-| ows.securityContext | object | `{}` | Deployment level security context |
+| ows.securityContext | object | `{}` |  |
 | ows.startupProbe | object | `{}` |  |
 | owsConfig.image.cfg_folder | string | `"/code/integration_tests/cfg"` |  |
 | owsConfig.image.pullPolicy | string | `"Always"` |  |
@@ -58,7 +58,7 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | owsConfig.image.tag | string | `"latest"` |  |
 | owsConfig.ows_cfg | string | `"cfg.ows_test_cfg.ows_cfg"` |  |
 | owsConfig.path | string | `"/env/config"` |  |
-| owsConfig.securityContext | object | `{}` | Container level security context |
+| owsConfig.securityContext | object | `{}` |  |
 | profiling.enabled | bool | `false` |  |
 | profiling.path | string | `"/opt/profiling/"` |  |
 | prometheus.enabled | bool | `false` |  |

@@ -92,8 +92,14 @@ jobs:
             echo "changed_list=${changed_list}" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Run chart-testing (lint)
+      - name: Run chart-testing lint (Changed Charts)
+        if: ${{ github.ref_name != 'main' }}
         run: ct lint --github-groups --config ct.yaml
+
+      - name: Run chart-testing lint (All Charts)
+        if: ${{ github.ref_name == 'main' }}
+        run: |
+          ct lint --github-groups --config ct.yaml
 
   install-chart:
     name: install-chart

@@ -3,28 +3,24 @@
   "additionalProperties": false,
   "properties": {
     "additionalEnvironmentVars": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "required": [],
-      "title": "additionalEnvironmentVars",
-      "type": "object"
+      "title": "additionalEnvironmentVars"
     },
     "additionalSettings": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "required": [],
-      "title": "additionalSettings",
-      "type": "object"
+      "title": "additionalSettings"
     },
     "affinity": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "required": [],
-      "title": "affinity",
-      "type": "object"
+      "title": "affinity"
     },
     "annotations": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "required": [],
-      "title": "annotations",
-      "type": "object"
+      "title": "annotations"
     },
     "database": {
       "additionalProperties": false,
@@ -211,10 +207,9 @@
       "additionalProperties": false,
       "properties": {
         "annotations": {
-          "additionalProperties": false,
+          "additionalProperties": true,
           "required": [],
-          "title": "annotations",
-          "type": "object"
+          "title": "annotations"
         },
         "enabled": {
           "default": false,
@@ -256,8 +251,7 @@
         "path",
         "pathType",
         "ingressClassName",
-        "hosts",
-        "annotations"
+        "hosts"
       ],
       "title": "ingress",
       "type": "object"
@@ -268,68 +262,17 @@
       "type": "integer"
     },
     "livenessProbe": {
-      "additionalProperties": false,
-      "properties": {
-        "failureThreshold": {
-          "default": 5,
-          "title": "failureThreshold",
-          "type": "integer"
-        },
-        "httpGet": {
-          "additionalProperties": false,
-          "properties": {
-            "path": {
-              "default": "/stac",
-              "title": "path",
-              "type": "string"
-            },
-            "port": {
-              "default": 8080,
-              "title": "port",
-              "type": "integer"
-            }
-          },
-          "required": [
-            "path",
-            "port"
-          ],
-          "title": "httpGet",
-          "type": "object"
-        },
-        "initialDelaySeconds": {
-          "default": 10,
-          "title": "initialDelaySeconds",
-          "type": "integer"
-        },
-        "periodSeconds": {
-          "default": 30,
-          "title": "periodSeconds",
-          "type": "integer"
-        },
-        "timeoutSeconds": {
-          "default": 60,
-          "title": "timeoutSeconds",
-          "type": "integer"
-        }
-      },
-      "required": [
-        "httpGet",
-        "initialDelaySeconds",
-        "periodSeconds",
-        "timeoutSeconds",
-        "failureThreshold"
-      ],
-      "title": "livenessProbe",
-      "type": "object"
+      "additionalProperties": true,
+      "required": [],
+      "title": "livenessProbe"
     },
     "pdb": {
       "additionalProperties": false,
       "properties": {
         "annotations": {
-          "additionalProperties": false,
+          "additionalProperties": true,
           "required": [],
-          "title": "annotations",
-          "type": "object"
+          "title": "annotations"
         },
         "enabled": {
           "default": true,
@@ -344,66 +287,15 @@
       },
       "required": [
         "enabled",
-        "minAvailable",
-        "annotations"
+        "minAvailable"
       ],
       "title": "pdb",
       "type": "object"
     },
     "readinessProbe": {
-      "additionalProperties": false,
-      "properties": {
-        "failureThreshold": {
-          "default": 5,
-          "title": "failureThreshold",
-          "type": "integer"
-        },
-        "httpGet": {
-          "additionalProperties": false,
-          "properties": {
-            "path": {
-              "default": "/stac",
-              "title": "path",
-              "type": "string"
-            },
-            "port": {
-              "default": 8080,
-              "title": "port",
-              "type": "integer"
-            }
-          },
-          "required": [
-            "path",
-            "port"
-          ],
-          "title": "httpGet",
-          "type": "object"
-        },
-        "initialDelaySeconds": {
-          "default": 10,
-          "title": "initialDelaySeconds",
-          "type": "integer"
-        },
-        "periodSeconds": {
-          "default": 30,
-          "title": "periodSeconds",
-          "type": "integer"
-        },
-        "timeoutSeconds": {
-          "default": 60,
-          "title": "timeoutSeconds",
-          "type": "integer"
-        }
-      },
-      "required": [
-        "httpGet",
-        "initialDelaySeconds",
-        "periodSeconds",
-        "timeoutSeconds",
-        "failureThreshold"
-      ],
-      "title": "readinessProbe",
-      "type": "object"
+      "additionalProperties": true,
+      "required": [],
+      "title": "readinessProbe"
     },
     "replicaCount": {
       "default": 1,
@@ -468,59 +360,9 @@
       ]
     },
     "startupProbe": {
-      "additionalProperties": false,
-      "properties": {
-        "failureThreshold": {
-          "default": 5,
-          "title": "failureThreshold",
-          "type": "integer"
-        },
-        "httpGet": {
-          "additionalProperties": false,
-          "properties": {
-            "path": {
-              "default": "/stac",
-              "title": "path",
-              "type": "string"
-            },
-            "port": {
-              "default": 8080,
-              "title": "port",
-              "type": "integer"
-            }
-          },
-          "required": [
-            "path",
-            "port"
-          ],
-          "title": "httpGet",
-          "type": "object"
-        },
-        "initialDelaySeconds": {
-          "default": 10,
-          "title": "initialDelaySeconds",
-          "type": "integer"
-        },
-        "periodSeconds": {
-          "default": 30,
-          "title": "periodSeconds",
-          "type": "integer"
-        },
-        "timeoutSeconds": {
-          "default": 60,
-          "title": "timeoutSeconds",
-          "type": "integer"
-        }
-      },
-      "required": [
-        "httpGet",
-        "initialDelaySeconds",
-        "periodSeconds",
-        "timeoutSeconds",
-        "failureThreshold"
-      ],
-      "title": "startupProbe",
-      "type": "object"
+      "additionalProperties": true,
+      "required": [],
+      "title": "startupProbe"
     },
     "updateCreationDt": {
       "additionalProperties": false,
@@ -600,18 +442,11 @@
     "image",
     "database",
     "resources",
-    "annotations",
-    "livenessProbe",
-    "readinessProbe",
-    "startupProbe",
-    "additionalEnvironmentVars",
     "service",
     "externalPort",
     "internalPort",
     "dockerArgs",
     "updateCreationDt",
-    "additionalSettings",
-    "affinity",
     "ingress"
   ],
   "type": "object"

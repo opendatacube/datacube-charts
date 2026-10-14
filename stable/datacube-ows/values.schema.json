@@ -3,10 +3,9 @@
   "additionalProperties": false,
   "properties": {
     "affinity": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "required": [],
-      "title": "affinity",
-      "type": "object"
+      "title": "affinity"
     },
     "clusterInfo": {
       "additionalProperties": false,
@@ -70,10 +69,9 @@
       "additionalProperties": false,
       "properties": {
         "annotations": {
-          "additionalProperties": false,
+          "additionalProperties": true,
           "required": [],
-          "title": "annotations",
-          "type": "object"
+          "title": "annotations"
         },
         "enabled": {
           "default": false,
@@ -108,8 +106,7 @@
         "enabled",
         "hosts",
         "path",
-        "redirect",
-        "annotations"
+        "redirect"
       ],
       "title": "ingress",
       "type": "object"
@@ -130,17 +127,12 @@
       "description": "#\n# Datacube OWS configuration\n#",
       "properties": {
         "annotations": {
-          "additionalProperties": false,
-          "properties": {
-            "iam.amazonaws.com/role": {
-              "default": "kubernetes-wms",
-              "title": "iam.amazonaws.com/role",
-              "type": "string"
-            }
+          "additionalProperties": true,
+          "default": {
+            "iam.amazonaws.com/role": "kubernetes-wms"
           },
-          "required": [
-            "iam.amazonaws.com/role"
-          ],
+          "description": "Extra annotations to apply to the OWS Pods",
+          "required": [],
           "title": "annotations",
           "type": "object"
         },
@@ -256,10 +248,9 @@
           "type": "integer"
         },
         "livenessProbe": {
-          "additionalProperties": false,
+          "additionalProperties": true,
           "required": [],
-          "title": "livenessProbe",
-          "type": "object"
+          "title": "livenessProbe"
         },
         "maxSurge": {
           "default": "25%",
@@ -272,10 +263,9 @@
           "type": "string"
         },
         "readinessProbe": {
-          "additionalProperties": false,
+          "additionalProperties": true,
           "required": [],
-          "title": "readinessProbe",
-          "type": "object"
+          "title": "readinessProbe"
         },
         "resources": {
           "additionalProperties": false,
@@ -309,17 +299,15 @@
           "type": "object"
         },
         "securityContext": {
-          "additionalProperties": false,
+          "additionalProperties": true,
           "description": "Deployment level security context",
           "required": [],
-          "title": "securityContext",
-          "type": "object"
+          "title": "securityContext"
         },
         "startupProbe": {
-          "additionalProperties": false,
+          "additionalProperties": true,
           "required": [],
-          "title": "startupProbe",
-          "type": "object"
+          "title": "startupProbe"
         }
       },
       "required": [
@@ -331,11 +319,6 @@
         "internalPort",
         "resources",
         "dockerArgs",
-        "annotations",
-        "livenessProbe",
-        "readinessProbe",
-        "startupProbe",
-        "securityContext",
         "hpa"
       ],
       "title": "ows",
@@ -460,10 +443,9 @@
       "additionalProperties": false,
       "properties": {
         "image": {
-          "additionalProperties": false,
+          "additionalProperties": true,
           "required": [],
-          "title": "image",
-          "type": "object"
+          "title": "image"
         },
         "resources": {
           "additionalProperties": false,
@@ -498,7 +480,6 @@
         }
       },
       "required": [
-        "image",
         "resources"
       ],
       "title": "pyspy",
@@ -522,21 +503,34 @@
     "serviceAccount": {
       "additionalProperties": false,
       "description": "serviceAccount -- See configuration below",
+      "properties": {
+        "annotations": {
+          "required": [],
+          "title": "annotations",
+          "type": "object"
+        },
+        "enabled": {
+          "description": "Whether to create and use a Service Account",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "title": "name",
+          "type": "string"
+        }
+      },
       "required": [],
-      "title": "serviceAccount",
-      "type": "object"
+      "title": "serviceAccount"
     },
     "tolerations": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "required": [],
-      "title": "tolerations",
-      "type": "object"
+      "title": "tolerations"
     }
   },
   "required": [
     "minReplicas",
     "maxReplicas",
-    "serviceAccount",
     "clusterInfo",
     "database",
     "ows",
@@ -545,8 +539,6 @@
     "prometheus",
     "profiling",
     "service",
-    "affinity",
-    "tolerations",
     "ingress"
   ],
   "type": "object"

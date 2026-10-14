@@ -1,6 +1,6 @@
 # datacube-explorer
 
-![Version: 0.5.34](https://img.shields.io/badge/Version-0.5.34-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
+![Version: 0.6.0](https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
 
 A Helm chart for Datacube Explorer
 
@@ -66,32 +66,17 @@ A Helm chart for Datacube Explorer
 | ingress.path | string | `"/"` |  |
 | ingress.pathType | string | `"Prefix"` | Ingress path type. One of Prefix, Exact or ImplementationSpecific. |
 | internalPort | int | `8080` |  |
-| livenessProbe.failureThreshold | int | `5` |  |
-| livenessProbe.httpGet.path | string | `"/stac"` |  |
-| livenessProbe.httpGet.port | int | `8080` |  |
-| livenessProbe.initialDelaySeconds | int | `10` |  |
-| livenessProbe.periodSeconds | int | `30` |  |
-| livenessProbe.timeoutSeconds | int | `60` |  |
+| livenessProbe | object | `{}` |  |
 | pdb.annotations | object | `{}` |  |
 | pdb.enabled | bool | `true` |  |
 | pdb.minAvailable | int | `1` |  |
-| readinessProbe.failureThreshold | int | `5` |  |
-| readinessProbe.httpGet.path | string | `"/stac"` |  |
-| readinessProbe.httpGet.port | int | `8080` |  |
-| readinessProbe.initialDelaySeconds | int | `10` |  |
-| readinessProbe.periodSeconds | int | `30` |  |
-| readinessProbe.timeoutSeconds | int | `60` |  |
+| readinessProbe | object | `{}` |  |
 | replicaCount | int | `1` | Number of replicas. Ignored when `hpa.enabled` is true. |
 | resources.limits.cpu | string | `"300m"` |  |
 | resources.limits.memory | string | `"1024Mi"` |  |
 | service.type | string | `"ClusterIP"` |  |
 | serviceAccountName | string | `nil` |  |
-| startupProbe.failureThreshold | int | `5` |  |
-| startupProbe.httpGet.path | string | `"/stac"` |  |
-| startupProbe.httpGet.port | int | `8080` |  |
-| startupProbe.initialDelaySeconds | int | `10` |  |
-| startupProbe.periodSeconds | int | `30` |  |
-| startupProbe.timeoutSeconds | int | `60` |  |
+| startupProbe | object | `{}` |  |
 | updateCreationDt.backoffLimit | int | `0` |  |
 | updateCreationDt.concurrencyPolicy | string | `"Allow"` |  |
 | updateCreationDt.cron | string | `"0 13 * * *"` |  |

@@ -1,16 +1,20 @@
 # Datacube Helm Charts
 
-![Linting](https://github.com/opendatacube/datacube-charts/workflows/Linting/badge.svg)
+![Linting](https://github.com/opendatacube/datacube-charts/workflows/CI/badge.svg)
 ![Publish charts](https://github.com/opendatacube/datacube-charts/workflows/Publish%20charts/badge.svg)
 
-This repository hosts the Opendatacube Helm charts
+This repository hosts the Open Datacube Helm charts
 
-
-You can use these helm charts in your own kubernetes cluster by adding the helm chart repo 
+You can use these helm charts in your Kubernetes cluster by adding the helm
+chart repo:
 
 `helm repo add datacube-charts https://opendatacube.github.io/datacube-charts/charts/`
 
-Documentation for installing each chart is available in their own directories
+Documentation for installing each chart is available in their own directories.
 
-## CI  Lint
-To pass lint, run [`helm-docs`](https://github.com/norwoodj/helm-docs) from the repo root after changing any chart values, and commit the regenerated `README.md` files. CI runs `helm-docs` and fails if the committed docs are out of date.
+## CI Linting
+
+To pass lint, run [`helm-docs`](https://github.com/norwoodj/helm-docs) from
+the repo root after changing any chart values, and commit the
+regenerated `README.md` files. CI runs `helm-docs` and fails if the
+committed docs are out-of-date.

@@ -1,250 +1,553 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "type": "object",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
   "properties": {
     "affinity": {
+      "additionalProperties": false,
+      "required": [],
+      "title": "affinity",
       "type": "object"
     },
     "clusterInfo": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "envName": {
+          "default": "dev",
+          "title": "envName",
           "type": "string"
         }
-      }
+      },
+      "required": [
+        "envName"
+      ],
+      "title": "clusterInfo",
+      "type": "object"
     },
     "database": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "database": {
+          "default": "datacube",
+          "title": "database",
           "type": "string"
         },
         "existingSecret": {
+          "default": "",
+          "description": "Name of an existing Secret holding `postgres-username` / `postgres-password`.",
+          "required": [],
+          "title": "existingSecret",
           "type": [
             "string",
             "null"
           ]
         },
         "host": {
+          "default": "localhost",
+          "title": "host",
           "type": "string"
         },
         "port": {
+          "default": 5432,
+          "title": "port",
           "type": "integer"
         }
-      }
+      },
+      "required": [
+        "database",
+        "host",
+        "port"
+      ],
+      "title": "database",
+      "type": "object"
+    },
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
     },
     "ingress": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "annotations": {
+          "additionalProperties": false,
+          "required": [],
+          "title": "annotations",
           "type": "object"
         },
         "enabled": {
+          "default": false,
+          "description": "# Enable Ingress.\n#",
+          "title": "enabled",
           "type": "boolean"
         },
         "hosts": {
-          "type": "array",
           "items": {
-            "type": "string"
-          }
+            "anyOf": [
+              {
+                "type": "string"
+              }
+            ],
+            "required": []
+          },
+          "title": "hosts",
+          "type": "array"
         },
         "path": {
+          "default": "/",
+          "title": "path",
           "type": "string"
         },
         "redirect": {
+          "default": false,
+          "title": "redirect",
           "type": "boolean"
         }
-      }
+      },
+      "required": [
+        "enabled",
+        "hosts",
+        "path",
+        "redirect",
+        "annotations"
+      ],
+      "title": "ingress",
+      "type": "object"
     },
     "maxReplicas": {
+      "default": 2,
+      "title": "maxReplicas",
       "type": "integer"
     },
     "minReplicas": {
+      "default": 1,
+      "description": "Default values for datacube-wms.\nThis is a YAML-formatted file.\nDeclare variables to be passed into your templates.",
+      "title": "minReplicas",
       "type": "integer"
     },
     "ows": {
-      "type": "object",
+      "additionalProperties": false,
+      "description": "#\n# Datacube OWS configuration\n#",
       "properties": {
         "annotations": {
-          "type": "object",
+          "additionalProperties": false,
           "properties": {
             "iam.amazonaws.com/role": {
+              "default": "kubernetes-wms",
+              "title": "iam.amazonaws.com/role",
               "type": "string"
             }
-          }
+          },
+          "required": [
+            "iam.amazonaws.com/role"
+          ],
+          "title": "annotations",
+          "type": "object"
         },
         "dockerArgs": {
-          "type": "array",
           "items": {
-            "type": "string"
-          }
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "required": []
+          },
+          "title": "dockerArgs",
+          "type": "array"
         },
         "enabled": {
+          "default": true,
+          "title": "enabled",
           "type": "boolean"
         },
         "externalPort": {
+          "default": 80,
+          "title": "externalPort",
           "type": "integer"
         },
         "hpa": {
-          "type": "object",
+          "additionalProperties": false,
           "properties": {
             "autoscaling": {
+              "default": true,
+              "title": "autoscaling",
               "type": "boolean"
             },
             "metrics": {
+              "description": "HorizontalPodAutoscaler metrics. A list, as per the HPA v2 spec.",
+              "items": {
+                "required": []
+              },
+              "title": "metrics",
               "type": "array"
             }
-          }
+          },
+          "required": [
+            "autoscaling",
+            "metrics"
+          ],
+          "title": "hpa",
+          "type": "object"
         },
         "image": {
-          "type": "object",
+          "additionalProperties": false,
           "properties": {
             "pullPolicy": {
+              "default": "Always",
+              "title": "pullPolicy",
               "type": "string"
             },
             "registry": {
+              "default": "ghcr.io",
+              "title": "registry",
               "type": "string"
             },
             "repository": {
+              "default": "opendatacube/ows",
+              "title": "repository",
               "type": "string"
             },
             "tag": {
+              "default": "latest",
+              "title": "tag",
               "type": "string"
             }
-          }
+          },
+          "required": [
+            "registry",
+            "repository",
+            "tag",
+            "pullPolicy"
+          ],
+          "title": "image",
+          "type": "object"
         },
         "internalPort": {
+          "default": 8000,
+          "title": "internalPort",
           "type": "integer"
         },
         "livenessProbe": {
+          "additionalProperties": false,
+          "required": [],
+          "title": "livenessProbe",
           "type": "object"
         },
         "maxSurge": {
+          "default": "25%",
+          "title": "maxSurge",
           "type": "string"
         },
         "maxUnavailable": {
+          "default": "25%",
+          "title": "maxUnavailable",
           "type": "string"
         },
         "readinessProbe": {
+          "additionalProperties": false,
+          "required": [],
+          "title": "readinessProbe",
           "type": "object"
         },
         "resources": {
-          "type": "object",
+          "additionalProperties": false,
           "properties": {
             "limits": {
-              "type": "object",
+              "additionalProperties": false,
               "properties": {
                 "cpu": {
+                  "default": "1",
+                  "title": "cpu",
                   "type": "string"
                 },
                 "memory": {
+                  "default": "2048Mi",
+                  "title": "memory",
                   "type": "string"
                 }
-              }
+              },
+              "required": [
+                "cpu",
+                "memory"
+              ],
+              "title": "limits",
+              "type": "object"
             }
-          }
+          },
+          "required": [
+            "limits"
+          ],
+          "title": "resources",
+          "type": "object"
         },
         "securityContext": {
+          "additionalProperties": false,
+          "description": "ows.securityContext -- Deployment level security context",
+          "required": [],
+          "title": "securityContext",
           "type": "object"
         },
         "startupProbe": {
+          "additionalProperties": false,
+          "required": [],
+          "title": "startupProbe",
           "type": "object"
         }
-      }
+      },
+      "required": [
+        "image",
+        "enabled",
+        "maxSurge",
+        "maxUnavailable",
+        "externalPort",
+        "internalPort",
+        "resources",
+        "dockerArgs",
+        "annotations",
+        "livenessProbe",
+        "readinessProbe",
+        "startupProbe",
+        "securityContext",
+        "hpa"
+      ],
+      "title": "ows",
+      "type": "object"
     },
     "owsConfig": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "image": {
-          "type": "object",
+          "additionalProperties": false,
           "properties": {
             "cfg_folder": {
+              "default": "/code/integration_tests/cfg",
+              "description": "the folder location within the docker image that contains\nows config file",
+              "title": "cfg_folder",
               "type": "string"
             },
             "pullPolicy": {
+              "default": "Always",
+              "title": "pullPolicy",
               "type": "string"
             },
             "registry": {
+              "default": "ghcr.io",
+              "title": "registry",
               "type": "string"
             },
             "repository": {
+              "default": "opendatacube/ows",
+              "title": "repository",
               "type": "string"
             },
             "tag": {
+              "default": "latest",
+              "title": "tag",
               "type": "string"
             }
-          }
+          },
+          "required": [
+            "registry",
+            "repository",
+            "tag",
+            "pullPolicy",
+            "cfg_folder"
+          ],
+          "title": "image",
+          "type": "object"
         },
         "ows_cfg": {
+          "default": "cfg.ows_test_cfg.ows_cfg",
+          "description": "the ows config python objection",
+          "title": "ows_cfg",
           "type": "string"
         },
         "path": {
+          "default": "/env/config",
+          "title": "path",
           "type": "string"
         },
         "securityContext": {
+          "additionalProperties": false,
+          "description": "owsConfig.securityContext -- Container level security context",
+          "required": [],
+          "title": "securityContext",
           "type": "object"
         }
-      }
+      },
+      "required": [
+        "image",
+        "securityContext",
+        "path",
+        "ows_cfg"
+      ],
+      "title": "owsConfig",
+      "type": "object"
     },
     "profiling": {
-      "type": "object",
+      "additionalProperties": false,
+      "description": "#\n# cProfiling, only enable for debugging and profiling purposes\n#",
       "properties": {
         "enabled": {
+          "default": false,
+          "title": "enabled",
           "type": "boolean"
         },
         "path": {
+          "default": "/opt/profiling/",
+          "title": "path",
           "type": "string"
         }
-      }
+      },
+      "required": [
+        "enabled",
+        "path"
+      ],
+      "title": "profiling",
+      "type": "object"
     },
     "prometheus": {
-      "type": "object",
+      "additionalProperties": false,
+      "description": "#\n# Prometheus Monitoring\n#",
       "properties": {
         "enabled": {
+          "default": false,
+          "title": "enabled",
           "type": "boolean"
         },
         "path": {
+          "default": "/opt/prometheus/",
+          "title": "path",
           "type": "string"
         }
-      }
+      },
+      "required": [
+        "enabled",
+        "path"
+      ],
+      "title": "prometheus",
+      "type": "object"
     },
     "pyspy": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "image": {
+          "additionalProperties": false,
+          "required": [],
+          "title": "image",
           "type": "object"
         },
         "resources": {
-          "type": "object",
+          "additionalProperties": false,
           "properties": {
             "limits": {
-              "type": "object",
+              "additionalProperties": false,
               "properties": {
                 "cpu": {
+                  "default": "0.125",
+                  "title": "cpu",
                   "type": "string"
                 },
                 "memory": {
+                  "default": "512Mi",
+                  "title": "memory",
                   "type": "string"
                 }
-              }
+              },
+              "required": [
+                "cpu",
+                "memory"
+              ],
+              "title": "limits",
+              "type": "object"
             }
-          }
+          },
+          "required": [
+            "limits"
+          ],
+          "title": "resources",
+          "type": "object"
         }
-      }
+      },
+      "required": [
+        "image",
+        "resources"
+      ],
+      "title": "pyspy",
+      "type": "object"
     },
     "service": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "type": {
+          "default": "NodePort",
+          "title": "type",
           "type": "string"
         }
-      }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "service",
+      "type": "object"
     },
     "serviceAccount": {
+      "additionalProperties": false,
+      "description": "serviceAccount -- See configuration below",
+      "required": [],
+      "title": "serviceAccount",
       "type": "object"
     },
     "tolerations": {
+      "additionalProperties": false,
+      "required": [],
+      "title": "tolerations",
       "type": "object"
     }
-  }
+  },
+  "required": [
+    "minReplicas",
+    "maxReplicas",
+    "serviceAccount",
+    "clusterInfo",
+    "database",
+    "ows",
+    "owsConfig",
+    "pyspy",
+    "prometheus",
+    "profiling",
+    "service",
+    "affinity",
+    "tolerations",
+    "ingress"
+  ],
+  "type": "object"
 }

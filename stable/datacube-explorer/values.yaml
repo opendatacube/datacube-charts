@@ -1,8 +1,10 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-# @schema type: [string, null]
-# -- Name of an existing ServiceAccount to run the pods under.
+# @schema
+# type: [string, null]
+# @schema
+#  Name of an existing ServiceAccount to run the pods under.
 serviceAccountName:
 # -- Number of replicas. Ignored when `hpa.enabled` is true.
 replicaCount: 1

@@ -13,7 +13,7 @@ Source code can be found [here](https://www.opendatacube.org/documentation)
 | affinity | object | `{}` |  |
 | clusterInfo.envName | string | `"dev"` |  |
 | database.database | string | `"datacube"` |  |
-| database.existingSecret | string | `nil` | Name of an existing Secret holding `postgres-username` / `postgres-password`. |
+| database.existingSecret | string | `nil` |  |
 | database.host | string | `"localhost"` |  |
 | database.port | int | `5432` |  |
 | ingress.annotations | object | `{}` |  |

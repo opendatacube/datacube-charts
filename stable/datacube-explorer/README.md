@@ -85,7 +85,7 @@ A Helm chart for Datacube Explorer
 | resources.limits.cpu | string | `"300m"` |  |
 | resources.limits.memory | string | `"1024Mi"` |  |
 | service.type | string | `"ClusterIP"` |  |
-| serviceAccountName | string | `nil` | Name of an existing ServiceAccount to run the pods under. |
+| serviceAccountName | string | `nil` |  |
 | startupProbe.failureThreshold | int | `5` |  |
 | startupProbe.httpGet.path | string | `"/stac"` |  |
 | startupProbe.httpGet.port | int | `8080` |  |
@@ -103,4 +103,3 @@ A Helm chart for Datacube Explorer
 | updateCreationDt.enabled | bool | `false` |  |
 | updateCreationDt.historyLimit | int | `1` |  |
 | updateCreationDt.suspend | bool | `false` |  |
-

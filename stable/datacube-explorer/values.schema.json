@@ -1,267 +1,618 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "type": "object",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
   "properties": {
     "additionalEnvironmentVars": {
+      "additionalProperties": false,
+      "required": [],
+      "title": "additionalEnvironmentVars",
       "type": "object"
     },
     "additionalSettings": {
+      "additionalProperties": false,
+      "required": [],
+      "title": "additionalSettings",
       "type": "object"
     },
     "affinity": {
+      "additionalProperties": false,
+      "required": [],
+      "title": "affinity",
       "type": "object"
     },
     "annotations": {
+      "additionalProperties": false,
+      "required": [],
+      "title": "annotations",
       "type": "object"
     },
     "database": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "database": {
+          "default": "datacube",
+          "title": "database",
           "type": "string"
         },
         "existingSecret": {
+          "default": "explorer-reader",
+          "title": "existingSecret",
           "type": "string"
         },
         "host": {
+          "default": "localhost",
+          "title": "host",
           "type": "string"
         },
         "port": {
+          "default": 5432,
+          "title": "port",
           "type": "integer"
         }
-      }
+      },
+      "required": [
+        "database",
+        "host",
+        "port",
+        "existingSecret"
+      ],
+      "title": "database",
+      "type": "object"
     },
     "dockerArgs": {
-      "type": "array",
       "items": {
-        "type": "string"
-      }
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "string"
+          }
+        ],
+        "required": []
+      },
+      "title": "dockerArgs",
+      "type": "array"
     },
     "externalPort": {
+      "default": 80,
+      "title": "externalPort",
       "type": "integer"
     },
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    },
     "hpa": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "enabled": {
+          "default": true,
+          "title": "enabled",
           "type": "boolean"
         },
         "maxReplicas": {
+          "default": 6,
+          "title": "maxReplicas",
           "type": "integer"
         },
         "metrics": {
+          "items": {
+            "required": []
+          },
+          "title": "metrics",
           "type": "array"
         },
         "minReplicas": {
+          "default": 1,
+          "title": "minReplicas",
           "type": "integer"
         }
-      }
+      },
+      "required": [
+        "enabled",
+        "minReplicas",
+        "maxReplicas",
+        "metrics"
+      ],
+      "title": "hpa",
+      "type": "object"
     },
     "image": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "pullPolicy": {
+          "default": "Always",
+          "title": "pullPolicy",
           "type": "string"
         },
         "registry": {
+          "default": "ghcr.io",
+          "title": "registry",
           "type": "string"
         },
         "repository": {
+          "default": "opendatacube/explorer",
+          "title": "repository",
           "type": "string"
         },
         "tag": {
+          "default": "latest",
+          "title": "tag",
           "type": "string"
         }
-      }
+      },
+      "required": [
+        "registry",
+        "repository",
+        "tag",
+        "pullPolicy"
+      ],
+      "title": "image",
+      "type": "object"
     },
     "ingress": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "annotations": {
+          "additionalProperties": false,
+          "required": [],
+          "title": "annotations",
           "type": "object"
         },
         "enabled": {
+          "default": false,
+          "title": "enabled",
           "type": "boolean"
         },
         "hosts": {
-          "type": "array",
           "items": {
-            "type": "string"
-          }
+            "anyOf": [
+              {
+                "type": "string"
+              }
+            ],
+            "required": []
+          },
+          "title": "hosts",
+          "type": "array"
         },
         "ingressClassName": {
+          "default": "",
+          "description": "Name of the IngressClass to use. Left empty the cluster default applies.",
+          "title": "ingressClassName",
           "type": "string"
         },
         "path": {
+          "default": "/",
+          "title": "path",
           "type": "string"
         },
         "pathType": {
+          "default": "Prefix",
+          "description": "Ingress path type. One of Prefix, Exact or ImplementationSpecific.",
+          "title": "pathType",
           "type": "string"
         }
-      }
+      },
+      "required": [
+        "enabled",
+        "path",
+        "pathType",
+        "ingressClassName",
+        "hosts",
+        "annotations"
+      ],
+      "title": "ingress",
+      "type": "object"
     },
     "internalPort": {
+      "default": 8080,
+      "title": "internalPort",
       "type": "integer"
     },
     "livenessProbe": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "failureThreshold": {
+          "default": 5,
+          "title": "failureThreshold",
           "type": "integer"
         },
         "httpGet": {
-          "type": "object",
+          "additionalProperties": false,
           "properties": {
             "path": {
+              "default": "/stac",
+              "title": "path",
               "type": "string"
             },
             "port": {
+              "default": 8080,
+              "title": "port",
               "type": "integer"
             }
-          }
+          },
+          "required": [
+            "path",
+            "port"
+          ],
+          "title": "httpGet",
+          "type": "object"
         },
         "initialDelaySeconds": {
+          "default": 10,
+          "title": "initialDelaySeconds",
           "type": "integer"
         },
         "periodSeconds": {
+          "default": 30,
+          "title": "periodSeconds",
           "type": "integer"
         },
         "timeoutSeconds": {
+          "default": 60,
+          "title": "timeoutSeconds",
           "type": "integer"
         }
-      }
+      },
+      "required": [
+        "httpGet",
+        "initialDelaySeconds",
+        "periodSeconds",
+        "timeoutSeconds",
+        "failureThreshold"
+      ],
+      "title": "livenessProbe",
+      "type": "object"
     },
     "pdb": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "annotations": {
+          "additionalProperties": false,
+          "required": [],
+          "title": "annotations",
           "type": "object"
         },
         "enabled": {
+          "default": true,
+          "title": "enabled",
           "type": "boolean"
         },
         "minAvailable": {
+          "default": 1,
+          "title": "minAvailable",
           "type": "integer"
         }
-      }
+      },
+      "required": [
+        "enabled",
+        "minAvailable",
+        "annotations"
+      ],
+      "title": "pdb",
+      "type": "object"
     },
     "readinessProbe": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "failureThreshold": {
+          "default": 5,
+          "title": "failureThreshold",
           "type": "integer"
         },
         "httpGet": {
-          "type": "object",
+          "additionalProperties": false,
           "properties": {
             "path": {
+              "default": "/stac",
+              "title": "path",
               "type": "string"
             },
             "port": {
+              "default": 8080,
+              "title": "port",
               "type": "integer"
             }
-          }
+          },
+          "required": [
+            "path",
+            "port"
+          ],
+          "title": "httpGet",
+          "type": "object"
         },
         "initialDelaySeconds": {
+          "default": 10,
+          "title": "initialDelaySeconds",
           "type": "integer"
         },
         "periodSeconds": {
+          "default": 30,
+          "title": "periodSeconds",
           "type": "integer"
         },
         "timeoutSeconds": {
+          "default": 60,
+          "title": "timeoutSeconds",
           "type": "integer"
         }
-      }
+      },
+      "required": [
+        "httpGet",
+        "initialDelaySeconds",
+        "periodSeconds",
+        "timeoutSeconds",
+        "failureThreshold"
+      ],
+      "title": "readinessProbe",
+      "type": "object"
     },
     "replicaCount": {
+      "default": 1,
+      "description": "Number of replicas. Ignored when `hpa.enabled` is true.",
+      "title": "replicaCount",
       "type": "integer"
     },
     "resources": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "limits": {
-          "type": "object",
+          "additionalProperties": false,
           "properties": {
             "cpu": {
+              "default": "300m",
+              "title": "cpu",
               "type": "string"
             },
             "memory": {
+              "default": "1024Mi",
+              "title": "memory",
               "type": "string"
             }
-          }
+          },
+          "required": [
+            "cpu",
+            "memory"
+          ],
+          "title": "limits",
+          "type": "object"
         }
-      }
+      },
+      "required": [
+        "limits"
+      ],
+      "title": "resources",
+      "type": "object"
     },
     "service": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "type": {
+          "default": "ClusterIP",
+          "title": "type",
           "type": "string"
         }
-      }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "service",
+      "type": "object"
     },
     "serviceAccountName": {
+      "default": "",
+      "description": " Name of an existing ServiceAccount to run the pods under.",
+      "required": [],
+      "title": "serviceAccountName",
       "type": [
         "string",
         "null"
       ]
     },
     "startupProbe": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "failureThreshold": {
+          "default": 5,
+          "title": "failureThreshold",
           "type": "integer"
         },
         "httpGet": {
-          "type": "object",
+          "additionalProperties": false,
           "properties": {
             "path": {
+              "default": "/stac",
+              "title": "path",
               "type": "string"
             },
             "port": {
+              "default": 8080,
+              "title": "port",
               "type": "integer"
             }
-          }
+          },
+          "required": [
+            "path",
+            "port"
+          ],
+          "title": "httpGet",
+          "type": "object"
         },
         "initialDelaySeconds": {
+          "default": 10,
+          "title": "initialDelaySeconds",
           "type": "integer"
         },
         "periodSeconds": {
+          "default": 30,
+          "title": "periodSeconds",
           "type": "integer"
         },
         "timeoutSeconds": {
+          "default": 60,
+          "title": "timeoutSeconds",
           "type": "integer"
         }
-      }
+      },
+      "required": [
+        "httpGet",
+        "initialDelaySeconds",
+        "periodSeconds",
+        "timeoutSeconds",
+        "failureThreshold"
+      ],
+      "title": "startupProbe",
+      "type": "object"
     },
     "updateCreationDt": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "backoffLimit": {
+          "default": 0,
+          "title": "backoffLimit",
           "type": "integer"
         },
         "concurrencyPolicy": {
+          "default": "Allow",
+          "title": "concurrencyPolicy",
           "type": "string"
         },
         "cron": {
+          "default": "0 13 * * *",
+          "title": "cron",
           "type": "string"
         },
         "dockerArgs": {
-          "type": "array",
           "items": {
-            "type": "string"
-          }
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "required": []
+          },
+          "title": "dockerArgs",
+          "type": "array"
         },
         "enabled": {
+          "default": false,
+          "title": "enabled",
           "type": "boolean"
         },
         "historyLimit": {
+          "default": 1,
+          "title": "historyLimit",
           "type": "integer"
         },
         "suspend": {
+          "default": false,
+          "title": "suspend",
           "type": "boolean"
         }
-      }
+      },
+      "required": [
+        "enabled",
+        "historyLimit",
+        "concurrencyPolicy",
+        "cron",
+        "suspend",
+        "backoffLimit",
+        "dockerArgs"
+      ],
+      "title": "updateCreationDt",
+      "type": "object"
     }
-  }
+  },
+  "required": [
+    "replicaCount",
+    "hpa",
+    "pdb",
+    "image",
+    "database",
+    "resources",
+    "annotations",
+    "livenessProbe",
+    "readinessProbe",
+    "startupProbe",
+    "additionalEnvironmentVars",
+    "service",
+    "externalPort",
+    "internalPort",
+    "dockerArgs",
+    "updateCreationDt",
+    "additionalSettings",
+    "affinity",
+    "ingress"
+  ],
+  "type": "object"
 }

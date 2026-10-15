@@ -1,6 +1,6 @@
 # datacube-explorer
 
-![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.2.1](https://img.shields.io/badge/AppVersion-3.2.1-informational?style=flat-square)
+![Version: 0.8.0](https://img.shields.io/badge/Version-0.8.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.2.1](https://img.shields.io/badge/AppVersion-3.2.1-informational?style=flat-square)
 
 A Helm chart for Datacube Explorer
 
@@ -26,6 +26,7 @@ A Helm chart for Datacube Explorer
 | additionalSettings | object | `{}` |  |
 | affinity | object | `{}` |  |
 | annotations | object | `{}` |  |
+| database.adminExistingSecret | string | `"explorer-admin"` |  |
 | database.database | string | `"datacube"` |  |
 | database.existingSecret | string | `"explorer-reader"` |  |
 | database.host | string | `"localhost"` |  |
@@ -65,6 +66,9 @@ A Helm chart for Datacube Explorer
 | ingress.ingressClassName | string | `""` | Name of the IngressClass to use. Left empty the cluster default applies. |
 | ingress.path | string | `"/"` |  |
 | ingress.pathType | string | `"Prefix"` | Ingress path type. One of Prefix, Exact or ImplementationSpecific. |
+| initSchema.backoffLimit | int | `0` |  |
+| initSchema.enabled | bool | `true` |  |
+| initSchema.epsg | int | `6933` |  |
 | internalPort | int | `8080` |  |
 | livenessProbe | object | `{}` |  |
 | pdb.annotations | object | `{}` |  |

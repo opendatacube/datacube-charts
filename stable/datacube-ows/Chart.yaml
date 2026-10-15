@@ -2,7 +2,7 @@ apiVersion: v2
 type: application
 name: datacube-ows
 description: Datacube Web Map Service
-version: 0.22.0
+version: 0.23.0
 # renovate: docker=ghcr.io/opendatacube/ows
 appVersion: 1.9.17
 icon: https://opendatacube.readthedocs.io/en/latest/_static/odc-icon.svg

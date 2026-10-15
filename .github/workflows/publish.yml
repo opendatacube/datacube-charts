@@ -42,8 +42,8 @@ jobs:
           # Chart sources live in stable/, not the action's default charts/.
           charts_dir: stable
           skip_existing: true
-          generate_release_notes: true
         env:
           CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Keep updating the historical index location on gh-pages.
           CR_PAGES_INDEX_PATH: charts/index.yaml
+          CR_GENERATE_RELEASE_NOTES: true

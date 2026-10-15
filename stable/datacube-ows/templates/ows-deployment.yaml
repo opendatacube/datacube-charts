@@ -10,6 +10,12 @@ metadata:
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+    app.kubernetes.io/name: {{ include "datacube-ows.name" . }}
+    helm.sh/chart: {{ include "datacube-ows.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Values.ows.image.tag | default .Chart.AppVersion }}
+    app.kubernetes.io/component: server
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
 {{- if not .Values.ows.autoscaling }}
   replicas: {{ .Values.minReplicas }}

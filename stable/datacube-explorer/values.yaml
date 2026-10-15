@@ -116,6 +116,10 @@ dockerArgs:
   - "||"
   - "true"
 
+# Run `cubedash-gen --init` as a Helm hook on install/upgrade to
+# initialise or migrate the ODC Explorer database.
+# This requires an existing database role with permission to write to the cubedash
+# schema. Point at a different secret with `database.adminExistingSecret`.
 initSchema:
   enabled: true
   epsg: 6933  # EPSG code used to initialise the cubedash summary schema

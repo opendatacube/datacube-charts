@@ -51,12 +51,12 @@ spec:
           - name: DB_USERNAME
             valueFrom:
               secretKeyRef:
-                name: {{ .Values.database.adminExistingSecret }}
+                name: {{ .Values.database.adminExistingSecret | default .Values.database.existingSecret }}
                 key: postgres-username
           - name: DB_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: {{ .Values.database.adminExistingSecret }}
+                name: {{ .Values.database.adminExistingSecret | default .Values.database.existingSecret }}
                 key: postgres-password
           {{- if not (empty .Values.additionalSettings) }}
           - name: CUBEDASH_SETTINGS

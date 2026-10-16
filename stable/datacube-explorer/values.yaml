@@ -35,6 +35,7 @@ database:
   host: localhost
   port: 5432
   existingSecret: "explorer-reader"
+  adminExistingSecret: "explorer-admin"  # Secret used for schema migration hooks (needs write/DDL privileges)
 
 resources:
   limits:
@@ -114,6 +115,15 @@ dockerArgs:
   - "cubedash:app"
   - "||"
   - "true"
+
+# Run `cubedash-gen --init` as a Helm hook on install/upgrade to
+# initialise or migrate the ODC Explorer database.
+# This requires an existing database role with permission to write to the cubedash
+# schema. Point at a different secret with `database.adminExistingSecret`.
+initSchema:
+  enabled: true
+  epsg: 6933  # EPSG code used to initialise the cubedash summary schema
+  backoffLimit: 0  # Number of retries
 
 updateCreationDt:
   enabled: false

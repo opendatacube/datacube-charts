@@ -2,7 +2,7 @@ apiVersion: v2
 type: application
 name: datacube-explorer
 description: A Helm chart for Datacube Explorer
-version: 0.7.0
+version: 0.8.0
 # renovate: docker=ghcr.io/opendatacube/explorer
 appVersion: 3.2.1
 icon: https://opendatacube.readthedocs.io/en/latest/_static/odc-icon.svg

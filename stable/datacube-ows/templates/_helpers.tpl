@@ -25,3 +25,10 @@ Get the password secret.
     {{- printf "%s" (include "datacube-ows.fullname" .) -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "datacube-ows.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}

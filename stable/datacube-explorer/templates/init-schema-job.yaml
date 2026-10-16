@@ -1,0 +1,96 @@
+{{- if .Values.initSchema.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: '{{ include "datacube-explorer.fullname" . }}-init-schema'
+  labels:
+    app.kubernetes.io/name: {{ include "datacube-explorer.name" . }}
+    helm.sh/chart: {{ include "datacube-explorer.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Values.image.tag | default .Chart.AppVersion }}
+    app.kubernetes.io/component: database-initialisation
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  annotations:
+    # Run on install and upgrade, after other resources are created/updated.
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  backoffLimit: {{ .Values.initSchema.backoffLimit }}
+  template:
+    metadata:
+      name: {{ include "datacube-explorer.name" . }}-init-schema
+      labels:
+        app.kubernetes.io/name: {{ include "datacube-explorer.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+      annotations:
+      {{- range $key, $value := .Values.annotations }}
+        {{ $key }}: {{ $value | quote }}
+      {{- end }}
+    spec:
+      {{- if .Values.serviceAccountName }}
+      serviceAccountName: {{ .Values.serviceAccountName }}
+      {{- end }}
+      restartPolicy: Never
+      containers:
+        - name: explorer-init-schema
+          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            - "cubedash-gen"
+            - "--init"
+            - "--epsg"
+            - {{ .Values.initSchema.epsg | quote }}
+          env:
+          - name: DB_HOSTNAME
+            value: {{ .Values.database.host | quote }}
+          - name: DB_PORT
+            value: {{ .Values.database.port | quote }}
+          - name: DB_DATABASE
+            value: {{ .Values.database.database | quote }}
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.database.adminExistingSecret | default .Values.database.existingSecret }}
+                key: postgres-username
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.database.adminExistingSecret | default .Values.database.existingSecret }}
+                key: postgres-password
+          {{- if not (empty .Values.additionalSettings) }}
+          - name: CUBEDASH_SETTINGS
+            value: /etc/cubedash/config/settings.env.py
+          {{- end }}
+          {{- if .Values.additionalEnvironmentVars }}
+          {{- range $arg, $value := .Values.additionalEnvironmentVars }}
+          - name: {{ $arg | quote }}
+            value: {{ $value | quote }}
+          {{- end }}
+          {{- end }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+        {{- if not (empty .Values.additionalSettings) }}
+          volumeMounts:
+          - name: config-volume
+            mountPath: /etc/cubedash/config
+        {{- end }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- if not (empty .Values.additionalSettings) }}
+      volumes:
+      - name: config-volume
+        configMap:
+          name: {{ include "datacube-explorer.fullname" . }}
+    {{- end }}
+{{- end }}

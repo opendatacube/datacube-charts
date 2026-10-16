@@ -25,6 +25,11 @@
     "database": {
       "additionalProperties": false,
       "properties": {
+        "adminExistingSecret": {
+          "default": "explorer-admin",
+          "title": "adminExistingSecret",
+          "type": "string"
+        },
         "database": {
           "default": "datacube",
           "title": "database",
@@ -50,7 +55,8 @@
         "database",
         "host",
         "port",
-        "existingSecret"
+        "existingSecret",
+        "adminExistingSecret"
       ],
       "title": "database",
       "type": "object"
@@ -256,6 +262,33 @@
       "title": "ingress",
       "type": "object"
     },
+    "initSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "backoffLimit": {
+          "default": 0,
+          "title": "backoffLimit",
+          "type": "integer"
+        },
+        "enabled": {
+          "default": true,
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "epsg": {
+          "default": 6933,
+          "title": "epsg",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "enabled",
+        "epsg",
+        "backoffLimit"
+      ],
+      "title": "initSchema",
+      "type": "object"
+    },
     "internalPort": {
       "default": 8080,
       "title": "internalPort",
@@ -447,6 +480,7 @@
     "externalPort",
     "internalPort",
     "dockerArgs",
+    "initSchema",
     "updateCreationDt",
     "ingress"
   ],

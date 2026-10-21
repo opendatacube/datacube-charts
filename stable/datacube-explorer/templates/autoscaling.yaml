@@ -4,10 +4,12 @@ kind: HorizontalPodAutoscaler
 metadata:
   name: {{ template "datacube-explorer.fullname" . }}
   labels:
-    app: {{ template "datacube-explorer.name" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    helm.sh/chart: {{ include "datacube-explorer.chart" . }}
+    app.kubernetes.io/name: {{ include "datacube-explorer.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Values.image.tag | default .Chart.AppVersion }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+
 spec:
   scaleTargetRef:
     apiVersion: apps/v1

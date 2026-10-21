@@ -4,11 +4,11 @@ kind: PodDisruptionBudget
 metadata:
   name: {{ include "datacube-explorer.fullname" . }}
   labels:
-    app: {{ .Release.Name }}
     app.kubernetes.io/name: {{ include "datacube-explorer.name" . }}
     helm.sh/chart: {{ include "datacube-explorer.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/version: {{ .Values.image.tag | default .Chart.AppVersion }}
   {{- if .Values.pdb.annotations }}
   annotations:
     {{- range $key, $value := .Values.pdb.annotations }}

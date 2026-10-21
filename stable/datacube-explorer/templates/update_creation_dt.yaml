@@ -8,6 +8,7 @@ metadata:
     helm.sh/chart: {{ include "datacube-explorer.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/version: {{ .Values.image.tag | default .Chart.AppVersion }}
 spec:
   schedule: {{ .Values.updateCreationDt.cron | quote }}
   successfulJobsHistoryLimit: {{ .Values.updateCreationDt.historyLimit }}
@@ -22,7 +23,10 @@ spec:
           name: {{ include "datacube-explorer.name" . }}
           labels:
             app.kubernetes.io/name: {{ include "datacube-explorer.name" . }}
+            helm.sh/chart: {{ include "datacube-explorer.chart" . }}
             app.kubernetes.io/instance: {{ .Release.Name }}
+            app.kubernetes.io/managed-by: {{ .Release.Service }}
+            app.kubernetes.io/version: {{ .Values.image.tag | default .Chart.AppVersion }}
           annotations:
           {{- range $key, $value := .Values.annotations }}
             {{ $key }}: {{ $value | quote }}

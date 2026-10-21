@@ -1414,6 +1414,38 @@ entries:
         - name: Chart Source
           url: https://github.com/opendatacube/datacube-charts
         - name: Upstream Project
+          url: https://github.com/opendatacube/datacube-explorer
+    apiVersion: v2
+    appVersion: 3.2.1
+    created: "2026-10-21T01:06:28.075855999Z"
+    description: A Helm chart for Datacube Explorer
+    digest: a10abd1723acf41705415712d6c3d0f29611f6d1072aaa542e0b54cb37a20443
+    home: https://www.opendatacube.org/
+    icon: https://opendatacube.readthedocs.io/en/latest/_static/odc-icon.svg
+    keywords:
+    - datacube
+    - http
+    - web
+    - application
+    - python
+    - stac
+    maintainers:
+    - name: omad
+    - name: pjonsson
+    name: datacube-explorer
+    sources:
+    - https://github.com/opendatacube/datacube-explorer
+    - https://github.com/opendatacube/datacube-charts
+    type: application
+    urls:
+    - https://github.com/opendatacube/datacube-charts/releases/download/datacube-explorer-0.8.0/datacube-explorer-0.8.0.tgz
+    version: 0.8.0
+  - annotations:
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: Chart Source
+          url: https://github.com/opendatacube/datacube-charts
+        - name: Upstream Project
           url: https://github.com/opendatacube/explorer
     apiVersion: v2
     appVersion: 3.2.1
@@ -2348,6 +2380,38 @@ entries:
     - https://opendatacube.github.io/datacube-charts/charts/datacube-index-0.2.12.tgz
     version: 0.2.12
   datacube-ows:
+  - annotations:
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: Chart Source
+          url: https://github.com/opendatacube/datacube-charts
+        - name: Upstream Project
+          url: https://github.com/opendatacube/datacube-ows
+    apiVersion: v2
+    appVersion: 1.9.17
+    created: "2026-10-21T01:06:28.24312958Z"
+    description: Datacube Web Map Service
+    digest: 55481ce9875e7ad92e6c17930c79458b2f72412199c4ae1c0d634e304cc5d998
+    home: https://www.opendatacube.org/
+    icon: https://opendatacube.readthedocs.io/en/latest/_static/odc-icon.svg
+    keywords:
+    - datacube
+    - http
+    - web
+    - application
+    - python
+    maintainers:
+    - name: omad
+    - name: pjonsson
+    name: datacube-ows
+    sources:
+    - https://github.com/opendatacube/datacube-core
+    - https://github.com/opendatacube/datacube-ows
+    - https://github.com/opendatacube/datacube-charts
+    type: application
+    urls:
+    - https://github.com/opendatacube/datacube-charts/releases/download/datacube-ows-0.24.0/datacube-ows-0.24.0.tgz
+    version: 0.24.0
   - annotations:
       artifacthub.io/license: Apache-2.0
       artifacthub.io/links: |
@@ -3436,4 +3500,4 @@ entries:
     urls:
     - https://opendatacube.github.io/datacube-charts/charts/restcube-0.1.0.tgz
     version: 0.1.0
-generated: "2026-10-15T02:25:05.465550381Z"
+generated: "2026-10-21T01:06:28.243737309Z"

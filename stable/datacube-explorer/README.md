@@ -23,7 +23,7 @@ A Helm chart for Datacube Explorer
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | additionalEnvironmentVars | object | `{}` |  |
-| additionalSettings | object | `{}` |  |
+| additionalSettings | string | `""` |  |
 | affinity | object | `{}` |  |
 | annotations | object | `{}` |  |
 | database.database | string | `"datacube"` |  |

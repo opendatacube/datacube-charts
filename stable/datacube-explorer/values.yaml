@@ -129,10 +129,8 @@ updateCreationDt:
   - "--force-refresh"
   - "--all"
 
-# @schema
-# additionalProperties: true
-# @schema
-additionalSettings: {}
+# Python format settings to be loaded by Explorer
+additionalSettings: ""
 
 # @schema
 # additionalProperties: true

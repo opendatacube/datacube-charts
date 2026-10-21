@@ -18,7 +18,9 @@ repos:
     hooks:
       - id: helm-schema
         pass_filenames: false
-        args: [--keep-existing-dep-schemas]
+        args:
+          - --keep-existing-dep-schemas
+          - --append-newline
   - repo: https://github.com/norwoodj/helm-docs
     rev: v1.14.2
     hooks:

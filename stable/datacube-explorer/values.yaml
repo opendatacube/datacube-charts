@@ -132,6 +132,9 @@ updateCreationDt:
 # Python format settings to be loaded by Explorer
 additionalSettings: ""
 
+# Pod Security Context
+securityContext: {}
+
 # @schema
 # additionalProperties: true
 # @schema

@@ -2,7 +2,7 @@ apiVersion: v2
 type: application
 name: datacube-ows
 description: Datacube Web Map Service
-version: 0.24.0
+version: 0.24.1
 # The following 'renovate' comment is a marker for
 # https://docs.renovatebot.com/presets-customManagers/#custommanagershelmchartyamlappversions
 #

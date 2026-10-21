@@ -5,8 +5,6 @@
     "helpers:pinGitHubActionDigestsToSemver",
     "customManagers:helmChartYamlAppVersions"
   ],
-  "rebaseWhen": "behind-base-branch",
-  "enabledManagers": ["helm-values"],
   "packageRules": [
     {
       "enabled": true,

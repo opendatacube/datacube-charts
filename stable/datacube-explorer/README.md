@@ -1,6 +1,6 @@
 # datacube-explorer
 
-![Version: 0.8.1](https://img.shields.io/badge/Version-0.8.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.2.1](https://img.shields.io/badge/AppVersion-3.2.1-informational?style=flat-square)
+![Version: 0.9.0](https://img.shields.io/badge/Version-0.9.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.2.1](https://img.shields.io/badge/AppVersion-3.2.1-informational?style=flat-square)
 
 A Helm chart for Datacube Explorer
 
@@ -74,6 +74,7 @@ A Helm chart for Datacube Explorer
 | replicaCount | int | `1` | Number of replicas. Ignored when `hpa.enabled` is true. |
 | resources.limits.cpu | string | `"300m"` |  |
 | resources.limits.memory | string | `"1024Mi"` |  |
+| securityContext | object | `{}` |  |
 | service.type | string | `"ClusterIP"` |  |
 | serviceAccountName | string | `nil` |  |
 | startupProbe | object | `{}` |  |

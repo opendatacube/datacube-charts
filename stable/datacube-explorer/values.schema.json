@@ -336,6 +336,13 @@
       "title": "resources",
       "type": "object"
     },
+    "securityContext": {
+      "additionalProperties": false,
+      "description": "Pod Security Context",
+      "required": [],
+      "title": "securityContext",
+      "type": "object"
+    },
     "service": {
       "additionalProperties": false,
       "properties": {
@@ -450,6 +457,7 @@
     "dockerArgs",
     "updateCreationDt",
     "additionalSettings",
+    "securityContext",
     "ingress"
   ],
   "type": "object"

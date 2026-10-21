@@ -8,9 +8,10 @@
       "title": "additionalEnvironmentVars"
     },
     "additionalSettings": {
-      "additionalProperties": true,
-      "required": [],
-      "title": "additionalSettings"
+      "default": "",
+      "description": "Python format settings to be loaded by Explorer",
+      "title": "additionalSettings",
+      "type": "string"
     },
     "affinity": {
       "additionalProperties": true,
@@ -448,6 +449,7 @@
     "internalPort",
     "dockerArgs",
     "updateCreationDt",
+    "additionalSettings",
     "ingress"
   ],
   "type": "object"

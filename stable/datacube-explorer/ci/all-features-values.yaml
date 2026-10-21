@@ -40,5 +40,5 @@ updateCreationDt:
 additionalEnvironmentVars:
   EXAMPLE_VAR: example-value
 
-additionalSettings:
+additionalSettings: |
   SHOW_DATA_LOCATION: true

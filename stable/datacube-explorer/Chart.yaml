@@ -2,7 +2,7 @@ apiVersion: v2
 type: application
 name: datacube-explorer
 description: A Helm chart for Datacube Explorer
-version: 0.8.1
+version: 0.9.0
 icon: https://opendatacube.readthedocs.io/en/latest/_static/odc-icon.svg
 # The following 'renovate' comment is a marker for
 # https://docs.renovatebot.com/presets-customManagers/#custommanagershelmchartyamlappversions

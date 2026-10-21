@@ -13,17 +13,24 @@ repos:
     hooks:
       - id: yamllint
         args: [--strict]
+  - repo: https://github.com/jorisdejosselin/pre-commit-helm
+    rev: v1.1.6  # Use the latest stable version
+    hooks:
+      # - id: helm-lint-docker
+      - id: helm-template-docker
+      # - id: helm-unittest-docker
+      - id: helm-docs-docker
   - repo: https://github.com/dadav/helm-schema
     rev: 0.23.5
     hooks:
       - id: helm-schema
         pass_filenames: false
         args: [--keep-existing-dep-schemas]
-  - repo: https://github.com/norwoodj/helm-docs
-    rev: v1.14.2
-    hooks:
-      - id: helm-docs-built
-        args:
-          # Make the tool search for charts only under the `charts` directory
-          - --chart-search-root=stable
-          - --skip-version-footer
+  # - repo: https://github.com/norwoodj/helm-docs
+  #   rev: v1.14.2
+  #   hooks:
+  #     - id: helm-docs-built
+  #       args:
+  #         # Make the tool search for charts only under the `charts` directory
+  #         - --chart-search-root=stable
+  #         - --skip-version-footer

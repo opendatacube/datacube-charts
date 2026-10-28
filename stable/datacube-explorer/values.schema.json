@@ -23,6 +23,66 @@
       "required": [],
       "title": "annotations"
     },
+    "containerSecurityContext": {
+      "additionalProperties": true,
+      "description": "The SecurityContext for Explorer containers",
+      "properties": {
+        "allowPrivilegeEscalation": {
+          "default": false,
+          "title": "allowPrivilegeEscalation",
+          "type": "boolean"
+        },
+        "capabilities": {
+          "additionalProperties": false,
+          "properties": {
+            "drop": {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  }
+                ],
+                "required": []
+              },
+              "title": "drop",
+              "type": "array"
+            }
+          },
+          "required": [
+            "drop"
+          ],
+          "title": "capabilities",
+          "type": "object"
+        },
+        "readOnlyRootFilesystem": {
+          "default": true,
+          "title": "readOnlyRootFilesystem",
+          "type": "boolean"
+        },
+        "seccompProfile": {
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "default": "RuntimeDefault",
+              "title": "type",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "title": "seccompProfile",
+          "type": "object"
+        }
+      },
+      "required": [
+        "readOnlyRootFilesystem",
+        "capabilities",
+        "allowPrivilegeEscalation",
+        "seccompProfile"
+      ],
+      "title": "containerSecurityContext"
+    },
     "database": {
       "additionalProperties": false,
       "properties": {
@@ -294,6 +354,49 @@
       "title": "pdb",
       "type": "object"
     },
+    "podSecurityContext": {
+      "additionalProperties": true,
+      "description": "The SecurityContext for Explorer pods",
+      "properties": {
+        "runAsGroup": {
+          "default": 1000,
+          "title": "runAsGroup",
+          "type": "integer"
+        },
+        "runAsNonRoot": {
+          "default": true,
+          "title": "runAsNonRoot",
+          "type": "boolean"
+        },
+        "runAsUser": {
+          "default": 1000,
+          "title": "runAsUser",
+          "type": "integer"
+        },
+        "seccompProfile": {
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "default": "RuntimeDefault",
+              "title": "type",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "title": "seccompProfile",
+          "type": "object"
+        }
+      },
+      "required": [
+        "runAsGroup",
+        "runAsNonRoot",
+        "runAsUser",
+        "seccompProfile"
+      ],
+      "title": "podSecurityContext"
+    },
     "readinessProbe": {
       "additionalProperties": true,
       "required": [],
@@ -335,12 +438,6 @@
       ],
       "title": "resources",
       "type": "object"
-    },
-    "securityContext": {
-      "additionalProperties": true,
-      "description": "Pod Security Context",
-      "required": [],
-      "title": "securityContext"
     },
     "service": {
       "additionalProperties": false,

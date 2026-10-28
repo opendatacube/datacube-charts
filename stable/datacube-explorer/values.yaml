@@ -132,11 +132,29 @@ updateCreationDt:
 # Python format settings to be loaded by Explorer
 additionalSettings: ""
 
-# Pod Security Context
 # @schema
 # additionalProperties: true
 # @schema
-securityContext: {}
+# -- The SecurityContext for Explorer pods
+podSecurityContext:
+  runAsGroup: 1000
+  runAsNonRoot: true
+  runAsUser: 1000
+  seccompProfile:
+    type: RuntimeDefault
+
+# @schema
+# additionalProperties: true
+# @schema
+# -- The SecurityContext for Explorer containers
+containerSecurityContext:
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+  allowPrivilegeEscalation: false
+  seccompProfile:
+    type: RuntimeDefault
 
 # @schema
 # additionalProperties: true

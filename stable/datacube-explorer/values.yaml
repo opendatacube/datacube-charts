@@ -133,6 +133,9 @@ updateCreationDt:
 additionalSettings: ""
 
 # Pod Security Context
+# @schema
+# additionalProperties: true
+# @schema
 securityContext: {}
 
 # @schema

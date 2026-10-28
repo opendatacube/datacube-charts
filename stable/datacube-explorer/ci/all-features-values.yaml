@@ -43,12 +43,18 @@ additionalEnvironmentVars:
 additionalSettings: |
   SHOW_DATA_LOCATION: true
 
-securityContext:
-  allowPrivilegeEscalation: false
+podSecurityContext:
   runAsGroup: 1000
   runAsUser: 1000
   runAsNonRoot: true
+  seccompProfile:
+    type: RuntimeDefault
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
   readOnlyRootFilesystem: true
   capabilities:
     drop:
       - ALL
+  seccompProfile:
+    type: RuntimeDefault

@@ -1,6 +1,6 @@
 # datacube-explorer
 
-![Version: 0.9.1](https://img.shields.io/badge/Version-0.9.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.2.1](https://img.shields.io/badge/AppVersion-3.2.1-informational?style=flat-square)
+![Version: 0.10.0](https://img.shields.io/badge/Version-0.10.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.2.1](https://img.shields.io/badge/AppVersion-3.2.1-informational?style=flat-square)
 
 A Helm chart for Datacube Explorer
 
@@ -26,6 +26,7 @@ A Helm chart for Datacube Explorer
 | additionalSettings | string | `""` |  |
 | affinity | object | `{}` |  |
 | annotations | object | `{}` |  |
+| containerSecurityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true,"seccompProfile":{"type":"RuntimeDefault"}}` | The SecurityContext for Explorer containers |
 | database.database | string | `"datacube"` |  |
 | database.existingSecret | string | `"explorer-reader"` |  |
 | database.host | string | `"localhost"` |  |
@@ -70,11 +71,11 @@ A Helm chart for Datacube Explorer
 | pdb.annotations | object | `{}` |  |
 | pdb.enabled | bool | `true` |  |
 | pdb.minAvailable | int | `1` |  |
+| podSecurityContext | object | `{"runAsGroup":1000,"runAsNonRoot":true,"runAsUser":1000,"seccompProfile":{"type":"RuntimeDefault"}}` | The SecurityContext for Explorer pods |
 | readinessProbe | object | `{}` |  |
 | replicaCount | int | `1` | Number of replicas. Ignored when `hpa.enabled` is true. |
 | resources.limits.cpu | string | `"300m"` |  |
 | resources.limits.memory | string | `"1024Mi"` |  |
-| securityContext | object | `{}` |  |
 | service.type | string | `"ClusterIP"` |  |
 | serviceAccountName | string | `nil` |  |
 | startupProbe | object | `{}` |  |

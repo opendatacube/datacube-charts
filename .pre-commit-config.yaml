@@ -14,7 +14,7 @@ repos:
       - id: yamllint
         args: [--strict]
   - repo: https://github.com/dadav/helm-schema
-    rev: 0.23.5
+    rev: 0.24.0
     hooks:
       - id: helm-schema
         pass_filenames: false

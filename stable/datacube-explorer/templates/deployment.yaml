@@ -45,6 +45,10 @@ spec:
           {{- else }}
           image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           {{- end }}
+          {{- with .Values.containerSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           env:
           - name: DB_HOSTNAME
             value: {{ .Values.database.host | quote }}
@@ -104,9 +108,9 @@ spec:
       tolerations:
 {{ toYaml . | indent 8 }}
     {{- end }}
-    {{- with .Values.securityContext }}
+    {{- with .Values.podSecurityContext }}
       securityContext:
-{{ toYaml . | indent 8 }}
+        {{- toYaml . | nindent 8 }}
     {{- end }}
     {{- if not (empty .Values.additionalSettings) }}
       volumes:

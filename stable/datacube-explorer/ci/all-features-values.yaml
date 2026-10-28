@@ -42,3 +42,13 @@ additionalEnvironmentVars:
 
 additionalSettings: |
   SHOW_DATA_LOCATION: true
+
+securityContext:
+  allowPrivilegeEscalation: false
+  runAsGroup: 1000
+  runAsUser: 1000
+  runAsNonRoot: true
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL

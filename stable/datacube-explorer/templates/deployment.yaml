@@ -92,12 +92,15 @@ spec:
             # All http services
             - name: http
               containerPort: {{ .Values.internalPort }}
-          livenessProbe:
-{{ toYaml .Values.livenessProbe | indent 12 }}
-          readinessProbe:
-{{ toYaml .Values.readinessProbe | indent 12 }}
-          startupProbe:
-{{ toYaml .Values.startupProbe | indent 12 }}
+          {{- with .Values.livenessProbe }}
+          livenessProbe: {{ toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.readinessProbe }}
+          readinessProbe: {{ toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.startupProbe }}
+          startupProbe: {{ toYaml . | nindent 12 }}
+          {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}

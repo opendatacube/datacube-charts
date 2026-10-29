@@ -12,11 +12,13 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
+      app: {{ .Release.Name }}
       app.kubernetes.io/name: {{ include "datacube-explorer.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
+        app: {{ .Release.Name }}
         app.kubernetes.io/name: {{ include "datacube-explorer.name" . }}
         helm.sh/chart: {{ include "datacube-explorer.chart" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}

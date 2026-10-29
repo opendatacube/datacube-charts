@@ -35,6 +35,8 @@ database:
   host: localhost
   port: 5432
   existingSecret: "explorer-reader"
+  userKey: postgres-username
+  passwordKey: postgres-password
 
 resources:
   limits:
@@ -114,6 +116,13 @@ dockerArgs:
   - "cubedash:app"
   - "||"
   - "true"
+
+# databaseManager allows setting a different database role that has management/write
+# permission to the database.
+databaseManager:
+  existingSecret: "explorer-writer"
+  userKey: postgres-username
+  passwordKey: postgres-password
 
 updateCreationDt:
   enabled: false

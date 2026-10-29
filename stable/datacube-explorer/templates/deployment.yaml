@@ -62,12 +62,12 @@ spec:
             valueFrom:
               secretKeyRef:
                 name: {{ .Values.database.existingSecret }}
-                key: postgres-username
+                key: {{ .Values.database.userKey | default "postgres-username" }}
           - name: DB_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: {{ .Values.database.existingSecret }}
-                key: postgres-password
+                key: {{ .Values.database.passwordKey | default "postgres-password" }}
           - name: VIRTUAL_HOST
             value: localhost,127.0.0.
           {{- if not (empty .Values.additionalSettings) }}

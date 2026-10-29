@@ -30,7 +30,12 @@ A Helm chart for Datacube Explorer
 | database.database | string | `"datacube"` |  |
 | database.existingSecret | string | `"explorer-reader"` |  |
 | database.host | string | `"localhost"` |  |
+| database.passwordKey | string | `"postgres-password"` |  |
 | database.port | int | `5432` |  |
+| database.userKey | string | `"postgres-username"` |  |
+| databaseManager.existingSecret | string | `"explorer-writer"` |  |
+| databaseManager.passwordKey | string | `"postgres-password"` |  |
+| databaseManager.userKey | string | `"postgres-username"` |  |
 | dockerArgs[0] | string | `"gunicorn"` |  |
 | dockerArgs[10] | string | `"--pid"` |  |
 | dockerArgs[11] | string | `"gunicorn.pid"` |  |

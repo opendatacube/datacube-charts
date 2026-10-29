@@ -1417,6 +1417,38 @@ entries:
           url: https://github.com/opendatacube/datacube-explorer
     apiVersion: v2
     appVersion: 3.2.1
+    created: "2026-10-29T04:19:08.213566695Z"
+    description: A Helm chart for Datacube Explorer
+    digest: aff0beb9c753c945a03175d8395ac10c4ec2d037d115aa298f706e0248d493a4
+    home: https://www.opendatacube.org/
+    icon: https://opendatacube.readthedocs.io/en/latest/_static/odc-icon.svg
+    keywords:
+    - datacube
+    - http
+    - web
+    - application
+    - python
+    - stac
+    maintainers:
+    - name: omad
+    - name: pjonsson
+    name: datacube-explorer
+    sources:
+    - https://github.com/opendatacube/datacube-explorer
+    - https://github.com/opendatacube/datacube-charts
+    type: application
+    urls:
+    - https://github.com/opendatacube/datacube-charts/releases/download/datacube-explorer-0.11.1/datacube-explorer-0.11.1.tgz
+    version: 0.11.1
+  - annotations:
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: Chart Source
+          url: https://github.com/opendatacube/datacube-charts
+        - name: Upstream Project
+          url: https://github.com/opendatacube/datacube-explorer
+    apiVersion: v2
+    appVersion: 3.2.1
     created: "2026-10-29T03:54:08.379594908Z"
     description: A Helm chart for Datacube Explorer
     digest: c112718e012ca4eda84aab398bb63577972686b0c0df6e494470fedd638ce089
@@ -3692,4 +3724,4 @@ entries:
     urls:
     - https://opendatacube.github.io/datacube-charts/charts/restcube-0.1.0.tgz
     version: 0.1.0
-generated: "2026-10-29T03:54:08.379937962Z"
+generated: "2026-10-29T04:19:08.214042226Z"

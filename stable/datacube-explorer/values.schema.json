@@ -101,19 +101,59 @@
           "title": "host",
           "type": "string"
         },
+        "passwordKey": {
+          "default": "postgres-password",
+          "title": "passwordKey",
+          "type": "string"
+        },
         "port": {
           "default": 5432,
           "title": "port",
           "type": "integer"
+        },
+        "userKey": {
+          "default": "postgres-username",
+          "title": "userKey",
+          "type": "string"
         }
       },
       "required": [
         "database",
         "host",
         "port",
-        "existingSecret"
+        "existingSecret",
+        "userKey",
+        "passwordKey"
       ],
       "title": "database",
+      "type": "object"
+    },
+    "databaseManager": {
+      "additionalProperties": false,
+      "description": "databaseManager allows setting a different database role that has management/write\npermission to the database.",
+      "properties": {
+        "existingSecret": {
+          "default": "explorer-writer",
+          "title": "existingSecret",
+          "type": "string"
+        },
+        "passwordKey": {
+          "default": "postgres-password",
+          "title": "passwordKey",
+          "type": "string"
+        },
+        "userKey": {
+          "default": "postgres-username",
+          "title": "userKey",
+          "type": "string"
+        }
+      },
+      "required": [
+        "existingSecret",
+        "userKey",
+        "passwordKey"
+      ],
+      "title": "databaseManager",
       "type": "object"
     },
     "dockerArgs": {
@@ -551,6 +591,7 @@
     "externalPort",
     "internalPort",
     "dockerArgs",
+    "databaseManager",
     "updateCreationDt",
     "additionalSettings",
     "ingress"

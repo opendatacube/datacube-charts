@@ -51,13 +51,13 @@ spec:
             - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.database.existingSecret }}
-                  key: postgres-username
+                  name: {{ coalesce .Values.databaseManager.existingSecret .Values.database.existingSecret }}
+                  key: {{ coalesce .Values.databaseManager.userKey .Values.database.userKey "postgres-username" }}
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.database.existingSecret }}
-                  key: postgres-password
+                  name: {{ coalesce .Values.databaseManager.existingSecret .Values.database.existingSecret }}
+                  key: {{ coalesce .Values.databaseManager.passwordKey .Values.database.passwordKey "postgres-password" }}
             {{- if .Values.additionalEnvironmentVars }}
             {{- range $arg, $value := .Values.updateCreationDt.additionalEnvironmentVars }}
             - name: {{ $arg | quote }}

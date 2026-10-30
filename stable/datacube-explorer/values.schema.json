@@ -218,6 +218,12 @@
           },
           {
             "type": "string"
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "string"
           }
         ],
         "required": []
@@ -398,6 +404,11 @@
       "additionalProperties": true,
       "description": "The SecurityContext for Explorer pods",
       "properties": {
+        "fsGroup": {
+          "default": 1000,
+          "title": "fsGroup",
+          "type": "integer"
+        },
         "runAsGroup": {
           "default": 1000,
           "title": "runAsGroup",
@@ -433,6 +444,7 @@
         "runAsGroup",
         "runAsNonRoot",
         "runAsUser",
+        "fsGroup",
         "seccompProfile"
       ],
       "title": "podSecurityContext"

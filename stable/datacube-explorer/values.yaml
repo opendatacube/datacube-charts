@@ -97,25 +97,27 @@ internalPort: 8080  # Internal port on which pod is running and serving cubedash
 
 dockerArgs:
   - "gunicorn"
-  - "-b"
+  - "--bind"
   - "0.0.0.0:8080"
-  - "-w"
+  - "--workers"
   - "3"
-  - "--threads=2"
-  - "-k"
+  - "--threads"
+  - "2"
+  - "--worker-class"
   - "gthread"
-  - "-t"
+  - "--timeout"
   - "60"
   - "--pid"
   - "gunicorn.pid"
   - "--worker-tmp-dir"
   - "/tmp"
+  - "--no-control-socket"
+  - "--access-logfile"
+  - "-"
   - "--preload"
   - "--config"
   - "python:cubedash.gunicorn_config"
   - "cubedash:app"
-  - "||"
-  - "true"
 
 # databaseManager allows setting a different database role that has management/write
 # permission to the database.
@@ -149,6 +151,7 @@ podSecurityContext:
   runAsGroup: 1000
   runAsNonRoot: true
   runAsUser: 1000
+  fsGroup: 1000
   seccompProfile:
     type: RuntimeDefault
 

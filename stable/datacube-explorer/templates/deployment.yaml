@@ -83,13 +83,13 @@ spec:
           resources:
 {{ toYaml .Values.resources | indent 12 }}
           args: [ {{- range .Values.dockerArgs }} {{ . | quote }}, {{ end -}} ]
-        {{- if not (empty .Values.additionalSettings) }}
           volumeMounts:
+        {{- if not (empty .Values.additionalSettings) }}
           - name: config-volume
             mountPath: /etc/cubedash/config
+        {{- end }}
           - name: tmpdir
             mountPath: /tmp
-        {{- end }}
           ports:
             # All http services
             - name: http

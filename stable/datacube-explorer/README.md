@@ -1,6 +1,6 @@
 # datacube-explorer
 
-![Version: 0.11.1](https://img.shields.io/badge/Version-0.11.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.2.1](https://img.shields.io/badge/AppVersion-3.2.1-informational?style=flat-square)
+![Version: 0.11.2](https://img.shields.io/badge/Version-0.11.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.2.1](https://img.shields.io/badge/AppVersion-3.2.1-informational?style=flat-square)
 
 A Helm chart for Datacube Explorer
 
@@ -37,25 +37,27 @@ A Helm chart for Datacube Explorer
 | databaseManager.passwordKey | string | `"postgres-password"` |  |
 | databaseManager.userKey | string | `"postgres-username"` |  |
 | dockerArgs[0] | string | `"gunicorn"` |  |
-| dockerArgs[10] | string | `"--pid"` |  |
-| dockerArgs[11] | string | `"gunicorn.pid"` |  |
-| dockerArgs[12] | string | `"--worker-tmp-dir"` |  |
-| dockerArgs[13] | string | `"/tmp"` |  |
-| dockerArgs[14] | string | `"--preload"` |  |
-| dockerArgs[15] | string | `"--config"` |  |
-| dockerArgs[16] | string | `"python:cubedash.gunicorn_config"` |  |
-| dockerArgs[17] | string | `"cubedash:app"` |  |
-| dockerArgs[18] | string | `"||"` |  |
-| dockerArgs[19] | string | `"true"` |  |
-| dockerArgs[1] | string | `"-b"` |  |
+| dockerArgs[10] | string | `"60"` |  |
+| dockerArgs[11] | string | `"--pid"` |  |
+| dockerArgs[12] | string | `"gunicorn.pid"` |  |
+| dockerArgs[13] | string | `"--worker-tmp-dir"` |  |
+| dockerArgs[14] | string | `"/tmp"` |  |
+| dockerArgs[15] | string | `"--no-control-socket"` |  |
+| dockerArgs[16] | string | `"--access-logfile"` |  |
+| dockerArgs[17] | string | `"-"` |  |
+| dockerArgs[18] | string | `"--preload"` |  |
+| dockerArgs[19] | string | `"--config"` |  |
+| dockerArgs[1] | string | `"--bind"` |  |
+| dockerArgs[20] | string | `"python:cubedash.gunicorn_config"` |  |
+| dockerArgs[21] | string | `"cubedash:app"` |  |
 | dockerArgs[2] | string | `"0.0.0.0:8080"` |  |
-| dockerArgs[3] | string | `"-w"` |  |
+| dockerArgs[3] | string | `"--workers"` |  |
 | dockerArgs[4] | string | `"3"` |  |
-| dockerArgs[5] | string | `"--threads=2"` |  |
-| dockerArgs[6] | string | `"-k"` |  |
-| dockerArgs[7] | string | `"gthread"` |  |
-| dockerArgs[8] | string | `"-t"` |  |
-| dockerArgs[9] | string | `"60"` |  |
+| dockerArgs[5] | string | `"--threads"` |  |
+| dockerArgs[6] | string | `"2"` |  |
+| dockerArgs[7] | string | `"--worker-class"` |  |
+| dockerArgs[8] | string | `"gthread"` |  |
+| dockerArgs[9] | string | `"--timeout"` |  |
 | externalPort | int | `80` |  |
 | hpa.enabled | bool | `true` |  |
 | hpa.maxReplicas | int | `6` |  |
@@ -76,7 +78,7 @@ A Helm chart for Datacube Explorer
 | pdb.annotations | object | `{}` |  |
 | pdb.enabled | bool | `true` |  |
 | pdb.minAvailable | int | `1` |  |
-| podSecurityContext | object | `{"runAsGroup":1000,"runAsNonRoot":true,"runAsUser":1000,"seccompProfile":{"type":"RuntimeDefault"}}` | The SecurityContext for Explorer pods |
+| podSecurityContext | object | `{"fsGroup":1000,"runAsGroup":1000,"runAsNonRoot":true,"runAsUser":1000,"seccompProfile":{"type":"RuntimeDefault"}}` | The SecurityContext for Explorer pods |
 | readinessProbe | object | `{}` |  |
 | replicaCount | int | `1` | Number of replicas. Ignored when `hpa.enabled` is true. |
 | resources.limits.cpu | string | `"300m"` |  |

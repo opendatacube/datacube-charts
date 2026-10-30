@@ -109,7 +109,7 @@ dockerArgs:
   - "--pid"
   - "gunicorn.pid"
   - "--worker-tmp-dir"
-  - "/dev/shm"
+  - "/tmp"
   - "--preload"
   - "--config"
   - "python:cubedash.gunicorn_config"

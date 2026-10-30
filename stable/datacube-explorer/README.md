@@ -40,7 +40,7 @@ A Helm chart for Datacube Explorer
 | dockerArgs[10] | string | `"--pid"` |  |
 | dockerArgs[11] | string | `"gunicorn.pid"` |  |
 | dockerArgs[12] | string | `"--worker-tmp-dir"` |  |
-| dockerArgs[13] | string | `"/dev/shm"` |  |
+| dockerArgs[13] | string | `"/tmp"` |  |
 | dockerArgs[14] | string | `"--preload"` |  |
 | dockerArgs[15] | string | `"--config"` |  |
 | dockerArgs[16] | string | `"python:cubedash.gunicorn_config"` |  |

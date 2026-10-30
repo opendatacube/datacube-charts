@@ -87,6 +87,8 @@ spec:
           volumeMounts:
           - name: config-volume
             mountPath: /etc/cubedash/config
+          - name: tmpdir
+            mountPath: /tmp
         {{- end }}
           ports:
             # All http services
@@ -117,8 +119,10 @@ spec:
       securityContext:
         {{- toYaml . | nindent 8 }}
     {{- end }}
-    {{- if not (empty .Values.additionalSettings) }}
       volumes:
+      - name: tmpdir
+        emptyDir: {}
+    {{- if not (empty .Values.additionalSettings) }}
       - name: config-volume
         configMap:
           name: {{ include "datacube-explorer.fullname" . }}
